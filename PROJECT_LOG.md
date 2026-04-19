@@ -27,6 +27,13 @@
 - Schema is now fully complete and security-reviewed
 - Next: implement password hashing and auth foundation
 
+## 2026-04-19 (continued)
+- Created `core/auth.py` with `hash_password` and `verify_password` functions using Werkzeug
+- Decided to use Werkzeug (pbkdf2:sha256) over bcrypt — already a Flask dependency, sufficient for this threat model
+- Tested auth functions with a small test script; confirmed correct and deleted test script
+- Created `database/db.py` with `get_db(db_path)` function — opens SQLite connection, sets row_factory, enables FK enforcement via PRAGMA
+- Next: database initialization code (creates tables from schema.sql on first run)
+
 ## 2026-04-14 (end of session)
 - Discussed auth approach: will use Werkzeug (`generate_password_hash` / `check_password_hash`) for password hashing
 - Planned three auth features: set up password, change password, reset lost password

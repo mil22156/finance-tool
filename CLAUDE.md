@@ -87,6 +87,7 @@ python app.py        # start dev server at http://127.0.0.1:5000
 - Flag if any assistance seems to cross the line for CS50 academic honesty
 - User will also flag if things feel like too much automation
 - When in doubt, explain the concept and let the user implement it
+- When running git commands, briefly explain what each command is doing and why
 
 ## CS50 Submission
 - Deadline: December 31, 2026

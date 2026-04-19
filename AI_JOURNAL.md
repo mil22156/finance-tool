@@ -90,6 +90,13 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 - Installed GitHub CLI and authenticated; pushed both repos to GitHub
 - Created CLAUDE_CONTEXT.md for persistent Claude.ai context
 
+### Auth and Database Foundation
+- Explained password hashing concepts — why slow hashes (pbkdf2/bcrypt) are better than MD5/SHA256
+- Explained Werkzeug vs bcrypt tradeoff; recommended Werkzeug to avoid extra dependency
+- Reviewed `core/auth.py` written by user; gave feedback on argument naming consistency
+- Explained database connection layer purpose and the row_factory and PRAGMA foreign_keys settings
+- Reviewed `database/db.py` written by user; caught `connection` vs `conn` variable name error
+
 ### Security Review (prompted by Claude.ai)
 - Reviewed four security areas: password hashing, path traversal, SQL injection, dedup hash
 - Identified missing `dedup_hash` column in transactions table — confirmed as oversight
