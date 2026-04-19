@@ -62,6 +62,8 @@ Designed to align with financial API providers (Teller.io, Plaid, etc.) for easi
 - `notes` — user notes
 - `source` — how the record entered the system (e.g. 'csv', 'ofx', 'api', 'manual')
 - `import_date` — timestamp of when the record was imported into the system
+- `dedup_hash` — SHA256 hash of (account_id + date + amount + normalized description); NOT NULL UNIQUE; indexed via `idx_transactions_dedup_hash` for fast import-time deduplication lookups
+- `statement_id` — nullable FK to statements table; traces a transaction back to its source upload file
 - API integration is a post-v1 goal; import pipeline should be designed so API is just another source feeding the same normalize → deduplicate → categorize flow
 
 ## Documentation Discipline
