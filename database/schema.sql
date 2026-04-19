@@ -5,7 +5,7 @@
 -- accounts: Stores account information, including name, institution, account type, currency, and creation timestamp.
 -- account_members: Stores the relationship between users and accounts, including the role of the user in the account and the creation timestamp.
 -- statements: Stores information about account statements, including the associated account, file name, file type, date range, creation timestamp, and description.
--- transactions: Stores transaction details, including the associated account, external ID, date, amount, description, merchant name, category ID, API category, pending status, notes, source, import date, and associated statement ID.
+-- transactions: Stores transaction details, including the associated account, external ID, date, amount, description, merchant name, category ID, API category, pending status, notes, deduplication hash (which is a hash of a few of the key fields to make it unique), source, import date, and associated statement ID.
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
@@ -58,6 +58,7 @@ CREATE TABLE transactions (
     api_category TEXT,
     pending BOOLEAN NOT NULL DEFAULT 0,
     notes TEXT,
+    dedup_hash TEXT NOT NULL UNIQUE,
     source TEXT NOT NULL CHECK(source IN ('csv', 'ofx', 'api', 'manual')),
     import_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     statement_id INTEGER,
@@ -65,6 +66,8 @@ CREATE TABLE transactions (
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
     FOREIGN KEY (statement_id) REFERENCES statements(id) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_transactions_dedup_hash ON transactions(dedup_hash);
 
 CREATE TABLE categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -16,10 +16,16 @@
 - Created .gitignore (excludes venv/, *.db, __pycache__, .env, .DS_Store)
 - Setting up GitHub: created `projects` master index repo and `finance-tool` repo on GitHub (both public)
 - Created README.md in ~/projects/ linking to finance-tool repo
-- Initialized git in ~/projects/, set global user.email and user.name
-- Push to GitHub blocked — GitHub requires a personal access token (not password) for HTTPS auth
-- Next step: generate PAT at GitHub → Settings → Developer Settings → Personal Access Tokens (classic), repo scope, then retry push
-- After projects repo is pushed, need to init and push finance-tool repo separately
+- Installed GitHub CLI (`gh`), authenticated via browser
+- Pushed both `projects` and `finance-tool` repos to GitHub
+- Created CLAUDE_CONTEXT.md in projects repo — persistent context file for Claude.ai sessions
+
+## 2026-04-19
+- Security review prompted by Claude.ai — four areas identified: password hashing, path traversal, SQL injection, dedup hash column
+- Added `dedup_hash TEXT NOT NULL UNIQUE` to transactions table — was missing despite being specified in CLAUDE.md
+- Added `CREATE INDEX idx_transactions_dedup_hash` for fast deduplication lookups during import
+- Schema is now fully complete and security-reviewed
+- Next: implement password hashing and auth foundation
 
 ## 2026-04-14 (end of session)
 - Discussed auth approach: will use Werkzeug (`generate_password_hash` / `check_password_hash`) for password hashing

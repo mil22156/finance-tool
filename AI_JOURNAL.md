@@ -86,8 +86,16 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 - Advised public repo is fine since no financial data is stored in the repo
 - Suggested master `projects` index repo with README linking to individual project repos
 - Created README.md for master projects index repo
-- Walked user through git init, global config, and remote setup
-- Diagnosed HTTPS auth failure — GitHub requires personal access token, not password
+- Walked user through git init, global config, remote setup, and PAT authentication
+- Installed GitHub CLI and authenticated; pushed both repos to GitHub
+- Created CLAUDE_CONTEXT.md for persistent Claude.ai context
+
+### Security Review (prompted by Claude.ai)
+- Reviewed four security areas: password hashing, path traversal, SQL injection, dedup hash
+- Identified missing `dedup_hash` column in transactions table — confirmed as oversight
+- Explained purpose of deduplication hash and why a database index speeds up lookups
+- Walked user through adding `dedup_hash` column and `CREATE INDEX` statement
+- Path traversal and SQL injection to be addressed as application code is written
 
 ### Database Schema — statements table
 - Confirmed FK constraints enforce referential integrity at the DB level (not just Python)
