@@ -1,5 +1,17 @@
 # Project Log — Personal Finance Tool
 
+## 2026-04-22 (end of session)
+- Added `init_db(db_path)` function to `database/db.py`
+  - Uses `os.path.dirname(__file__)` to build a reliable path to `schema.sql` regardless of working directory
+  - Calls `get_db()` to open the connection, then `executescript()` to run the full schema in one call
+  - Closes the connection after — `init_db` is setup only, does not return a connection
+- Added `import os` to top of `db.py`
+- Decided household database files live in `data/{id}/{id}.db` — one subfolder per household for OS-level permission isolation
+- Decided `registry.db` lives in `data/` — tracks household names and their database paths; separate from household DBs
+- Created `database/registry_schema.sql` with a single `households` table: `id`, `name` (UNIQUE), `database_path`, `created_at`
+- Added comment above `CREATE INDEX idx_transactions_dedup_hash` in `schema.sql` explaining why the index exists
+- Next: write `init_registry()` in `db.py` and the household registration route in `app.py`
+
 ## 2026-04-17 (end of session)
 - Wrote `accounts` table in schema.sql
 - Removed Copilot-suggested `user_id` FK — accounts are household-level; user↔account relationships belong in `account_members` junction table

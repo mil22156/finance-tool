@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 # database/db.py                                                                                                                                                                         
   # Provides get_db() — the single entry point for all database connections in this app.                                                                                                   
@@ -14,5 +15,10 @@ def get_db(db_path):
     conn.execute('PRAGMA foreign_keys = ON')
     return conn
 
-
+def init_db(db_path):
+    schema_path = os.path.join(os.path.dirname(__file__), 'schema.sql')
+    conn = get_db(db_path)
+    with open(schema_path) as f:
+        conn.executescript(f.read())
+    conn.close()
 

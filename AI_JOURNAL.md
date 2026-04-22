@@ -7,6 +7,25 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 4 — 2026-04-22
+
+### Database Initialization
+- Explained `init_db` concept: called once at household creation to build tables from schema; contrasted with `get_db` which is called on every request
+- Explained `os.path.dirname(__file__)` and why hardcoding `'schema.sql'` is fragile
+- Explained `executescript()` — runs an entire SQL file as a string; noted it handles its own transactions so `with conn` is redundant
+- Reviewed four drafts of `init_db`; gave feedback on: duplicate imports, indentation errors, Copilot interference, missing `conn.close()`
+- Explained `with` statement / context manager concept: `__enter__`/`__exit__`, how `with conn` commits/rolls back, how `with open()` closes files
+- Explained `__pycache__` — Python's compiled bytecode cache, safe to ignore, already in `.gitignore`
+
+### Registry and Data Layout Design
+- Explained chicken-and-egg problem with ID-based DB naming — household ID isn't known until a registry row is inserted
+- Proposed `registry.db` in `data/` as a lightweight index mapping household names to DB paths
+- Designed `data/{id}/{id}.db` folder-per-household structure for OS-level permission isolation
+- Explained why `registry_schema.sql` belongs in `database/` (blueprint) not `data/` (runtime files)
+- Reviewed `registry_schema.sql` written by user; all correct — noted `database_path` is clearer than `db_path`
+
+---
+
 ## Session 1 — 2026-04-13
 
 ### Project Planning

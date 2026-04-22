@@ -67,6 +67,9 @@ CREATE TABLE transactions (
     FOREIGN KEY (statement_id) REFERENCES statements(id) ON DELETE CASCADE
 );
 
+-- Speeds up deduplication lookups during import by indexing the hash column.                                                                                                            
+-- UNIQUE constraint on dedup_hash already prevents duplicates; this index makes the check fast.
+
 CREATE INDEX idx_transactions_dedup_hash ON transactions(dedup_hash);
 
 CREATE TABLE categories (
