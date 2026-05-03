@@ -7,6 +7,32 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 5 — 2026-05-03
+
+### layout.html Review and Cleanup
+- Reviewed `layout.html` copied from CS50 Finance project; identified six issues to fix
+- Explained `<!DOCTYPE html>` — what it is, why it's needed, that it goes on line 1 before `<html>`
+- Explained navbar brand — what it does, recommended plain text replacement
+- Identified CS50-specific leftovers to remove: colored spans in brand, Quote/Buy/Sell/History nav links, Register link, W3C validator footer block
+- Explained why removing global `text-center` from `<main>` is better for data-heavy pages like transaction lists
+- Reviewed five successive saves and flagged remaining issues each time
+
+### app.py Startup Wiring
+- Explained `python-dotenv` purpose — loads `.env` into environment so `os.environ.get()` can read it
+- Explained `requirements.txt` purpose and version pinning convention
+- Walked through what `app.py` needs at startup: `load_dotenv()`, `app.secret_key`, `REGISTRY_PATH`, `init_registry()`
+- Explained why order matters in Python — `app` must exist before `app.secret_key`, `REGISTRY_PATH` must be defined before `init_registry()` uses it
+- Reviewed three successive saves; caught: missing `load_dotenv()`, wrong ordering, `init-registry` typo (hyphen vs underscore)
+- Explained `.env` file purpose and recommended different values for `SECRET_KEY` vs `CREATION_CODE`
+- Confirmed `.env` is in `.gitignore`
+
+### /household/new Route Design
+- Walked through full route design: GET renders form; POST validates creation code, inputs, uniqueness, then creates household directory, runs `init_db()`, inserts admin user, registers in `registry.db`, redirects to login
+- Identified imports needed: `uuid`, `render_template`, `request`, `flash`, `redirect`, `init_db`, `hash_password`
+- Route not yet implemented — user paused session before writing code
+
+---
+
 ## Session 4 — 2026-04-22
 
 ### Database Initialization

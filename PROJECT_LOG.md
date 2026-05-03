@@ -1,10 +1,14 @@
 # Project Log — Personal Finance Tool
 
-## 2026-05-03
-- Added `init_registry()` to `database/db.py` — mirrors `init_registry()`, targets `registry_schema.sql` and `registry.db`
+## 2026-05-03 (end of session)
+- Added `init_registry()` to `database/db.py` — targets `registry_schema.sql` and `registry.db`
 - Decided UI flow: unauthenticated home screen shows login form + "Add Household" button (top right)
 - Decided household creation gate: `/household/new` form requires a `CREATION_CODE` env var (stored in `.env`, excluded from git); plain secret is sufficient for this threat model — hardening deferred to pre-submission to-do
-- Next: implement app startup initialization (`init_registry()` at startup), then build `/`, `/login`, and `/household/new` routes
+- Cleaned up `templates/layout.html`: added `<!DOCTYPE html>`, replaced CS50 navbar brand with "Household Finance", replaced stock-trading nav links with app routes (Transactions, Accounts, Upload, AddUser), removed Register link from logged-out nav, removed W3C validator footer, removed global `text-center` from `<main>`
+- Added `python-dotenv==1.2.2` to `requirements.txt`
+- Updated `app.py`: added `load_dotenv()`, `app.secret_key` from env, `REGISTRY_PATH`, and `init_registry()` call at startup
+- Created `.env` with `SECRET_KEY` and `CREATION_CODE` (excluded from git)
+- Next: write `/household/new` route (GET + POST) and `household_new.html` template, then `/login` and `/` routes
 
 ## 2026-04-22 (end of session)
 - Added `init_db(db_path)` function to `database/db.py`
