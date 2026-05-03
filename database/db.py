@@ -22,3 +22,9 @@ def init_db(db_path):
         conn.executescript(f.read())
     conn.close()
 
+def init_registry(db_path):
+    registry_path = os.path.join(os.path.dirname(__file__), 'registry_schema.sql')
+    conn = get_db(db_path)
+    with open(registry_path) as f:
+        conn.executescript(f.read())
+    conn.close()
