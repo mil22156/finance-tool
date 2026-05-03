@@ -1,5 +1,11 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-03
+- Added `init_registry()` to `database/db.py` — mirrors `init_registry()`, targets `registry_schema.sql` and `registry.db`
+- Decided UI flow: unauthenticated home screen shows login form + "Add Household" button (top right)
+- Decided household creation gate: `/household/new` form requires a `CREATION_CODE` env var (stored in `.env`, excluded from git); plain secret is sufficient for this threat model — hardening deferred to pre-submission to-do
+- Next: implement app startup initialization (`init_registry()` at startup), then build `/`, `/login`, and `/household/new` routes
+
 ## 2026-04-22 (end of session)
 - Added `init_db(db_path)` function to `database/db.py`
   - Uses `os.path.dirname(__file__)` to build a reliable path to `schema.sql` regardless of working directory

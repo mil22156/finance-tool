@@ -46,6 +46,7 @@ static/             — CSS and JS
 - **`categorization_rules`** table: household-wide rules (e.g. "WHOLE FOODS → Groceries"), ordered by priority
 - Categories and rules are shared across all members of a household
 - Security model: file permissions (chmod 600) on database files; strong login password sufficient for this threat model
+- **Household creation gate (decided 2026-05-03):** `/household/new` requires a `CREATION_CODE` stored in a `.env` file (excluded from git); Flask reads it via `os.environ.get()` at startup; submitted code is checked against it on POST — if it doesn't match, the request is rejected; code can be changed or removed after initial setup
 
 ## Transaction Fields (decided 2026-04-14)
 Designed to align with financial API providers (Teller.io, Plaid, etc.) for easier future integration:
@@ -91,6 +92,7 @@ python app.py        # start dev server at http://127.0.0.1:5000
 
 ## Before We Finish (Pre-submission To-Do)
 - [ ] Decide on a permanent data directory location — currently `data/` is relative to the project folder; revisit if deployment needs change
+- [ ] Harden household creation code — currently a plain secret stored in `.env`; consider expiring codes, rate limiting, or admin-only creation for stricter deployments
 
 ## CS50 Submission
 - Deadline: December 31, 2026
