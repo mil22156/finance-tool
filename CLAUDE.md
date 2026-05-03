@@ -89,6 +89,9 @@ python app.py        # start dev server at http://127.0.0.1:5000
 - When in doubt, explain the concept and let the user implement it
 - When running git commands, briefly explain what each command is doing and why
 
+## Before We Finish (Pre-submission To-Do)
+- [ ] Decide on a permanent data directory location — currently `data/` is relative to the project folder; revisit if deployment needs change
+
 ## CS50 Submission
 - Deadline: December 31, 2026
 - Submit via: submit50 cs50/problems/2026/x/project
