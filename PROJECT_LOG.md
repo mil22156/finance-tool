@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-04 (end of session — mid-test)
+- Fixed `registry_schema.sql` — added `IF NOT EXISTS` to `CREATE TABLE households` to prevent error on repeated startup
+- Added `os.makedirs('data', exist_ok=True)` to `app.py` before `init_registry()` call
+- First test of `/household/new` hit `sqlite3.IntegrityError: NOT NULL constraint failed: users.email` — `email` column is NOT NULL but form and INSERT didn't include it
+- Decided to add email to the form rather than make the column nullable
+- Next: add email field to `household_new.html`, add `email` to form field collection and INSERT in `app.py`, delete `data/` folder to clear partially-created household, then retest
+
 ## 2026-05-04 (end of session)
 - Added imports to `app.py`: `uuid`, `get_db`, `init_db`, `hash_password`, updated Flask imports
 - Wrote `/household/new` route (GET + POST):

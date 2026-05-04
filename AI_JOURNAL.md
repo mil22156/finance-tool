@@ -7,6 +7,16 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 6 — 2026-05-04 (continued)
+
+### First Test of /household/new
+- Diagnosed `sqlite3.OperationalError: table households already exists` — `init_registry()` runs every startup but schema had no `IF NOT EXISTS`; fix: add `IF NOT EXISTS` to `CREATE TABLE` in `registry_schema.sql`
+- Diagnosed missing `data/` directory causing registry DB creation to fail; fix: add `os.makedirs('data', exist_ok=True)` before `init_registry()` in `app.py`
+- Diagnosed `sqlite3.IntegrityError: NOT NULL constraint failed: users.email` — `users` table requires email but form and INSERT didn't include it; presented two options (make nullable vs. add to form); user chose to add email field
+- Explained need to delete `data/` folder to clear orphaned partially-created household DB before retesting
+
+---
+
 ## Session 6 — 2026-05-04
 
 ### /household/new Route

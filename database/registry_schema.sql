@@ -1,4 +1,4 @@
-CREATE TABLE households (
+CREATE TABLE IF NOT EXISTS households (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     database_path TEXT NOT NULL,
