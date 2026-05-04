@@ -1,5 +1,13 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-04 (end of session)
+- Added imports to `app.py`: `uuid`, `get_db`, `init_db`, `hash_password`, updated Flask imports
+- Wrote `/household/new` route (GET + POST):
+  - POST validates: creation code, all fields present, password >= 8 chars, passwords match, household name uniqueness
+  - Creation block: generates `uuid` for file naming, creates `data/{id}/` directory, calls `init_db()`, inserts admin user into household DB, registers household in `registry.db`
+  - GET renders `household_new.html` template (not yet written)
+- Next: write `household_new.html` template, then `/login` and `/` routes
+
 ## 2026-05-03 (end of session)
 - Added `init_registry()` to `database/db.py` — targets `registry_schema.sql` and `registry.db`
 - Decided UI flow: unauthenticated home screen shows login form + "Add Household" button (top right)

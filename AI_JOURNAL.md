@@ -7,6 +7,19 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 6 — 2026-05-04
+
+### /household/new Route
+- Explained `request.method == 'POST'` and `request.form.get()` for reading form fields
+- Caught validation ordering bug: `len(password)` ran before the "all fields required" check, crashing if password was None
+- Caught Copilot-invented methods: `registry.get_household_by_name()` and `registry.create_household()` — `get_db()` returns a raw `sqlite3.Connection`, not an ORM object; those methods don't exist
+- Explained sqlite3 connection pattern — must use `.execute()` with SQL directly
+- Explained uuid chicken-and-egg problem: SQLite AUTOINCREMENT ID doesn't exist until after INSERT, but we need the filename before creating the file — so we generate a uuid upfront for the folder/file name; the registry's `id` column is still AUTOINCREMENT
+- Reviewed four successive saves; caught: missing `import uuid`, `db_path` undefined, connection not closed before redirect, wrong INSERT columns (`db_path` vs `database_path`, manual `id` insert that should be omitted)
+- Route is now complete and correct
+
+---
+
 ## Session 5 — 2026-05-03
 
 ### layout.html Review and Cleanup
