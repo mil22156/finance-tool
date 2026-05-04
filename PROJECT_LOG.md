@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-04 (end of session)
+- Added email field to `household_new.html` and `app.py` (form collection, validation, INSERT)
+- Added basic email format check (`@` and `.` present)
+- Added `os.makedirs('data', exist_ok=True)` before `init_registry()` in `app.py` so `data/` is created on fresh start
+- `/household/new` fully working — tested successfully; household and admin user verified in SQLite
+- Next: build `/login` route and template
+
 ## 2026-05-04 (end of session — mid-test)
 - Fixed `registry_schema.sql` — added `IF NOT EXISTS` to `CREATE TABLE households` to prevent error on repeated startup
 - Added `os.makedirs('data', exist_ok=True)` to `app.py` before `init_registry()` call

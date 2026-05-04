@@ -12,6 +12,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
 REGISTRY_PATH = os.path.join('data', 'registry.db')
+os.makedirs("data", exist_ok=True)
 init_registry(REGISTRY_PATH)
 
 @app.route('/')
@@ -34,11 +35,17 @@ def household_new():
         username = request.form.get('username')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
+        email = request.form.get('email') 
                 
         # validate fields
-        if not household_name or not password or not username or not confirm_password:
+        if not household_name or not email or not password or not username or not confirm_password:
             flash('All fields are required.', 'danger')
             return redirect('/household/new')
+        
+        # verify email format
+        if '@' not in email or '.' not in email:
+            flash('Invalid email format.', 'danger')
+            return redirect('/household/new')   
         
         # verify password length
         if len(password) < 8:
@@ -72,7 +79,7 @@ def household_new():
         # insert admin user into the household database
         household_conn = get_db(db_path)
         household_conn.execute(
-            'INSERT INTO users (username, password_hash, rights) VALUES (?, ?, ?)', (username, hash_password(password), 'admin'))
+            'INSERT INTO users (username, email, password_hash, rights) VALUES (?, ?, ?, ?)', (username, email, hash_password(password), 'admin'))
         household_conn.commit()
         household_conn.close()
         

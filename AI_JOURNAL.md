@@ -7,6 +7,16 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 6 — 2026-05-04 (continued, second half)
+
+### Email Field and Final Testing
+- Explained options for email validation in Python; recommended simple `@` and `.` check for this use case given `type="email"` handles browser-side validation
+- Caught email missing from users INSERT — was added to form and validation but not the SQL
+- Diagnosed `unable to open database file` on restart after `rm -rf data/` — `os.makedirs` was never actually saved; guided user to add it
+- Verified working household creation by querying `registry.db` and household DB directly via sqlite3 CLI
+
+---
+
 ## Session 6 — 2026-05-04 (continued)
 
 ### First Test of /household/new
