@@ -140,6 +140,11 @@ def login():
         conn.close()
         return render_template('login.html', households=households)
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('Logged out successfully.', 'success')
+    return redirect('/')
 
 #  if __name__ == '__main__': — Python sets a special variable called __name__ on every file it loads. When   
 #  you run a file directly (e.g. python app.py), Python sets __name__ to '__main__'. When a file is imported
