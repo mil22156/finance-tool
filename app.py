@@ -106,7 +106,7 @@ def login():
             flash('Username, password, and household are required.', 'danger')
             return redirect('/login')
 
-        # Here you would typically check the credentials against the database
+        
         # get the database path for the selected household
         conn = get_db(REGISTRY_PATH)
         household = conn.execute('SELECT database_path FROM households WHERE id = ?', (household_id,)).fetchone()
@@ -121,6 +121,7 @@ def login():
         user = household_conn.execute('SELECT id, password_hash FROM users WHERE username = ?', (username,)).fetchone()
         household_conn.close()
 
+        # Check that the user exists and that the password is correct using the verify_password function from core/auth.py
         if not user or not verify_password(password, user[1]):
             flash('Invalid username, password, or household.', 'danger')
             return redirect('/login')
@@ -140,6 +141,31 @@ def login():
         conn.close()
         return render_template('login.html', households=households)
 
+# Transactions route
+# For now this will just be a placeholder to demonstrate navigation after login. It will eventually display the transactions for the household and allow users to add, edit, and delete transactions.
+@app.route('/transactions')
+def transactions():
+    return render_template('transactions.html')
+
+# Add user to household route
+# For now this will just be a placeholder to demonstrate navigation after login. It will eventually allow admin users to add other users to the household and assign them rights.
+@app.route('/add_user')
+def add_user():
+    return render_template('add_user.html')
+
+# Account management route
+# For now this will just be a placeholder to demonstrate navigation after login. It will eventually allow users to manage their accounts, including changing their password and email.  
+@app.route('/accounts')
+def accounts():
+    return render_template('accounts.html')
+
+# Upload transactions route
+# For now this will just be a placeholder to demonstrate navigation after login. It will eventually allow users to upload transactions in bulk via a CSV file. 
+@app.route('/upload')
+def upload():
+    return render_template('upload.html')
+
+# Logout route
 @app.route('/logout')
 def logout():
     session.clear()

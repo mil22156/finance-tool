@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-07 (end of session — continued)
+- Added `/logout` route: clears session, flashes success message, redirects to `/`
+- Added stub routes for `/transactions`, `/accounts`, `/upload`, `/adduser` — each renders a "Coming soon" template
+- Created stub templates: `transactions.html`, `accounts.html`, `upload.html`, `add_user.html`
+- All navigation links working; no 404s on logged-in nav
+- Next: build out `/upload` route with real CSV/OFX file upload and parsing logic
+
 ## 2026-05-07 (end of session)
 - Built index route: replaced `'Finance Tool is running.'` placeholder with `render_template('index.html')`
 - Built `index.html` template with conditional content: logged-in users see navigation links (Transactions, Accounts, Upload, Add Member); logged-out users see Log In and Create Household links

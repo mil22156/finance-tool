@@ -7,6 +7,15 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 9 — 2026-05-07 (continued)
+
+### Logout Route and Stub Pages
+- Explained `session.clear()` purpose and that no new template is needed for logout
+- Caught `extends "base.html"` in upload.html — layout file is `layout.html`; user fixed before copying to other templates
+- Confirmed all four stub templates correct before testing
+
+---
+
 ## Session 8 — 2026-05-07
 
 ### Index Route and Template
