@@ -1,5 +1,5 @@
 import os
-from core.auth import hash_password
+from core.auth import hash_password, verify_password
 from dotenv import load_dotenv
 from database.db import init_registry, init_db, get_db
 from flask import Flask, render_template, request, flash, redirect, session
@@ -93,6 +93,52 @@ def household_new():
         return redirect('/login')
 
     return render_template('household_new.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        household_id = request.form.get('household_id')
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Validate credentials (simplified for demonstration)
+        if not username or not password or not household_id:
+            flash('Username, password, and household are required.', 'danger')
+            return redirect('/login')
+
+        # Here you would typically check the credentials against the database
+        # get the database path for the selected household
+        conn = get_db(REGISTRY_PATH)
+        household = conn.execute('SELECT database_path FROM households WHERE id = ?', (household_id,)).fetchone()
+        conn.close()
+
+        if not household:
+            flash('Invalid household.', 'danger')
+            return redirect('/login')
+
+        # Check that the username is associated with the household and that the password is correct
+        household_conn = get_db(household[0])
+        user = household_conn.execute('SELECT id, password_hash FROM users WHERE username = ?', (username,)).fetchone()
+        household_conn.close()
+
+        if not user or not verify_password(password, user[1]):
+            flash('Invalid username, password, or household.', 'danger')
+            return redirect('/login')
+
+        # For demonstration purposes, we'll assume valid credentials
+        session['user_id'] = user[0]
+        session['household_db_path'] = household[0]
+
+
+        flash('Login successful.', 'success')
+        return redirect('/')
+
+    else:
+        # Fetch households for the dropdown
+        conn = get_db(REGISTRY_PATH)
+        households = conn.execute('SELECT id, name FROM households').fetchall()
+        conn.close()
+        return render_template('login.html', households=households)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,5 +1,17 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-06 (end of session)
+- Fixed `household_new.html` — email field was missing `required` attribute and label said "optional"; corrected both
+- Built `/login` route (GET + POST):
+  - GET fetches all households from `registry.db` and passes them to template as a dropdown
+  - POST validates fields, looks up household in `registry.db` to get `database_path`, queries household DB for user, checks password with `verify_password()`, stores `user_id` and `household_db_path` in session
+- Built `login.html` template with household dropdown, username, and password fields
+- Fixed `login.html` block name: `{% block content %}` → `{% block main %}` to match `layout.html`
+- Fixed flash message display in `layout.html`: replaced double `get_flashed_messages()` call (which consumed messages before rendering) with `{% set messages %}` pattern; added `with_categories=true` so Bootstrap alert color matches flash category
+- Login route confirmed working — redirects to `/` on success
+- Flash message not visible yet because `/` returns a plain string, not a template; will resolve when index route is built
+- Next: build index route and template
+
 ## 2026-05-04 (end of session)
 - Added email field to `household_new.html` and `app.py` (form collection, validation, INSERT)
 - Added basic email format check (`@` and `.` present)

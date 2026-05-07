@@ -7,6 +7,22 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 7 — 2026-05-06
+
+### /login Route and Template
+- Explained two-step DB lookup pattern: registry.db → get database_path → open household DB → query users
+- Reviewed login route and identified four bugs: querying registry.db for users instead of household DB, comparing hashes directly instead of using `verify_password()`, storing username instead of user ID in session, storing password hash in session (unnecessary)
+- Caught session key named `household_id` storing a file path — renamed to `household_db_path` for clarity
+- Caught `{% block content %}` in `login.html` not matching `{% block main %}` in `layout.html` — Jinja2 silently ignores unrecognized blocks
+- Caught double `get_flashed_messages()` call in `layout.html` — first call in `{% if %}` consumes the messages, second call returns empty; fix: assign to a variable with `{% set messages %}`
+- Explained why "Login successful" flash doesn't appear on `/` — plain string response never renders layout.html, so `get_flashed_messages()` is never called and message stays in session
+- Explained that flash display and index page issues resolve together once a real index route is built
+
+### household_new.html Fix
+- Caught missing `required` attribute on email input and misleading "Email (optional)" label — corrected both before committing
+
+---
+
 ## Session 6 — 2026-05-04 (continued, second half)
 
 ### Email Field and Final Testing
