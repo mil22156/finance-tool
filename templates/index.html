@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+<!-- Index Form  -->
+<!-- Form for logged in user to navigate to different pages and log out. At least it should allow navigation to 
+adding user to a household. Uploading transactions. Or for a not logged in user to navigate to the login or add household pages-->
+
+{% block main %}
+<div class="container mt-4">
+    <h2>Welcome to the Finance Tool</h2>
+    <p>This tool helps you manage your household finances by allowing you to track transactions, manage accounts, and collaborate with other household members.</p>
+</div>
+
+{% if session["user_id"] %}
+<div class="container mt-4">
+    <h3>Get Started</h3>
+    <ul>
+        <li><a href="/transactions">View Transactions</a></li>
+        <li><a href="/accounts">Manage Accounts</a></li>
+        <li><a href="/upload">Upload Transactions</a></li>
+        <li><a href="/adduser">Add Household Member</a></li>
+    </ul>
+</div>
+{% else %}
+<div class="container mt-4">
+    <h3>Get Started</h3>
+    <ul>
+        <li><a href="/login">Log In</a></li>
+        <li><a href="/household/new">Create Household</a></li>      
+    </ul>
+</div>
+{% endif %}
+
+{% endblock %}

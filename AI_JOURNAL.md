@@ -7,6 +7,16 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 8 — 2026-05-07
+
+### Index Route and Template
+- Explained that `href` links in templates don't need extra Python logic — routes in `app.py` are all that's needed
+- Caught ERB syntax (`<% if %>`) used instead of Jinja2 (`{% if %}`) in index.html
+- Caught that the existing index route still had the placeholder string — user had added a second route definition instead of replacing the original
+- Confirmed index route working with conditional content
+
+---
+
 ## Session 7 — 2026-05-06
 
 ### /login Route and Template

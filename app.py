@@ -17,7 +17,7 @@ init_registry(REGISTRY_PATH)
 
 @app.route('/')
 def index():
-    return 'Finance Tool is running.'
+    return render_template('index.html')
 
 # Household creation route
 @app.route('/household/new', methods=['GET', 'POST'])
@@ -139,6 +139,18 @@ def login():
         households = conn.execute('SELECT id, name FROM households').fetchall()
         conn.close()
         return render_template('login.html', households=households)
+
+
+#  if __name__ == '__main__': — Python sets a special variable called __name__ on every file it loads. When   
+#  you run a file directly (e.g. python app.py), Python sets __name__ to '__main__'. When a file is imported
+#  by another file, __name__ is set to the module name instead. So this condition is just asking "was this    
+#  file run directly, or imported?" — and only starts the server in the direct-run case.
+
+#  app.run(debug=True) — starts Flask's built-in development server. debug=True enables two things: automatic 
+#  reloading when you save a file, and the interactive debugger in the browser if an error occurs.
+                                                                                                             
+#  You'd remove debug=True (or set it to False) before any real deployment — it exposes a debug console that  
+#  would be a security risk on a public server.
 
 if __name__ == '__main__':
     app.run(debug=True)

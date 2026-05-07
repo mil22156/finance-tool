@@ -1,5 +1,11 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-07 (end of session)
+- Built index route: replaced `'Finance Tool is running.'` placeholder with `render_template('index.html')`
+- Built `index.html` template with conditional content: logged-in users see navigation links (Transactions, Accounts, Upload, Add Member); logged-out users see Log In and Create Household links
+- Index route confirmed working — flash messages (e.g. "Login successful") now display correctly after login
+- Next: build `/logout` route, then stub out remaining routes (`/transactions`, `/accounts`, `/upload`, `/adduser`)
+
 ## 2026-05-06 (end of session)
 - Fixed `household_new.html` — email field was missing `required` attribute and label said "optional"; corrected both
 - Built `/login` route (GET + POST):
