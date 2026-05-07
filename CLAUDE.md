@@ -93,6 +93,7 @@ python app.py        # start dev server at http://127.0.0.1:5000
 ## Before We Finish (Pre-submission To-Do)
 - [ ] Decide on a permanent data directory location — currently `data/` is relative to the project folder; revisit if deployment needs change
 - [ ] Harden household creation code — currently a plain secret stored in `.env`; consider expiring codes, rate limiting, or admin-only creation for stricter deployments
+- [ ] Refactor upload logic into a Flask Blueprint (`routes/upload.py`) — upload flow is expected to be lengthy; keep `app.py` clean
 
 ## CS50 Submission
 - Deadline: December 31, 2026
