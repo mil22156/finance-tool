@@ -1,5 +1,14 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-09 (end of session)
+- Added `transactions/` to `.gitignore` — folder contains real bank data, must not be committed
+- Set up Flask Blueprint structure for upload route: created `routes/` package with `__init__.py` and `upload.py`
+- Moved `REGISTRY_PATH` from `app.py` into `database/db.py` so it can be imported by both `app.py` and `routes/upload.py`
+- Registered Blueprint in `app.py` with `app.register_blueprint(upload_bp)`
+- Built `upload.html` form with file input, `enctype="multipart/form-data"`, and `name="file"` attribute
+- Old stub `/upload` route in `app.py` still needs to be removed — deferred to next session
+- Next: remove stub route, then build real upload logic in `routes/upload.py`
+
 ## 2026-05-07 (end of session — continued)
 - Added `/logout` route: clears session, flashes success message, redirects to `/`
 - Added stub routes for `/transactions`, `/accounts`, `/upload`, `/adduser` — each renders a "Coming soon" template

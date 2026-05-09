@@ -7,6 +7,18 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 10 — 2026-05-09
+
+### Blueprint Setup and Upload Form
+- Explained Flask Blueprint concept — mini-app that holds related routes, registered with main app via `app.register_blueprint()`
+- Explained `__init__.py` purpose — marks folder as a Python package so imports work
+- Explained `from X import Y, Z` pattern — module path vs specific names being pulled in
+- Caught `REGISTRY_PATH` imported from `database.db` but only defined in `app.py` — recommended moving it to `db.py` as the cleaner solution
+- Flagged `transactions/` folder not in `.gitignore` — contains real bank data
+- Caught missing `<form>` tag, `enctype="multipart/form-data"`, and `name="file"` on upload form
+
+---
+
 ## Session 9 — 2026-05-07 (continued)
 
 ### Logout Route and Stub Pages

@@ -1,17 +1,21 @@
 import os
 from core.auth import hash_password, verify_password
 from dotenv import load_dotenv
-from database.db import init_registry, init_db, get_db
+from database.db import init_registry, init_db, get_db, REGISTRY_PATH
 from flask import Flask, render_template, request, flash, redirect, session
 import uuid
+from routes.upload import upload_bp
+
+
 
 load_dotenv()
 
 app = Flask(__name__)
 
+app.register_blueprint(upload_bp)
+
 app.secret_key = os.getenv('SECRET_KEY')
 
-REGISTRY_PATH = os.path.join('data', 'registry.db')
 os.makedirs("data", exist_ok=True)
 init_registry(REGISTRY_PATH)
 

@@ -5,6 +5,14 @@
 {% block main %}
 <div class="container mt-4">
     <h2>Upload Transactions</h2>
-    <p>Coming soon!</p>
+    <!-- These are buttons for file select and upload. For now they will not do anything.-->
+    <form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="transactionFile" class="form-label">Select a file to upload:</label>
+        <input class="form-control" type="file" id="transactionFile" name="file">
+    </div>
+    <button class="btn btn-primary" id="uploadButton">Upload</button>
+    </form>
 </div>
+
 {% endblock %}  

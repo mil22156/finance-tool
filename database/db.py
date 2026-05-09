@@ -1,6 +1,8 @@
 import sqlite3
 import os
 
+REGISTRY_PATH = os.path.join('data', 'registry.db')
+
 # database/db.py                                                                                                                                                                         
   # Provides get_db() — the single entry point for all database connections in this app.                                                                                                   
   # Opens a SQLite connection to the given household database file, configures it, and returns it.                                                                                         
