@@ -7,6 +7,22 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 11 — 2026-05-10
+
+### Upload Pipeline Design
+- Identified duplicate `/upload` route still present in `app.py` alongside the Blueprint — user removed it
+- Held design discussion at user's request for the upload validation pipeline; proposed and refined a 3-step structure:
+  - Step 1: file-level validation (type, size, non-empty, OFX header check)
+  - Step 2: column mapping UI — preview table with auto-guessed dropdowns per column header
+  - Step 3: column validation — hard reject on bad rows with specific error messages
+- Proposed the "header row becomes dropdowns" UI pattern for column mapping
+- Flagged debit/credit two-column CSV pattern as a normalization edge case
+- Noted mapping profile persistence as a post-v1 feature
+- Raised open question: staging between Step 2 and Step 3 (staging table vs. temp file vs. session)
+- No code written this session — design and planning only
+
+---
+
 ## Session 10 — 2026-05-09
 
 ### Blueprint Setup and Upload Form

@@ -31,6 +31,12 @@ static/             — CSS and JS
 - Deduplication uses a hash of (account + date + amount + normalized description)
 - Categorization is rules-based with user override capability
 - Statement upload goes through: parse → normalize → deduplicate → categorize → review → commit
+- Upload pipeline uses a strict 3-step validation gate before any data is written (decided 2026-05-10):
+  - **Step 1 — File validation:** check extension/MIME type, file size limit, non-empty; for OFX/QFX also validate header structure; hard reject with clear error message
+  - **Step 2 — Column mapping:** parse headers + ~5 sample rows; auto-guess mapping from column names; render a preview table where each column header is a dropdown (Date / Description / Amount / Debit / Credit / Ignore); user confirms or corrects before proceeding
+  - **Step 3 — Column validation:** with mapping confirmed, validate every row; any unparseable value (bad date, non-numeric amount) rejects the entire upload with a specific error (row number, column, value found); start strict and relax rules only if real usage demands it
+- Mapping profile persistence (saving a bank's column layout for re-use) is a post-v1 goal
+- Open question: how to hold the uploaded file between Step 2 and Step 3 (staging table vs. temp file vs. server-side session)
 
 ## Multi-User Architecture (decided 2026-04-13)
 - Target deployment: small number of users (2-5 households), local machine or personal server — NOT a SaaS
@@ -93,9 +99,27 @@ python app.py        # start dev server at http://127.0.0.1:5000
 ## Before We Finish (Pre-submission To-Do)
 - [ ] Decide on a permanent data directory location — currently `data/` is relative to the project folder; revisit if deployment needs change
 - [ ] Harden household creation code — currently a plain secret stored in `.env`; consider expiring codes, rate limiting, or admin-only creation for stricter deployments
-- [ ] Refactor upload logic into a Flask Blueprint (`routes/upload.py`) — upload flow is expected to be lengthy; keep `app.py` clean
+- [x] Refactor upload logic into a Flask Blueprint (`routes/upload.py`) — done 2026-05-10
 
 ## CS50 Submission
-- Deadline: December 31, 2026
-- Submit via: submit50 cs50/problems/2026/x/project
-- Requires: README.md, ≤3 min YouTube video, code submission
+- Deadline: December 31, 2026 at 23:59 UTC — all three steps must be complete by then
+
+### Step 1: Video
+- Max 3 minutes
+- Must open with: project title, your name, GitHub username, edX username, city and country, recording date
+- Upload to YouTube as **unlisted** (not private)
+- Submit the URL via forms.cs50.io
+- **Video tools:** OBS Studio (screen recording) + Shotcut (editing) — both installed; make the video last, once the project is complete
+
+### Step 2: README.md
+- File must be named exactly `README.md`, placed at the root of the project directory
+- Target ~750 words minimum
+- Must include: project title, YouTube URL from Step 1, description of the project, explanation of each file and its purpose, design choice rationales
+- Submit via: `submit50 cs50/problems/2026/x/project` (uses GitHub credentials)
+- Keep submission under 100MB
+
+### Step 3: Verify
+- Visit cs50.me/cs50x a few minutes after submitting to confirm completion and trigger certificate generation
+
+### AI Tool Policy
+- AI tools are permitted but must be cited — the official requirement is **code comments** (AI_JOURNAL.md covers the spirit of this, but also add inline comments where AI materially contributed to specific code)

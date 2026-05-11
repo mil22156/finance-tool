@@ -1,5 +1,15 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-10 (end of session)
+- Removed duplicate `/upload` route from `app.py` — Blueprint in `routes/upload.py` is now the sole handler; completes the Blueprint refactor to-do
+- Designed the upload validation pipeline — 3-step gate before any data is written:
+  - Step 1: file-level checks (type, size, non-empty, OFX header) — hard reject
+  - Step 2: column mapping UI — preview table with auto-guessed header dropdowns; user confirms before proceeding
+  - Step 3: column validation — hard reject on any bad row, with specific error message (row number, column, value)
+- Decided to start with strict/unforgiving validation rules and relax only if real usage demands it
+- Noted debit/credit two-column pattern (common in bank CSV exports) as a known edge case — normalizer will need to combine them into a single signed amount
+- Open question: how to hold the uploaded file between Step 2 and Step 3 — staging table, temp file, or server-side session; not resolved yet
+
 ## 2026-05-09 (end of session)
 - Added `transactions/` to `.gitignore` — folder contains real bank data, must not be committed
 - Set up Flask Blueprint structure for upload route: created `routes/` package with `__init__.py` and `upload.py`

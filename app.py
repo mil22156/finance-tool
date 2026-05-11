@@ -24,6 +24,11 @@ def index():
     return render_template('index.html')
 
 # Household creation route
+# AI note: Alot of this detail around establishing location in the os and opening and closing files andsetting up a 
+# database from the template sql was suggested by AI. I would never have known how to do it without a ton of trial and error and research.
+
+
+
 @app.route('/household/new', methods=['GET', 'POST'])
 def household_new():
     if request.method == 'POST':
@@ -163,12 +168,6 @@ def add_user():
 def accounts():
     return render_template('accounts.html')
 
-# Upload transactions route
-# For now this will just be a placeholder to demonstrate navigation after login. It will eventually allow users to upload transactions in bulk via a CSV file. 
-@app.route('/upload')
-def upload():
-    return render_template('upload.html')
-
 # Logout route
 @app.route('/logout')
 def logout():
@@ -186,6 +185,9 @@ def logout():
                                                                                                              
 #  You'd remove debug=True (or set it to False) before any real deployment — it exposes a debug console that  
 #  would be a security risk on a public server.
+#  AI note. I annotated this from AI because honestly it's obsure to me and I would never have thought to have
+#  it in there.
+
 
 if __name__ == '__main__':
     app.run(debug=True)
