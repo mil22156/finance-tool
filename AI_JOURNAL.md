@@ -7,6 +7,21 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 12 — 2026-05-13
+
+### Upload Step 1 — File Validation
+- Explained that `allowed_file` is not a built-in — user needs to write it; described the `rsplit('.', 1)` pattern for extracting file extensions
+- Explained why `allowed_file` belongs in `upload.py` for now rather than a separate `helpers.py` — only one caller; move it when a second route needs it
+- Caught that validation checks were in the wrong order — `file` was used before it was defined; walked through correct ordering
+- Caught missing `else` branch on `allowed_file` check — bad file types were silently falling through with no error; user added the branch
+- Flagged `file.size` doesn't exist on Werkzeug `FileStorage` — size check deferred until file is saved to disk
+- Explained `os.path.join` and how `file_path` is constructed, not built-in
+- Flagged `qfx` missing from `ALLOWED_EXTENSIONS`
+- Discussed uploads folder options; user decided to keep files on disk for debugging/reprocessing value
+- Explained `os.makedirs('uploads', exist_ok=True)` pattern by analogy to existing `os.makedirs('data', ...)` in `app.py`; user added it
+
+---
+
 ## Session 11 — 2026-05-10
 
 ### Upload Pipeline Design

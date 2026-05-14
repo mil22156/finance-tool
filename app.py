@@ -16,7 +16,11 @@ app.register_blueprint(upload_bp)
 
 app.secret_key = os.getenv('SECRET_KEY')
 
+# Ensure necessary directories exist
 os.makedirs("data", exist_ok=True)
+
+os.makedirs('uploads', exist_ok=True)
+
 init_registry(REGISTRY_PATH)
 
 @app.route('/')

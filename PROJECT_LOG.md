@@ -1,5 +1,16 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-13 (end of session)
+- Started implementing Step 1 (file validation) in `routes/upload.py`
+- Added `ALLOWED_EXTENSIONS = {'csv', 'ofx'}` and `allowed_file()` helper at top of file
+- Fixed validation check ordering: no-file-in-request → empty filename → `allowed_file()` → save; earlier draft had checks after `file.save()` which would have crashed
+- Added `else` branch to flash a clear error and redirect if file type is not allowed
+- Added `os.makedirs('uploads', exist_ok=True)` to `app.py` so uploads folder is created at startup
+- Decided to keep uploaded files on disk (not discard after processing) — useful for debugging bad imports and re-processing
+- Note: `qfx` still missing from `ALLOWED_EXTENSIONS` — to fix next session
+- Note: `uploads/` path is currently relative; revisit absolute path and per-household subfolders post-v1
+- Next: add `qfx` to allowed extensions, then move on to Step 2 (column mapping)
+
 ## 2026-05-10 (end of session)
 - Removed duplicate `/upload` route from `app.py` — Blueprint in `routes/upload.py` is now the sole handler; completes the Blueprint refactor to-do
 - Designed the upload validation pipeline — 3-step gate before any data is written:
