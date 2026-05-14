@@ -7,6 +7,22 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 13 — 2026-05-14
+
+### Upload Step 2 — Column Mapping Scaffolding
+- Explained the two-route structure for the upload pipeline: `POST /upload` saves the file and renders the mapping preview; `POST /upload/confirm` receives the confirmed mapping
+- Explained `pd.read_csv()` with `nrows=5` and `header=0 if has_headers else None` for reading a preview without loading the full file
+- Explained checkbox behavior in Flask forms — unchecked checkboxes send nothing, so `'has_headers' in request.form` is more idiomatic than `request.form.get()`
+- Caught `app` incorrectly imported in Flask imports line; caught `session` missing from imports
+- Caught `@upload_confirm.route` — wrong object; should be `upload_bp.route`
+- Caught confirm route nested inside `upload()` function multiple times; explained decorator must be at top level followed immediately by `def`
+- Caught `return render_template('upload.html')` at wrong indentation level (outside both functions); explained it belongs inside `upload()` as the GET fallback
+- Explained Flask Blueprint decorator pattern — `upload_bp` is the container, route functions are registered on it
+- Explained session storage for multi-step flows — store `file_path` and `column_mapping` in session to pass state between routes without touching the file
+- Designed `upload_confirm` logic: session retrieval, form mapping collection, required-column validation, session storage of mapping for Step 3
+
+---
+
 ## Session 12 — 2026-05-13
 
 ### Upload Step 1 — File Validation

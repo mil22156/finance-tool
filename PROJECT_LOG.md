@@ -1,5 +1,14 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-14 (end of session)
+- Built out Step 2 (column mapping) scaffolding in `routes/upload.py`
+- Added `has_headers` checkbox to `upload.html` — checked by default; if unchecked, `pd.read_csv()` uses `header=None` to avoid treating first data row as headers
+- After file save, reads first 5 rows with Pandas and passes `headers` and `sample_rows` to `confirm.html` template (not yet built)
+- Stores file path in `session['uploaded_file']` to persist between Step 1 and Step 2
+- Added `upload_confirm()` route stub at `POST /upload/confirm` using `upload_bp` decorator
+- Designed `upload_confirm` logic: retrieve file path from session, collect per-column mapping from form (keys like `mapping_0`, `mapping_1`), validate that Date/Description/Amount are assigned, store confirmed mapping in `session['column_mapping']` for Step 3
+- Next: build `confirm.html` preview table with per-column dropdowns (Date / Description / Amount / Debit / Credit / Ignore), then implement `upload_confirm` logic
+
 ## 2026-05-13 (end of session)
 - Started implementing Step 1 (file validation) in `routes/upload.py`
 - Added `ALLOWED_EXTENSIONS = {'csv', 'ofx'}` and `allowed_file()` helper at top of file
