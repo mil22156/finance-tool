@@ -1,6 +1,6 @@
 # Project Log — Personal Finance Tool
 
-## 2026-05-15 (start of session)
+## 2026-05-15 (end of session)
 - Built `confirm.html` — column mapping preview template
   - Preview table renders headers as dropdowns + sample rows as data
   - Dropdown options: Ignore / Date / Description / Amount / Debit / Credit
@@ -10,7 +10,14 @@
   - Confirm and Go Back buttons placed below the table
   - `loop.index0` used for dropdown names (`mapping_0`, `mapping_1`, etc.) — matches `upload_confirm` logic
 - Resolved open question from CLAUDE.md: file held between steps via Flask session (`session['uploaded_file']`)
-- Next: implement `upload_confirm()` route logic
+- Fixed `UndefinedError: 'int object' has no attribute 'lower'` — caused by `pd.read_csv(header=None)` returning integer column indices; fixed by converting all columns to strings
+- Tested against a real Chase CSV (no header row, 7 columns); identified column layout: transaction date, post date, description, Chase category, transaction type, amount, empty trailing column
+- Decisions for next session — column mapping dropdown options need expanding:
+  - Split `Date` into `Transaction Date` and `Post Date` (two separate options); if only one date column present, default to Transaction Date
+  - Add `Category` option mapping to `api_category` field (for bank-provided categories like Chase exports)
+  - Auto-guess for `Category`: `'categ' in header.lower()`
+  - Full target dropdown set: Ignore / Transaction Date / Post Date / Description / Amount / Debit / Credit / Category
+- Next: update `confirm.html` with expanded dropdown options, then implement `upload_confirm()` route logic
 
 ## 2026-05-14 (end of session)
 - Built out Step 2 (column mapping) scaffolding in `routes/upload.py`

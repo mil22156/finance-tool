@@ -43,7 +43,8 @@ def upload():
         has_headers = 'has_headers' in request.form
 
         df = pd.read_csv(file_path, nrows=5, header=0 if has_headers else None  )  # Read only the first 5 rows for preview
-        headers = list(df.columns)
+        #AI note: this was a autocomplete suggestion
+        headers = [str(col) for col in df.columns] if has_headers else [f'Column {i}' for i in range(len(df.columns))]
         sample_rows = df.values.tolist()
 
         return render_template('confirm.html', headers=headers, sample_rows=sample_rows)
@@ -58,26 +59,29 @@ def upload_confirm():
         flash('Session expired, please upload the file again.', 'danger')
         return redirect('/upload')
 
-    # Read the mapping from the form AI Note. This was claudes suggestion for how to handle the mapping of columns. I would not have come up with this on my own.
+    # Read the mapping from the form AI Note. This was claudes suggestion for how to handle the mapping of columns. 
     mapping = {}
     for key, value in request.form.items():
         if key.startswith('mapping_'):
             column_index = int(key.split('_')[1])   
             mapping[column_index] = value
     
-    #Validat the required columns were assigned
+    #Validate the required columns were assigned
     if 'date' not in mapping.values() or 'description' not in mapping.values():
         flash('You must assign both a date and description column.', 'danger')
-        return redirect('/upload/confirm')
-    if 'amount' not in mapping.values():
-        flash('You must assign an amount column.', 'danger')
-        return redirect('/upload/confirm')
+        return redirect('/upload')
+    if 'amount' not in mapping.values() and not ('debit' in mapping.values() or 'credit' in mapping.values()):
+        flash('You must assign an amount column, or both a debit and credit column.', 'danger')
+        return redirect('/upload')
     
     # Store the mapping in the session for use in the final processing step
     session['column_mapping'] = mapping
 
+    # Temporary redirect to upload. This will eventually go to the processing step
+    return redirect('/upload')
+
     # Handle confirmation logic here
     # Column Validation (e.g., check that date column contains valid dates, amount column contains valid numbers)   
     # Transaction parsing logic (e.g., read the file, parse transactions, and prepare them for insertion into the database)
-        # Database insertion logic 
-        pass       
+    # Database insertion logic 
+           

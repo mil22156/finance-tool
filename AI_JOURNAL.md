@@ -16,6 +16,9 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 - Caught Copilot-suggested exact-match auto-guess (`header == 'Date'`); explained case-insensitive `'date' in header.lower()` is more robust for real bank exports; user updated all options
 - Caught incorrect Jinja2 `or` syntax: `{% if 'desc' or 'memo' in header.lower() %}` always evaluates true; corrected to `{% if 'desc' in header.lower() or 'memo' in header.lower() %}`
 - Confirmed session-based file staging resolves the open question in CLAUDE.md about holding the file between Step 2 and Step 3
+- Diagnosed `jinja2.exceptions.UndefinedError: 'int object' has no attribute 'lower'` — caused by `pd.read_csv(..., header=None)` returning integer column indices when no headers are present; fix is to convert columns to strings before passing to the template
+- Copilot-suggested fix for `headers` line: `[str(col) for col in df.columns] if has_headers else [f'Column {i}' for i in range(len(df.columns))]` — converts to strings in the has-headers case; generates "Column 0", "Column 1" labels in the no-headers case for better UX; user accepted the suggestion
+- Reviewed real Chase CSV to identify column layout; advised expanding dropdown options to include Transaction Date, Post Date, and Category (mapping to `api_category`) for next session
 
 ---
 
