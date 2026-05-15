@@ -7,6 +7,18 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 14 — 2026-05-15
+
+### confirm.html — Column Mapping Template
+- Caught `{% extends "base.html" %}` and `{% block content %}` — should be `layout.html` and `{% block main %}` to match all other templates
+- Explained `loop.index0` — Jinja2's zero-based loop counter; used to generate `mapping_0`, `mapping_1` etc. so form submission keys match what `upload_confirm` expects
+- Explained why `<form>` must wrap the table — dropdowns outside the form are not submitted
+- Caught Copilot-suggested exact-match auto-guess (`header == 'Date'`); explained case-insensitive `'date' in header.lower()` is more robust for real bank exports; user updated all options
+- Caught incorrect Jinja2 `or` syntax: `{% if 'desc' or 'memo' in header.lower() %}` always evaluates true; corrected to `{% if 'desc' in header.lower() or 'memo' in header.lower() %}`
+- Confirmed session-based file staging resolves the open question in CLAUDE.md about holding the file between Step 2 and Step 3
+
+---
+
 ## Session 13 — 2026-05-14
 
 ### Upload Step 2 — Column Mapping Scaffolding

@@ -1,5 +1,17 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-15 (start of session)
+- Built `confirm.html` — column mapping preview template
+  - Preview table renders headers as dropdowns + sample rows as data
+  - Dropdown options: Ignore / Date / Description / Amount / Debit / Credit
+  - Auto-guess uses case-insensitive `header.lower()` checks (e.g. `'date' in header.lower()`)
+  - Description auto-guess catches both `'desc'` and `'memo'` column naming conventions
+  - `<form>` wraps entire table so all dropdowns are submitted together
+  - Confirm and Go Back buttons placed below the table
+  - `loop.index0` used for dropdown names (`mapping_0`, `mapping_1`, etc.) — matches `upload_confirm` logic
+- Resolved open question from CLAUDE.md: file held between steps via Flask session (`session['uploaded_file']`)
+- Next: implement `upload_confirm()` route logic
+
 ## 2026-05-14 (end of session)
 - Built out Step 2 (column mapping) scaffolding in `routes/upload.py`
 - Added `has_headers` checkbox to `upload.html` — checked by default; if unchecked, `pd.read_csv()` uses `header=None` to avoid treating first data row as headers
