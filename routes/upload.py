@@ -67,8 +67,8 @@ def upload_confirm():
             mapping[column_index] = value
     
     #Validate the required columns were assigned
-    if 'date' not in mapping.values() or 'description' not in mapping.values():
-        flash('You must assign both a date and description column.', 'danger')
+    if 'date' not in mapping.values() and 'transaction_date' not in mapping.values():
+        flash('You must assign a date column.', 'danger')
         return redirect('/upload')
     if 'amount' not in mapping.values() and not ('debit' in mapping.values() or 'credit' in mapping.values()):
         flash('You must assign an amount column, or both a debit and credit column.', 'danger')

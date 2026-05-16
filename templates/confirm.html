@@ -17,7 +17,10 @@
                     <select name="mapping_{{ loop.index0 }}" class="form-select form-select-sm">
                         <option value="ignore">Ignore</option>
                         <option value="date" {% if 'date' in header.lower() %}selected{% endif %}>Date</option>
+                        <option value="transaction_date" {% if 'trans' in header.lower() and 'date' in header.lower() %}selected{% endif %}>Transaction Date</option>
+                        <option value="post_date" {% if 'post' in header.lower() and 'date' in header.lower() %}selected{% endif %}>Post Date</option>
                         <option value="description" {% if 'desc' in header.lower() or 'memo' in header.lower() %}selected{% endif %}>Description</option>
+                        <option value="category" {% if 'cat' in header.lower() %}selected{% endif %}>Category</option>
                         <option value="amount" {% if 'amount' in header.lower() %}selected{% endif %}>Amount</option>
                         <option value="debit" {% if 'debit' in header.lower() %}selected{% endif %}>Debit</option>
                         <option value="credit" {% if 'credit' in header.lower() %}selected{% endif %}>Credit</option>

@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-16 (end of session)
+- Fixed two auto-guess bugs in `confirm.html` (lines 20-21): `'trans' and 'date' in header.lower()` was incorrect — `'trans'` alone is always truthy; corrected to `'trans' in header.lower() and 'date' in header.lower()`; same fix for `post_date`
+- Decided to keep the generic `Date` dropdown option alongside `Transaction Date` and `Post Date`: browser's "last `selected` wins" behavior means the more specific options naturally take priority when headers contain both keywords — no extra exclusion condition needed
+- Fixed `upload_confirm()` validation: accepts `date` or `transaction_date` as a valid date mapping; `post_date` alone is not sufficient — user confirmed this is the correct requirement
+- Upload pipeline tested through Step 2; `upload_confirm()` route working
+- Next: Step 3 — column validation (read full file with confirmed mapping; reject on any unparseable date or amount with row number, column, and value found)
+
 ## 2026-05-15 (end of session)
 - Built `confirm.html` — column mapping preview template
   - Preview table renders headers as dropdowns + sample rows as data

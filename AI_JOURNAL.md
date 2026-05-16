@@ -7,6 +7,17 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 15 — 2026-05-16
+
+### confirm.html — Dropdown Auto-Guess Fixes
+- Caught two broken auto-guess conditions on `Transaction Date` and `Post Date` options: `'trans' and 'date' in header.lower()` uses the same logical error as last session — `'trans'` is a non-empty string, always truthy; corrected to `'trans' in header.lower() and 'date' in header.lower()`
+- Explained "last `selected` wins" browser behavior — when multiple `<option>` elements have `selected`, the browser renders the last one; this means the generic `Date` option naturally loses to `Transaction Date` or `Post Date` for headers containing both keywords, so no extra exclusion condition is needed on the `Date` option
+
+### upload_confirm() — Validation Logic Review
+- Reviewed date validation on line 70; confirmed it correctly requires `date` or `transaction_date` — `post_date` alone is not a sufficient date mapping per user's design intent
+
+---
+
 ## Session 14 — 2026-05-15
 
 ### confirm.html — Column Mapping Template
