@@ -1,11 +1,23 @@
 # Project Log — Personal Finance Tool
 
-## 2026-05-16 (end of session)
+## 2026-05-16 (end of session — continued)
 - Fixed two auto-guess bugs in `confirm.html` (lines 20-21): `'trans' and 'date' in header.lower()` was incorrect — `'trans'` alone is always truthy; corrected to `'trans' in header.lower() and 'date' in header.lower()`; same fix for `post_date`
 - Decided to keep the generic `Date` dropdown option alongside `Transaction Date` and `Post Date`: browser's "last `selected` wins" behavior means the more specific options naturally take priority when headers contain both keywords — no extra exclusion condition needed
 - Fixed `upload_confirm()` validation: accepts `date` or `transaction_date` as a valid date mapping; `post_date` alone is not sufficient — user confirmed this is the correct requirement
 - Upload pipeline tested through Step 2; `upload_confirm()` route working
 - Next: Step 3 — column validation (read full file with confirmed mapping; reject on any unparseable date or amount with row number, column, and value found)
+
+## 2026-05-16 (end of session)
+- Built `upload_process()` route (Step 3 — column validation) in `routes/upload.py`
+  - Reads full CSV with `pd.read_csv(file_path)` once at top
+  - Iterates `mapping.items()` for date columns (`date`, `transaction_date`, `post_date`) and validates each value with `pd.to_datetime()`
+  - Iterates `mapping.items()` for amount/debit/credit columns and validates each value with `float()`
+  - Uses `enumerate(..., start=2)` to track row numbers (offset by 1 for header row)
+  - Uses `int(column_index)` to handle session key string conversion
+  - Error flash includes row number, column index, and bad value
+- Next session:
+  - Improve error messages: replace column index number with column name (`df.columns[int(column_index)]`); include the transaction date and description alongside the bad value so the user can locate the row in their bank export
+  - Wire up `upload_process` — needs a form or redirect from `upload_confirm` to actually be reachable
 
 ## 2026-05-15 (end of session)
 - Built `confirm.html` — column mapping preview template

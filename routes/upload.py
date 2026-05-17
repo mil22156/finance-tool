@@ -77,11 +77,53 @@ def upload_confirm():
     # Store the mapping in the session for use in the final processing step
     session['column_mapping'] = mapping
 
-    # Temporary redirect to upload. This will eventually go to the processing step
+    # Process the file and mapping to prepare for database insertion
     return redirect('/upload')
 
     # Handle confirmation logic here
-    # Column Validation (e.g., check that date column contains valid dates, amount column contains valid numbers)   
+    # Column Validation (e.g., check that date column contains valid dates, amount column contains valid numbers)
+@upload_bp.route('/upload/process', methods=['POST'])
+def upload_process():
+     # Get the uploaded file path and column mapping from the session
+    file_path = session.get('uploaded_file')
+    mapping = session.get('column_mapping')
+    if not file_path or not mapping:
+        flash('Session expired, please upload the file again.', 'danger')
+        return redirect('/upload')  
+    
+    # Check that each record has a valid date
+    df = pd.read_csv(file_path)  # Read the entire file for processing
+
+    for column_index, column_type in mapping.items():
+        if column_type in ['date', 'transaction_date', 'post_date']:            
+            for row_num, value in enumerate(df.iloc[:, int(column_index)], start=2):  # Start at 2 to account for header row
+                try:
+                    pd.to_datetime(value)
+                except ValueError:
+                    flash(f'Invalid date at row {row_num} column "{column_index}";{value}', 'danger')
+                    return redirect('/upload')
+                
+
+    # Check that each record has a valid amount (either in the amount column or in the debit/credit columns)
+    for column_index, column_type in mapping.items():
+        if column_type == 'amount':
+            
+            for row_num, value in enumerate(df.iloc[:, int(column_index)], start=2):
+                try:
+                    float(value)
+                except ValueError:
+                    flash(f'Invalid amount at row {row_num} column "{column_index}";{value}', 'danger')
+                    return redirect('/upload')
+        elif column_type in ['debit', 'credit']:
+            
+            for row_num, value in enumerate(df.iloc[:, int(column_index)], start=2):
+                try:
+                    float(value)
+                except ValueError:
+                    flash(f'Invalid {column_type} at row {row_num} column "{column_index}";{value}', 'danger')
+                    return redirect('/upload')  
+
+
     # Transaction parsing logic (e.g., read the file, parse transactions, and prepare them for insertion into the database)
     # Database insertion logic 
            

@@ -7,6 +7,19 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 16 — 2026-05-16 (continued)
+
+### upload_process() — Step 3 Column Validation
+- Explained why `pd.read_csv()` should be called once at the top rather than inside the loop — avoids re-reading the file for each column
+- Explained why iterating `mapping.items()` directly is simpler than iterating `df.columns` and doing a reverse lookup into the mapping
+- Explained `enumerate(..., start=2)` for tracking row numbers with header offset
+- Flagged session key string conversion issue — Flask JSON-serializes session dicts, converting integer keys to strings; fix is `int(column_index)` when passing to `df.iloc`
+- Flagged `df.iloc[:, 0]` hardcoded column in amount/debit/credit loops — should be `df.iloc[:, int(column_index)]`; user fixed
+- Suggested replacing column index number in error messages with column name via `df.columns[int(column_index)]`
+- User decision: error messages should also include the transaction date and description so the user can locate the bad row in their bank export — deferred to next session
+
+---
+
 ## Session 15 — 2026-05-16
 
 ### confirm.html — Dropdown Auto-Guess Fixes
