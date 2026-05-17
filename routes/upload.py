@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 from database.db import get_db, REGISTRY_PATH
 import pandas as pd
+import hashlib
 
 
 upload_bp = Blueprint('upload', __name__)
@@ -142,14 +143,52 @@ def upload_process():
             
 
 
-    # rename the columns in the dataframe based on the mapping provided by the user, so that we have consistent column names to work with for the rest of the processing steps. This will make it easier to handle the data in a standardized way regardless of how the user mapped their columns.
+    # AI suggested this. I would have probably done something more clunky: rename the columns in the dataframe based on the mapping provided by the user, so that we have consistent column names to work with for the rest of the processing steps. This will make it easier to handle the data in a standardized way regardless of how the user mapped their columns.
     df = df.rename(columns={df.columns[int(k)]: v for k, v in mapping.items()})
     
     # Normalize — clean up the data: convert amounts to signed floats (combine debit/credit if needed), parse dates to a consistent
-    # format, strip whitespace from descriptions
+    # format. rename category to api_category. 
+    # drop ignored columns.
+    df = df.drop(columns=['ignore'], errors='ignore')
 
+    # Normalize the transaction amount columns by stripping any currency symbols or commas or spaces and converting to float
+    for col in ['amount', 'debit', 'credit']:
+        if col in df.columns:
+            df[col] = df[col].astype(str).str.replace('[$, ]', '', regex=True)
+            df[col] = pd.to_numeric(df[col])  # Convert to numeric
+
+
+    # If there are separate debit and credit columns, combine them into a single amount column with positive values for credits and negative values for debits
+    if 'debit' in df.columns and 'credit' in df.columns:
+        df['amount'] = df.apply(lambda row: -row['debit'] if not pd.isna(row['debit']) else (row['credit'] if not pd.isna(row['credit']) else 0), axis=1)
+        df = df.drop(columns=['debit', 'credit'])
+    
+    
+    # Parse dates to a consistent format including time if available(e.g., ISO format)
+    # If there is a "date" column, not further processing after formatting.
+    # If there is not already a "date" column and there is a transaction_date then copy the transaction_date into the date column.
+    # If there is no transaction_date but there is a post_date, copy the post_date into the date column. This way we have a consistent "date" column to work with for the rest of the processing, regardless of how the user mapped their columns.
+    if 'date' in df.columns:
+        df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')  # Convert to datetime and format as string
+    elif 'transaction_date' in df.columns:
+        df['date'] = pd.to_datetime(df['transaction_date']).dt.strftime('%Y-%m-%d')
+    elif 'post_date' in df.columns:
+        df['date'] = pd.to_datetime(df['post_date']).dt.strftime('%Y-%m-%d')    
+    if 'transaction_date' in df.columns:
+        df = df.drop(columns=['transaction_date'])
+    if 'post_date' in df.columns:
+        df = df.drop(columns=['post_date'])
+    
+    # Rename category column to api_category to avoid confusion with the categories in our database
+    if 'category' in df.columns:
+        df = df.rename(columns={'category': 'api_category'})    
+    
     # Deduplication logic (e.g., check if a transaction with the same date, description, and amount already exists in the database to avoid duplicates)
-
+    def make_dedup_hash(account_id, date, description, amount):
+        value = f"{account_id}|{date}|{amount}|{description.strip().lower()}"
+        return hashlib.sha256(value.encode('utf-8')).hexdigest()
+    df['dedup_hash'] = df.apply(lambda row: make_dedup_hash(account_id, row['date'], row['amount'], row['description']), axis=1)
+    
     # Categorization logic (e.g., use the description to suggest a category for the transaction, either through simple keyword matching or an AI model)
 
     # Review and confirmation step (e.g., show the user a preview of the parsed transactions with the assigned categories and allow them to make any necessary adjustments before finalizing the import)

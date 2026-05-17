@@ -7,6 +7,17 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 18 — 2026-05-17 (continued)
+
+### upload_process() — Normalization Fixes and Dedup Design
+- Caught `float(df[col])` on line 157 — `float()` works on a single value, not a Pandas column; corrected to `pd.to_numeric(df[col])`
+- Confirmed currency stripping should happen before debit/credit combine so the `df.apply()` lambda receives numeric values
+- Explained that `account_id` in the dedup hash is needed to distinguish same-bank transactions across different accounts (e.g. two accounts with identical date/amount/description); user/household ID is not the right choice
+- Identified design gap: `upload.html` has no account selection, so `account_id` cannot flow into the pipeline; dedup hash cannot be completed until this is resolved
+- Recommended adding account selection inline on `upload.html` — dropdown of existing accounts plus "Add new account" option — rather than a separate accounts page, to keep the upload flow self-contained
+
+---
+
 ## Session 17 — 2026-05-17
 
 ### upload_process() — Parse and Normalize Design

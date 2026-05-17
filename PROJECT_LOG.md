@@ -1,5 +1,16 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-17 (end of session — continued)
+- Completed normalization logic in `upload_process()`:
+  - Fixed ignore column drop: replaced loop with `df.drop(columns=['ignore'], errors='ignore')`
+  - Added currency stripping (`[$,]`) on `amount`, `debit`, and `credit` columns before any math
+  - Fixed `float(df[col])` → `pd.to_numeric(df[col])` — `float()` works on single values, not columns
+  - Debit/credit combine now works correctly since columns are already numeric before the `df.apply()` call
+- Started deduplication design — identified that `account_id` is required in the dedup hash to distinguish transactions across different bank accounts
+- Identified design gap: user has no way to select an account during upload yet
+- Decision: add account selection to `upload.html` — dropdown of existing accounts plus inline "Add new account" option; this must be done before dedup hash can be completed
+- Next: add account selection to `upload.html` and wire `account_id` through the session into the dedup hash
+
 ## 2026-05-17 (end of session)
 - Improved `upload_process()` error messages: replaced hardcoded `row.iloc[0]` and `row.iloc[1]` with mapping-aware `date_col` and `desc_col` lookups; errors now show column name, row number, bad value, plus the row's date and description for context
 - Added `pd.isna(value)` skip for debit/credit columns — empty cells are valid since a row will only have one or the other
