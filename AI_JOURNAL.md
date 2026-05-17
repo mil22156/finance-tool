@@ -7,6 +7,20 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 17 — 2026-05-17
+
+### upload_process() — Parse and Normalize Design
+- Explained `df.iterrows()` — iterates a dataframe one row at a time, yielding row index and row as a Series
+- Explained `row.iloc[n]` — retrieves a cell value from a row by integer position
+- Explained why `row_num + 2` is used in error messages — accounts for zero-based indexing (+1) and the header row (+1)
+- Suggested `df.rename(columns={df.columns[int(k)]: v for k, v in mapping.items()})` as more efficient than building a list of dicts — stays in Pandas, enables column-wise operations in normalization
+- Explained the rename line in detail: dict comprehension iterates mapping, converts string keys to int, looks up actual column name via `df.columns[int(k)]`, maps to field name
+- Explained `session.get()` — retrieves a value from Flask's session dict without raising KeyError if missing; session keys like `uploaded_file` and `column_mapping` are user-defined, not built-in Flask attributes
+- Advised that normalization needs to bridge mapping names to database names: `debit`/`credit` → combined signed `amount`; `transaction_date`/`post_date` → `date`; `category` → `api_category`
+- Advised against adding `post_date` to schema — option 3 (both date types map to `date` field) is sufficient for v1
+
+---
+
 ## Session 16 — 2026-05-16 (continued)
 
 ### upload_process() — Step 3 Column Validation

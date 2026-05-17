@@ -1,5 +1,20 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-17 (end of session)
+- Improved `upload_process()` error messages: replaced hardcoded `row.iloc[0]` and `row.iloc[1]` with mapping-aware `date_col` and `desc_col` lookups; errors now show column name, row number, bad value, plus the row's date and description for context
+- Added `pd.isna(value)` skip for debit/credit columns — empty cells are valid since a row will only have one or the other
+- Decided to use `df.rename()` to map bank column names to database field names rather than building a list of dicts — stays in Pandas, more efficient, cleaner for normalization step
+- Decided against adding `post_date` to the schema — both `transaction_date` and `post_date` will map to the `date` field; keeping schema simple
+- Wrote `df.rename(columns={df.columns[int(k)]: v for k, v in mapping.items()})` to rename columns using the confirmed mapping
+- Identified normalization tasks for next session:
+  - Combine `debit`/`credit` columns into signed `amount`
+  - Rename `transaction_date`/`post_date` → `date`
+  - Rename `category` → `api_category`
+  - Drop ignored columns
+  - Parse dates with `pd.to_datetime()`
+  - Strip whitespace from descriptions with `.str.strip()`
+- Next: implement normalization, then deduplication, then wire up `upload_process` to be reachable
+
 ## 2026-05-16 (end of session — continued)
 - Fixed two auto-guess bugs in `confirm.html` (lines 20-21): `'trans' and 'date' in header.lower()` was incorrect — `'trans'` alone is always truthy; corrected to `'trans' in header.lower() and 'date' in header.lower()`; same fix for `post_date`
 - Decided to keep the generic `Date` dropdown option alongside `Transaction Date` and `Post Date`: browser's "last `selected` wins" behavior means the more specific options naturally take priority when headers contain both keywords — no extra exclusion condition needed

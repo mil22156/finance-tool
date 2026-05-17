@@ -91,39 +91,70 @@ def upload_process():
         flash('Session expired, please upload the file again.', 'danger')
         return redirect('/upload')  
     
-    # Check that each record has a valid date
+    # Check that each record has a valid date. AI suggested using df.iloc and df.itterrows to loop through the rows and validate the date format. 
+    # AI also suggested how to set up the error message
     df = pd.read_csv(file_path)  # Read the entire file for processing
+    # Claude suggested how to get the column index for the date and description columns based on the mapping provided by the user. This allows us to validate the correct columns for dates and descriptions.
+    date_col = next((int(k) for k, v in mapping.items() if v in ['date', 'transaction_date', 'post_date']), None    )
+    desc_col = next((int(k) for k, v in mapping.items() if v == 'description'), None)
 
     for column_index, column_type in mapping.items():
-        if column_type in ['date', 'transaction_date', 'post_date']:            
-            for row_num, value in enumerate(df.iloc[:, int(column_index)], start=2):  # Start at 2 to account for header row
+        if column_type in ['date', 'transaction_date', 'post_date']:
+            for row_num, row in df.iterrows():
+                value = row.iloc[int(column_index)]  # Get the value from the date column
                 try:
-                    pd.to_datetime(value)
+                    pd.to_datetime(value)  # Try to convert to datetime
                 except ValueError:
-                    flash(f'Invalid date at row {row_num} column "{column_index}";{value}', 'danger')
+                    col_name = df.columns[int(column_index)]
+                    flash(f'Invalid date "{value}" in column "{col_name}" at row {row_num + 2}. '
+                          f'Date: {row.iloc[date_col] if date_col is not None else "unknown"}, '
+                          f'Description: {row.iloc[desc_col] if desc_col is not None else "unknown"}', 'danger')
                     return redirect('/upload')
                 
 
     # Check that each record has a valid amount (either in the amount column or in the debit/credit columns)
     for column_index, column_type in mapping.items():
-        if column_type == 'amount':
-            
-            for row_num, value in enumerate(df.iloc[:, int(column_index)], start=2):
+        if column_type in ['amount']:
+            for row_num, row in df.iterrows():
+                value = row.iloc[int(column_index)]  # Get the value from the amount column
                 try:
-                    float(value)
+                    float(value)  # Try to convert to float
                 except ValueError:
-                    flash(f'Invalid amount at row {row_num} column "{column_index}";{value}', 'danger')
+                    col_name = df.columns[int(column_index)]
+                    flash(f'Invalid amount "{value}" in column "{col_name}" at row {row_num + 2}. '
+                          f'Date: {row.iloc[date_col] if date_col is not None else "unknown"}, '
+                          f'Description: {row.iloc[desc_col] if desc_col is not None else "unknown"}', 'danger')
                     return redirect('/upload')
         elif column_type in ['debit', 'credit']:
-            
-            for row_num, value in enumerate(df.iloc[:, int(column_index)], start=2):
+            for row_num, row in df.iterrows():
+                value = row.iloc[int(column_index)]  # Get the value from the debit/credit column
+                if pd.isna(value):
+                    continue  # Skip empty values, we'll check that at least one of debit/credit is filled in later
                 try:
-                    float(value)
+                    float(value)  # Try to convert to float
                 except ValueError:
-                    flash(f'Invalid {column_type} at row {row_num} column "{column_index}";{value}', 'danger')
-                    return redirect('/upload')  
+                    col_name = df.columns[int(column_index)]
+                    flash(f'Invalid amount "{value}" in column "{col_name}" at row {row_num + 2}. '
+                          f'Date: {row.iloc[date_col] if date_col is not None else "unknown"}, '
+                          f'Description: {row.iloc[desc_col] if desc_col is not None else "unknown"}', 'danger')
+                    return redirect('/upload')
+            
+            
 
 
-    # Transaction parsing logic (e.g., read the file, parse transactions, and prepare them for insertion into the database)
-    # Database insertion logic 
+    # rename the columns in the dataframe based on the mapping provided by the user, so that we have consistent column names to work with for the rest of the processing steps. This will make it easier to handle the data in a standardized way regardless of how the user mapped their columns.
+    df = df.rename(columns={df.columns[int(k)]: v for k, v in mapping.items()})
+    
+    # Normalize — clean up the data: convert amounts to signed floats (combine debit/credit if needed), parse dates to a consistent
+    # format, strip whitespace from descriptions
+
+    # Deduplication logic (e.g., check if a transaction with the same date, description, and amount already exists in the database to avoid duplicates)
+
+    # Categorization logic (e.g., use the description to suggest a category for the transaction, either through simple keyword matching or an AI model)
+
+    # Review and confirmation step (e.g., show the user a preview of the parsed transactions with the assigned categories and allow them to make any necessary adjustments before finalizing the import)
+
+    # Commit the transactions to the database after confirmation, ensuring that all necessary fields are populated and valid. This may involve inserting into multiple tables (e.g., transactions, categories) and handling any relationships between them.
+
+
            
