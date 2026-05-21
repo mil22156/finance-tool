@@ -7,6 +7,16 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 20 — 2026-05-21
+
+### Categorization Design
+- Discussed moving categorization confirmation to post-import to lower the bar for getting data in; rules engine populates suggested category at import time, user confirms later on the transactions page
+- User proposed three-field category design to avoid overwriting data: `api_category` (bank's label), `suggested_category_id` (rules engine guess), `category_id` (user confirmed)
+- Recommended `suggested_category_id` as a FK to the categories table rather than free text, since the rules engine works from the household's own categories; user agreed
+- User added `suggested_category_id INTEGER` to schema.sql with correct FK and `ON DELETE SET NULL`
+
+---
+
 ## Session 19 — 2026-05-20
 
 ### Account Selection — Upload Flow

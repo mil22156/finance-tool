@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-21 (end of session)
+- Philosophy discussion on categorization: decided to move user categorization confirmation to post-import rather than blocking the import flow; rules engine will populate `suggested_category_id` at import time
+- User proposed three distinct category fields to avoid overwriting data: `api_category` (bank's label), `suggested_category_id` (rules engine guess), `category_id` (user confirmed)
+- Added `suggested_category_id INTEGER` to transactions table — FK to `categories(id)` with `ON DELETE SET NULL`, consistent with existing `category_id`
+- Note: existing test DBs need to be deleted and recreated to pick up schema change
+- Next: dedup hash, then wire up `upload_process`
+
 ## 2026-05-20 (end of session)
 - Added account selection to `upload.html` — dropdown of existing accounts with "Add Account" button to the right using Bootstrap `d-flex`
 - Built `/accounts/new` route in `app.py` (GET + POST) — validates all fields, inserts into household DB, redirects to `/accounts` on success

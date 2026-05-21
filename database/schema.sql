@@ -55,6 +55,7 @@ CREATE TABLE transactions (
     description TEXT NOT NULL,
     merchant_name TEXT,
     category_ID INTEGER,
+    suggested_category_id INTEGER,
     api_category TEXT,
     pending BOOLEAN NOT NULL DEFAULT 0,
     notes TEXT,
@@ -62,6 +63,7 @@ CREATE TABLE transactions (
     source TEXT NOT NULL CHECK(source IN ('csv', 'ofx', 'api', 'manual')),
     import_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     statement_id INTEGER,
+    FOREIGN KEY (suggested_category_id) REFERENCES categories(id) ON DELETE SET NULL,
     FOREIGN KEY (category_ID) REFERENCES categories(id) ON DELETE SET NULL,
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
     FOREIGN KEY (statement_id) REFERENCES statements(id) ON DELETE CASCADE
