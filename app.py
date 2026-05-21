@@ -172,6 +172,29 @@ def add_user():
 def accounts():
     return render_template('accounts.html')
 
+# Add Account route
+@app.route('/accounts/new', methods=['GET', 'POST'])
+def add_account():
+    if request.method == 'POST':
+        # get form fields: account name, institution, account type, currency
+        account_name = request.form.get('account_name')
+        institution = request.form.get('institution')
+        account_type = request.form.get('account_type')
+        currency = request.form.get('currency')
+        # validate fields
+        if not account_name or not institution or not account_type or not currency:
+            flash('All fields are required.', 'danger')
+            return redirect('/accounts/new') 
+        #  insert account into the household database
+        household_conn = get_db(session['household_db_path'])
+        household_conn.execute(
+            'INSERT INTO accounts (name, institution, account_type, currency) VALUES (?, ?, ?, ?)', (account_name, institution, account_type, currency))
+        household_conn.commit()
+        household_conn.close()
+        flash('Account added successfully.', 'success')
+        return redirect('/accounts')
+    return render_template('add_account.html')    
+        
 # Logout route
 @app.route('/logout')
 def logout():

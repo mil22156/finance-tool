@@ -4,9 +4,25 @@
 
 {% block main %}
 <div class="container mt-4">
+    <!-- Dropdown menu for selecting the account label shows  name (institution) value is account id -->
     <h2>Upload Transactions</h2>
     <!-- These are buttons for file select and upload. For now they will not do anything.-->
     <form method="post" enctype="multipart/form-data">
+        
+
+        <label for="accountSelect" class="form-label">Select Account:</label>
+        <div class="d-flex gap-2 align-items-center">
+            <select class="form-control" id="accountSelect" name="account_id">
+                <option value="">-- Choose an account --</option>
+                {% for account in accounts %}
+                <option value="{{ account['id'] }}">{{ account['name'] }} ({{ account['institution'] }})</option>
+                {% endfor %}
+                <!-- Options will be populated by server-side code -->
+            </select>
+            <a href="/accounts/new" class="btn btn-secondary text-nowrap">Add Account</a>
+        </div>
+
+    
     <div class="mb-3">
         <label for="transactionFile" class="form-label">Select a file to upload:</label>
         <input class="form-control" type="file" id="transactionFile" name="file"

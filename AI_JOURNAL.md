@@ -7,6 +7,23 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 19 — 2026-05-20
+
+### Account Selection — Upload Flow
+- Caught malformed `<div>` wrapping the account dropdown in `upload.html` (quote in class name, duplicate id/name attributes); explained Bootstrap `d-flex gap-2 align-items-center` for side-by-side layout
+- Caught `account['account_id']` — schema column is `id`; corrected to `account['id']`
+- Caught account dropdown outside the `<form>` tag — would not be submitted; restructured so dropdown is inside the form
+- Caught `{% block content %}` in `add_account.html` — should be `{% block main %}`
+- Caught `url_for('accounts.create_account')` — no Blueprint named `accounts`, no function `create_account`; replaced with `action="/accounts/new"`
+- Caught `credit_card` and `loan` in account_type options — not in schema CHECK constraint; corrected to `credit` and `other`
+- Caught `methods` missing from `/accounts/new` route — POST never handled; added `methods=['GET', 'POST']`
+- Caught `account_type` column name in INSERT was `type` — corrected to `account_type`
+- Caught redirect on validation failure still pointing to `/add_account` — corrected to `/accounts/new`
+- Explained reading form value into a local variable before checking it — `session['account_id']` raises KeyError before the session key is set; use `account_id = request.form.get('account_id')` then check `if not account_id`
+- User caught: `name="name"` in `add_account.html` didn't match `request.form.get('account_name')` in route — corrected to `name="account_name"`
+
+---
+
 ## Session 18 — 2026-05-17 (continued)
 
 ### upload_process() — Normalization Fixes and Dedup Design

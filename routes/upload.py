@@ -37,10 +37,18 @@ def upload():
             flash('Invalid file type. Only CSV and OFX files are allowed.', 'danger')
             return redirect('/upload') 
             
-           
+        
+        # validate that an account was selected
+        account_id = request.form.get('account_id')
+        if not account_id:
+            flash('No account selected', 'danger')
+            return redirect('/upload')
+
         # column mapping logic (e.g., allow user to specify which columns correspond to date, description, amount)  
         session['uploaded_file'] = file_path
-        
+        session['account_id'] = account_id
+
+                        
         has_headers = 'has_headers' in request.form
 
         df = pd.read_csv(file_path, nrows=5, header=0 if has_headers else None  )  # Read only the first 5 rows for preview
@@ -50,8 +58,12 @@ def upload():
 
         return render_template('confirm.html', headers=headers, sample_rows=sample_rows)
 
-    return render_template('upload.html')
-
+    else:
+        db = get_db(session['household_db_path'])
+        accounts = db.execute('SELECT id, name, institution FROM accounts').fetchall()
+        db.close()
+        return render_template('upload.html', accounts=accounts)
+    
 @upload_bp.route('/upload/confirm', methods=['POST'])
 def upload_confirm():
     # Get the uploaded file path from the session
@@ -184,11 +196,12 @@ def upload_process():
         df = df.rename(columns={'category': 'api_category'})    
     
     # Deduplication logic (e.g., check if a transaction with the same date, description, and amount already exists in the database to avoid duplicates)
+    # to do : add in account_id
     def make_dedup_hash(account_id, date, description, amount):
         value = f"{account_id}|{date}|{amount}|{description.strip().lower()}"
         return hashlib.sha256(value.encode('utf-8')).hexdigest()
     df['dedup_hash'] = df.apply(lambda row: make_dedup_hash(account_id, row['date'], row['amount'], row['description']), axis=1)
-    
+
     # Categorization logic (e.g., use the description to suggest a category for the transaction, either through simple keyword matching or an AI model)
 
     # Review and confirmation step (e.g., show the user a preview of the parsed transactions with the assigned categories and allow them to make any necessary adjustments before finalizing the import)

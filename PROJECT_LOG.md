@@ -1,5 +1,15 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-20 (end of session)
+- Added account selection to `upload.html` — dropdown of existing accounts with "Add Account" button to the right using Bootstrap `d-flex`
+- Built `/accounts/new` route in `app.py` (GET + POST) — validates all fields, inserts into household DB, redirects to `/accounts` on success
+- Built `add_account.html` template — fixed `{% block main %}`, action points to `/accounts/new`, account_type options match schema CHECK constraint (`checking`, `savings`, `credit`, `investment`, `other`)
+- Added account query to upload GET handler in `routes/upload.py` — fetches accounts from household DB and passes to template
+- Added `account_id` validation to upload POST handler — reads from form, checks before file save, stores in session
+- Fixed form field mismatch in `add_account.html`: `name="name"` → `name="account_name"` to match `request.form.get('account_name')` in the route
+- Tested end to end — account creation and upload account selection working
+- Next: complete dedup hash now that `account_id` is available in session; then wire up `upload_process`
+
 ## 2026-05-17 (end of session — continued)
 - Completed normalization logic in `upload_process()`:
   - Fixed ignore column drop: replaced loop with `df.drop(columns=['ignore'], errors='ignore')`
