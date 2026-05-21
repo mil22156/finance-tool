@@ -9,6 +9,12 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ## Session 20 — 2026-05-21
 
+### Dedup Hash, Pipeline Wiring, and Testing
+- Explained that `account_id` fetched from session inside `make_dedup_hash` overwrites the parameter — removed session call from inside function, fetched `account_id` at top of `upload_process` instead
+- Diagnosed 32 rows in Chase CSV where `&amp,` (HTML-encoded ampersand followed by comma) split descriptions across columns; fixed by replacing `&amp,` with `&amp ` in a modified copy of the file using `sed`
+- Explained that GET/POST distinction for `upload_process` doesn't matter since all data is in the session — changed to accept GET so `redirect()` from `upload_confirm` works
+- Diagnosed `TypeError: did not return a valid response` — `upload_process` had no return statement; added temporary redirect placeholder
+
 ### Categorization Design
 - Discussed moving categorization confirmation to post-import to lower the bar for getting data in; rules engine populates suggested category at import time, user confirms later on the transactions page
 - User proposed three-field category design to avoid overwriting data: `api_category` (bank's label), `suggested_category_id` (rules engine guess), `category_id` (user confirmed)

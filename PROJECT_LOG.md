@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-21 (end of session — continued)
+- Completed dedup hash: `make_dedup_hash()` function hashes account_id, date, description (stripped/lowercased), and amount using SHA256; applied to full dataframe with `df.apply()`
+- Wired up `upload_process` — changed to `methods=['GET', 'POST']` and `upload_confirm` now redirects to `/upload/process`
+- Fixed 32 rows in Chase test CSV where `&amp,` was splitting descriptions across columns; saved fixed file as `Chase9887_Activity20250101_20251231_20260508-m.csv` in `transactions/`
+- Tested full upload pipeline end to end — file validation, column mapping, normalization, and dedup hash all running; added temporary `redirect('/upload')` at end of `upload_process` as placeholder
+- Next: build review step (show user preview of what's about to be committed), then database insert
+
 ## 2026-05-21 (end of session)
 - Philosophy discussion on categorization: decided to move user categorization confirmation to post-import rather than blocking the import flow; rules engine will populate `suggested_category_id` at import time
 - User proposed three distinct category fields to avoid overwriting data: `api_category` (bank's label), `suggested_category_id` (rules engine guess), `category_id` (user confirmed)

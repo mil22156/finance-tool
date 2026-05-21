@@ -91,15 +91,14 @@ def upload_confirm():
     session['column_mapping'] = mapping
 
     # Process the file and mapping to prepare for database insertion
-    return redirect('/upload')
-
-    # Handle confirmation logic here
-    # Column Validation (e.g., check that date column contains valid dates, amount column contains valid numbers)
-@upload_bp.route('/upload/process', methods=['POST'])
+    return redirect('/upload/process')
+    
+@upload_bp.route('/upload/process', methods=['GET', 'POST'])
 def upload_process():
      # Get the uploaded file path and column mapping from the session
     file_path = session.get('uploaded_file')
     mapping = session.get('column_mapping')
+    account_id = session.get('account_id')  
     if not file_path or not mapping:
         flash('Session expired, please upload the file again.', 'danger')
         return redirect('/upload')  
@@ -197,16 +196,19 @@ def upload_process():
     
     # Deduplication logic (e.g., check if a transaction with the same date, description, and amount already exists in the database to avoid duplicates)
     # to do : add in account_id
+    
     def make_dedup_hash(account_id, date, description, amount):
         value = f"{account_id}|{date}|{amount}|{description.strip().lower()}"
         return hashlib.sha256(value.encode('utf-8')).hexdigest()
-    df['dedup_hash'] = df.apply(lambda row: make_dedup_hash(account_id, row['date'], row['amount'], row['description']), axis=1)
+    df['dedup_hash'] = df.apply(lambda row: make_dedup_hash(account_id, row['date'], row['description'], row['amount']), axis=1)
 
     # Categorization logic (e.g., use the description to suggest a category for the transaction, either through simple keyword matching or an AI model)
+    # For now we will assume that the categorization will be done after import.
 
     # Review and confirmation step (e.g., show the user a preview of the parsed transactions with the assigned categories and allow them to make any necessary adjustments before finalizing the import)
 
     # Commit the transactions to the database after confirmation, ensuring that all necessary fields are populated and valid. This may involve inserting into multiple tables (e.g., transactions, categories) and handling any relationships between them.
 
-
+    flash('File processed and transactions imported successfully.', 'success')
+    return redirect('/')
            
