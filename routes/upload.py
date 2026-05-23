@@ -4,6 +4,7 @@ import os
 from database.db import get_db, REGISTRY_PATH
 import pandas as pd
 import hashlib
+import uuid
 
 
 upload_bp = Blueprint('upload', __name__)
@@ -19,9 +20,15 @@ def allowed_file(filename):
 def upload():
     if request.method == 'POST':
         #Handle file upload logic here
-        # file-level validation (e.g., check file type, size, non-empty, OFX header check)
         # AI note. I needed a lot of AI help on this file manipation logic.
 
+        # clear all data from the staging_transactions table for this household before processing the new upload, to avoid confusion with any old data that may be in there from a previous upload that was not completed. We will repopulate the staging_transactions table with the new upload data after we process and normalize the new upload file.
+        db = get_db(session['household_db_path'])
+        db.execute('DELETE FROM staging_transactions')
+        db.commit()
+        db.close()
+
+        # Validate that a file was provided in the request and that it has an allowed file extension
         if 'file' not in request.files:
             flash('No file provided', 'danger')
             return redirect('/upload')
@@ -176,7 +183,7 @@ def upload_process():
     
     
     # Parse dates to a consistent format including time if available(e.g., ISO format)
-    # If there is a "date" column, not further processing after formatting.
+    # If there is a "date" column, no further processing after formatting.
     # If there is not already a "date" column and there is a transaction_date then copy the transaction_date into the date column.
     # If there is no transaction_date but there is a post_date, copy the post_date into the date column. This way we have a consistent "date" column to work with for the rest of the processing, regardless of how the user mapped their columns.
     if 'date' in df.columns:
@@ -215,15 +222,29 @@ def upload_process():
 
     df = df[~df['is_duplicate']]
 
-    # Categorization logic (e.g., use the description to suggest a category for the transaction, either through simple keyword matching or an AI model)
     # For now we will assume that the categorization will be done after import.
 
-    # Review and confirmation step (e.g., show the user a preview of the parsed transactions with the assigned categories and allow them to make any necessary adjustments before finalizing the import)
+    # Drop the is_duplicate column before displaying the review page, since it's not needed for the user to see and may cause confusion.
+    df = df.drop(columns=['is_duplicate'])
 
-    # Commit the transactions to the database after confirmation, ensuring that all necessary fields are populated and valid. This may involve inserting into multiple tables (e.g., transactions, categories) and handling any relationships between them.
+    # copy the df to the staging_transactions table before rendering the review page. This way we have a record of the uploaded transactions in the database and can use that for the review page and final commit to the transactions table after the user reviews and confirms.
+    # We will need to add a household_id column to the staging_transactions table to associate the uploaded transactions with the correct household, since multiple users may be uploading transactions at the same time. We can get the household_id from the session since it's stored there when the user logs in.
+    # AI Note: I got this code from Claude.
+    session_id = uuid.uuid4().hex  # Generate a unique session ID for this upload
+    session['upload_session_id'] = session_id  # Store the session ID in the session
 
-    flash('File processed and transactions imported successfully.', 'success')
+    db = get_db(session['household_db_path'])
+    db.execute('DELETE FROM staging_transactions WHERE session_id = ?', (session_id,))  # Clear any existing staging transactions for this session
+    for _, row in df.iterrows():
+        db.execute('''INSERT INTO staging_transactions 
+            (session_id, account_id, date, amount, description, api_category, dedup_hash, source)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
+            (session_id, account_id, row['date'], row['amount'], row['description'], 
+             row.get('api_category'), row['dedup_hash'], 'csv'))
+    db.commit()
+    db.close()
 
+    # Show the user the data that will be imported before the user commits the data to the database
     return render_template('review.html', transactions=df.to_dict('records'), duplicate_count=duplicate_count)
 
            

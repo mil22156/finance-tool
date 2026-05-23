@@ -8,6 +8,14 @@
 - Open question: how to pass transactions from review page to commit route — options are session storage, re-processing, or hidden form fields; not yet decided
 - Next: decide on commit approach, build `review.html`, build `/upload/commit` route
 
+## 2026-05-23 (end of session — continued)
+- Built `review.html` — displays staged transactions in a striped table with duplicate count warning, Confirm Import and Cancel buttons
+- Decided `/upload/review` will be a GET route that reads from `staging_transactions` into a dataframe and passes it to the template
+- Updated `upload_process` to write to `staging_transactions` using `session_id` before rendering review
+- Added staging table cleanup at start of `upload()` — clears all stale staging rows before new upload begins
+- Fixed `DELETE * FROM staging_transactions` → `DELETE FROM staging_transactions`
+- Next: build `/upload/review` GET route and `/upload/commit` POST route
+
 ## 2026-05-23 (end of session)
 - Decided on `staging_transactions` table approach for review-to-commit handoff:
   - Permanent table in household DB with `session_id` column to identify the current upload

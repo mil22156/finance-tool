@@ -9,6 +9,18 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ## Session 20 — 2026-05-21
 
+## Session 22 — 2026-05-23 (continued)
+
+### Staging Table and Review Template
+- Explained that `df.to_sql()` requires SQLAlchemy — recommended `iterrows()` insert loop with raw sqlite3 connection instead
+- Caught `session['household_id']` — not stored in session; correct key is `household_db_path`
+- Caught `DELETE * FROM staging_transactions` — invalid SQL; corrected to `DELETE FROM staging_transactions`
+- Caught `uuid` not imported in `upload.py` — user added import
+- Recommended `/upload/review` as a separate GET route reading from staging rather than passing df directly from `upload_process`
+- Reviewed `review.html` — caught action pointing to `/upload/review` instead of `/upload/commit`; extra angle brackets on Cancel link; `table-striped` class on `<tr>` instead of `<table>`
+
+---
+
 ## Session 21 — 2026-05-22
 
 ### Deduplication and Review Step Design

@@ -1,0 +1,35 @@
+{%- extends "layout.html" -%}
+<!--this page shows the uploaded transactions for review -->
+
+{%- block main -%}
+    <h2>Review Uploaded Transactions</h2>
+    <p>Please review the transactions below. You can edit any details if needed before confirming the import.</p>
+    
+    <form method="post" action="/upload/commit">
+        {% if duplicate_count > 0 %}
+        <div class="alert alert-warning" role="alert">
+            <strong>Warning:</strong> {{ duplicate_count }} duplicates detected and removed.
+        </div>
+        {% endif %}
+        <table  class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    {% for column in df.columns %}
+                    <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in df.iterrows() %}
+                <tr>
+                    {% for column in df.columns %}
+                    <td>{{ row[column] }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Confirm Import</button>
+        <a href="/upload" class="btn btn-secondary">Cancel</a>
+    </form>
+{%- endblock -%}

@@ -6,6 +6,7 @@
 -- account_members: Stores the relationship between users and accounts, including the role of the user in the account and the creation timestamp.
 -- statements: Stores information about account statements, including the associated account, file name, file type, date range, creation timestamp, and description.
 -- transactions: Stores transaction details, including the associated account, external ID, date, amount, description, merchant name, category ID, API category, pending status, notes, deduplication hash (which is a hash of a few of the key fields to make it unique), source, import date, and associated statement ID.
+-- staging_transactions: A temporary table used during the import process to hold transactions before they are validated and moved to the main transactions table. This allows for error handling and validation without affecting the main transaction data.
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
@@ -69,6 +70,22 @@ CREATE TABLE transactions (
     FOREIGN KEY (statement_id) REFERENCES statements(id) ON DELETE CASCADE
 );
 
+CREATE TABLE staging_transactions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    account_id INTEGER NOT NULL,
+    external_id TEXT,
+    date DATE NOT NULL,
+    amount REAL NOT NULL,
+    description TEXT NOT NULL,
+    merchant_name TEXT,
+    api_category TEXT,
+    pending BOOLEAN NOT NULL DEFAULT 0,
+    dedup_hash TEXT NOT NULL UNIQUE,
+    source TEXT NOT NULL CHECK(source IN ('csv', 'ofx', 'api', 'manual')),
+    import_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    statement_id INTEGER
+);
 -- Speeds up deduplication lookups during import by indexing the hash column.                                                                                                            
 -- UNIQUE constraint on dedup_hash already prevents duplicates; this index makes the check fast.
 
