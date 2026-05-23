@@ -195,12 +195,25 @@ def upload_process():
         df = df.rename(columns={'category': 'api_category'})    
     
     # Deduplication logic (e.g., check if a transaction with the same date, description, and amount already exists in the database to avoid duplicates)
-    # to do : add in account_id
     
+    # Create dedupe hashes for the upload transactions
     def make_dedup_hash(account_id, date, description, amount):
         value = f"{account_id}|{date}|{amount}|{description.strip().lower()}"
         return hashlib.sha256(value.encode('utf-8')).hexdigest()
     df['dedup_hash'] = df.apply(lambda row: make_dedup_hash(account_id, row['date'], row['description'], row['amount']), axis=1)
+
+    # Check for duplicates in the database based on the dedup_hash
+    db = get_db(session['household_db_path'])
+    existing_hashes = set(row[0] for row in db.execute('SELECT dedup_hash FROM transactions').fetchall())
+    db.close()
+    df['is_duplicate'] = df['dedup_hash'].apply(lambda x: x in existing_hashes)
+
+    # Remove duplicatesFor now we will just drop duplicates, but in the future we may want to keep them and allow the user to review and decide whether to keep or discard each potential duplicate.
+    duplicate_count = df['is_duplicate'].sum()
+    if duplicate_count > 0:
+        flash(f'{duplicate_count} duplicate transactions were found and will be skipped.', 'warning')
+
+    df = df[~df['is_duplicate']]
 
     # Categorization logic (e.g., use the description to suggest a category for the transaction, either through simple keyword matching or an AI model)
     # For now we will assume that the categorization will be done after import.
@@ -210,5 +223,7 @@ def upload_process():
     # Commit the transactions to the database after confirmation, ensuring that all necessary fields are populated and valid. This may involve inserting into multiple tables (e.g., transactions, categories) and handling any relationships between them.
 
     flash('File processed and transactions imported successfully.', 'success')
-    return redirect('/')
+
+    return render_template('review.html', transactions=df.to_dict('records'), duplicate_count=duplicate_count)
+
            

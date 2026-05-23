@@ -9,6 +9,17 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ## Session 20 — 2026-05-21
 
+## Session 21 — 2026-05-22
+
+### Deduplication and Review Step Design
+- Confirmed dedup hash comparison should happen before review step, not after
+- Explained `df.to_dict('records')` for passing dataframe to template without session
+- Suggested `duplicate_count = df['is_duplicate'].sum()` before drop to track skipped rows
+- Flagged `is_duplicate` column needs to be dropped before passing df to template or inserting to DB
+- Discussed options for passing transactions from review page to commit route: session storage, re-processing, or hidden form fields
+
+---
+
 ### Dedup Hash, Pipeline Wiring, and Testing
 - Explained that `account_id` fetched from session inside `make_dedup_hash` overwrites the parameter — removed session call from inside function, fetched `account_id` at top of `upload_process` instead
 - Diagnosed 32 rows in Chase CSV where `&amp,` (HTML-encoded ampersand followed by comma) split descriptions across columns; fixed by replacing `&amp,` with `&amp ` in a modified copy of the file using `sed`

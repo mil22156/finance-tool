@@ -1,5 +1,13 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-22 (end of session)
+- Added duplicate detection in `upload_process`: queries existing `dedup_hash` values from transactions table, flags duplicates, counts them, flashes warning if any found, drops them from dataframe
+- Added `duplicate_count` tracking before drop so user is informed of skipped rows
+- Changed end of `upload_process` to `render_template('review.html', ...)` passing `transactions=df.to_dict('records')` and `duplicate_count` — review template not yet built
+- Identified need to drop `is_duplicate` column before passing df to template
+- Open question: how to pass transactions from review page to commit route — options are session storage, re-processing, or hidden form fields; not yet decided
+- Next: decide on commit approach, build `review.html`, build `/upload/commit` route
+
 ## 2026-05-21 (end of session — continued)
 - Completed dedup hash: `make_dedup_hash()` function hashes account_id, date, description (stripped/lowercased), and amount using SHA256; applied to full dataframe with `df.apply()`
 - Wired up `upload_process` — changed to `methods=['GET', 'POST']` and `upload_confirm` now redirects to `/upload/process`
