@@ -8,6 +8,16 @@
 - Open question: how to pass transactions from review page to commit route — options are session storage, re-processing, or hidden form fields; not yet decided
 - Next: decide on commit approach, build `review.html`, build `/upload/commit` route
 
+## 2026-05-23 (end of session)
+- Decided on `staging_transactions` table approach for review-to-commit handoff:
+  - Permanent table in household DB with `session_id` column to identify the current upload
+  - `upload_process` writes normalized rows to `staging_transactions` after dedup
+  - `review.html` reads from `staging_transactions` for display
+  - `/upload/commit` moves rows from staging to transactions, then deletes staging rows
+  - Stale rows cleared at start of `upload_process` in case of previous abandoned upload
+  - Cancel button deletes staging rows without committing
+- Next: add `staging_transactions` to `schema.sql`, then build `review.html` and `/upload/commit` route
+
 ## 2026-05-21 (end of session — continued)
 - Completed dedup hash: `make_dedup_hash()` function hashes account_id, date, description (stripped/lowercased), and amount using SHA256; applied to full dataframe with `df.apply()`
 - Wired up `upload_process` — changed to `methods=['GET', 'POST']` and `upload_confirm` now redirects to `/upload/process`

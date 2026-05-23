@@ -36,7 +36,8 @@ static/             — CSS and JS
   - **Step 2 — Column mapping:** parse headers + ~5 sample rows; auto-guess mapping from column names; render a preview table where each column header is a dropdown (Date / Description / Amount / Debit / Credit / Ignore); user confirms or corrects before proceeding
   - **Step 3 — Column validation:** with mapping confirmed, validate every row; any unparseable value (bad date, non-numeric amount) rejects the entire upload with a specific error (row number, column, value found); start strict and relax rules only if real usage demands it
 - Mapping profile persistence (saving a bank's column layout for re-use) is a post-v1 goal
-- Open question: how to hold the uploaded file between Step 2 and Step 3 (staging table vs. temp file vs. server-side session)
+- File is held between Step 1 and Step 2 via Flask session (`session['uploaded_file']`)
+- Staging between Step 2/3 and commit uses a permanent `staging_transactions` table in the household DB with a `session_id` column; rows are cleared at upload start (in case of prior abandoned upload), after commit, and on cancel
 
 ## Multi-User Architecture (decided 2026-04-13)
 - Target deployment: small number of users (2-5 households), local machine or personal server — NOT a SaaS
