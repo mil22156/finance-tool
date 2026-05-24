@@ -245,6 +245,41 @@ def upload_process():
     db.close()
 
     # Show the user the data that will be imported before the user commits the data to the database
-    return render_template('review.html', transactions=df.to_dict('records'), duplicate_count=duplicate_count)
+    session['duplicate_count'] = duplicate_count
+    return redirect('/upload/review')
 
-           
+# Review Route for the user to review the transactions that were uploaded before committing to the database. This allows the user to catch any potential issues with the data before it gets imported into the main transactions table.    
+# staging_transactions table will be loaded to df to pass to the review.html template for display to the user. The user can then choose to confirm and commit the transactions to the main transactions table, or cancel and discard the uploaded transactions. We will identify the staging transactions for this upload based on the unique session_id that we generated and stored in the session when we processed the upload. This way we can ensure that each user's uploaded transactions are kept separate and there is no confusion between multiple users uploading at the same time.
+@upload_bp.route('/upload/review', methods=['POST', 'GET'])
+def upload_review():   
+    if request.method == 'POST':
+        # User confirmed the upload, so we will move the transactions from the staging_transactions table to the main transactions table and then clear the staging_transactions for this session.
+        session_id = session.get('upload_session_id')
+        if not session_id:
+            flash('Session expired, please upload the file again.', 'danger')
+            return redirect('/upload')
+        db = get_db(session['household_db_path'])
+        # Move transactions from staging to transaction
+        result = db.execute('''INSERT INTO  transactions (account_id, date, amount, description, api_category, dedup_hash, source)
+                            SELECT account_id, date, amount, description, api_category, dedup_hash, source
+                            FROM staging_transactions
+                            WHERE session_id = ?''', (session_id,))        
+        db.execute('DELETE FROM staging_transactions WHERE session_id = ?', (session_id,))  # Clear the staging transactions for this session after committing to the main transactions table
+        db.commit()
+        db.close()        
+        flash(f'{result.rowcount} transactions have been successfully uploaded.', 'success')
+        return redirect('/transactions')  # Redirect to the transactions page after successful upload
+
+    else:
+        # User is just viewing the review page, so we will load the transactions from the staging_transactions table for this session and display them for review.
+        session_id = session.get('upload_session_id')
+        if not session_id:
+            flash('Session expired, please upload the file again.', 'danger')
+            return redirect('/upload')
+        db = get_db(session['household_db_path'])
+        df = pd.read_sql_query('SELECT * FROM staging_transactions WHERE session_id = ?', db, 
+            params=(session_id,))        
+        db.close()
+        df=df.drop(columns=['session_id', 'account_id', 'dedup_hash', 'source', 'import_date', 'statement_id', 'pending'])  # Drop columns that are not needed for the review display
+        duplicate_count = session.get('duplicate_count', 0)
+        return render_template('review.html', df=df, duplicate_count=duplicate_count)   

@@ -1,5 +1,15 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-24 (end of session)
+- Built `/upload/review` GET+POST route in `routes/upload.py`
+  - GET: loads `staging_transactions` into DataFrame with `pd.read_sql_query`, drops internal columns (`session_id`, `account_id`, `dedup_hash`, `source`, `import_date`, `statement_id`, `pending`), reads `duplicate_count` from session, renders `review.html`
+  - Decided to keep `id` column visible — will be useful as a reference when row-level selection is added in the future
+  - POST: uses `INSERT INTO ... SELECT` to move rows directly from staging to transactions (no Python loop), uses `result.rowcount` for flash message count, deletes staging rows, commits, redirects to `/transactions`
+- Updated `upload_process`: stores `duplicate_count` in session, redirects to `/upload/review` instead of rendering directly
+- Updated `review.html` form action from `/upload/commit` to `/upload/review`
+- Deleted `data/` folder and `registry.db` to reset for testing after staging_transactions schema change
+- Next: test the full upload pipeline end to end
+
 ## 2026-05-22 (end of session)
 - Added duplicate detection in `upload_process`: queries existing `dedup_hash` values from transactions table, flags duplicates, counts them, flashes warning if any found, drops them from dataframe
 - Added `duplicate_count` tracking before drop so user is informed of skipped rows

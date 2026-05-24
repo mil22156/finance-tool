@@ -7,6 +7,23 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 23 — 2026-05-24
+
+### Review Route and Commit Logic
+- Explained `pd.read_sql_query(sql, conn, params=(...))` as the idiomatic way to load a SQL query directly into a DataFrame
+- Explained why session_id filter on staging_transactions is still needed even in a single-user scenario — protects against simultaneous uploads from different household members
+- Suggested `INSERT INTO ... SELECT` as a more efficient alternative to fetching rows into Python and looping — one SQL statement, no DataFrame round-trip
+- Explained `result.rowcount` — the cursor returned by `db.execute()` carries a `rowcount` attribute set to the number of rows affected; no separate COUNT query needed
+- Caught: period instead of comma in `df.drop(columns=[...])` list — Python string concatenation silently produced a wrong column name
+- Caught: `df.drop(...)` result not assigned back — drop returns a new DataFrame; must do `df = df.drop(...)`
+- Caught: duplicate INSERT block — user had the INSERT written twice after an edit; would have hit UNIQUE constraint on `dedup_hash`
+- Caught: `db.close()` called before `db.execute()` on the next line — connection already closed
+- Caught: `SELECT COUNT(*)` from staging after staging rows already deleted — would always return 0; and `fetchone()` returns a tuple, not a cursor, so `.rowcount` wouldn't work on it either
+- Caught: `staging_transactions` variable referenced in flash message after being removed from the code
+- User decided to keep `id` column visible in review table rather than dropping it — will serve as a row reference when per-row selection is added later
+
+---
+
 ## Session 20 — 2026-05-21
 
 ## Session 22 — 2026-05-23 (continued)

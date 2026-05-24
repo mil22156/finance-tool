@@ -5,7 +5,7 @@
     <h2>Review Uploaded Transactions</h2>
     <p>Please review the transactions below. You can edit any details if needed before confirming the import.</p>
     
-    <form method="post" action="/upload/commit">
+    <form method="post" action="/upload/review">
         {% if duplicate_count > 0 %}
         <div class="alert alert-warning" role="alert">
             <strong>Warning:</strong> {{ duplicate_count }} duplicates detected and removed.
