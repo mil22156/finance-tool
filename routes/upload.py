@@ -234,7 +234,7 @@ def upload_process():
     session['upload_session_id'] = session_id  # Store the session ID in the session
 
     db = get_db(session['household_db_path'])
-    db.execute('DELETE FROM staging_transactions WHERE session_id = ?', (session_id,))  # Clear any existing staging transactions for this session
+    db.execute('DELETE FROM staging_transactions')  # Clear any existing staging transactions for this session
     for _, row in df.iterrows():
         db.execute('''INSERT INTO staging_transactions 
             (session_id, account_id, date, amount, description, api_category, dedup_hash, source)
@@ -245,7 +245,7 @@ def upload_process():
     db.close()
 
     # Show the user the data that will be imported before the user commits the data to the database
-    session['duplicate_count'] = duplicate_count
+    session['duplicate_count'] = int(duplicate_count)
     return redirect('/upload/review')
 
 # Review Route for the user to review the transactions that were uploaded before committing to the database. This allows the user to catch any potential issues with the data before it gets imported into the main transactions table.    

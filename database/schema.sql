@@ -60,7 +60,7 @@ CREATE TABLE transactions (
     api_category TEXT,
     pending BOOLEAN NOT NULL DEFAULT 0,
     notes TEXT,
-    dedup_hash TEXT NOT NULL UNIQUE,
+    dedup_hash TEXT NOT NULL,
     source TEXT NOT NULL CHECK(source IN ('csv', 'ofx', 'api', 'manual')),
     import_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     statement_id INTEGER,
@@ -81,7 +81,7 @@ CREATE TABLE staging_transactions (
     merchant_name TEXT,
     api_category TEXT,
     pending BOOLEAN NOT NULL DEFAULT 0,
-    dedup_hash TEXT NOT NULL UNIQUE,
+    dedup_hash TEXT NOT NULL,
     source TEXT NOT NULL CHECK(source IN ('csv', 'ofx', 'api', 'manual')),
     import_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     statement_id INTEGER

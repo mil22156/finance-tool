@@ -7,6 +7,15 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 24 — 2026-05-25
+
+### Upload Pipeline Testing — Bug Fixes
+- Diagnosed `UNIQUE constraint failed: staging_transactions.dedup_hash` — two rows in the CSV with identical date/amount/description (two beers same day same vendor); user correctly identified this as a valid real-world case that should not be deduplicated; recommended removing UNIQUE constraint from `staging_transactions.dedup_hash` while keeping it on `transactions`
+- Diagnosed `DELETE FROM staging_transactions WHERE session_id = ?` deleting nothing — session_id was freshly generated at the top of `upload_process` so no rows matched; recommended `DELETE FROM staging_transactions` with no filter; discussed multi-user race condition and agreed it's an acceptable v1 limitation given small household deployment
+- Diagnosed `TypeError: Object of type int64 is not JSON serializable` — `df['is_duplicate'].sum()` returns a Pandas `int64`; Flask session serializes via JSON which doesn't handle numpy types; fix: `int(duplicate_count)` to convert to plain Python int before storing in session
+
+---
+
 ## Session 23 — 2026-05-24
 
 ### Review Route and Commit Logic

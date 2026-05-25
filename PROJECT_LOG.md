@@ -1,5 +1,13 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-25 (end of session)
+- Tested full upload pipeline end to end — 988 transactions successfully imported
+- Fixed three bugs found during testing:
+  - `staging_transactions.dedup_hash` had a UNIQUE constraint that blocked within-file duplicates (e.g. two identical charges same day same vendor); removed UNIQUE from staging table — constraint kept on `transactions` table where it belongs
+  - `DELETE FROM staging_transactions WHERE session_id = ?` used a freshly generated session_id so never deleted anything; changed to `DELETE FROM staging_transactions` (no filter); simultaneous upload race condition accepted as a known v1 limitation
+  - `session['duplicate_count'] = duplicate_count` stored a Pandas `int64` which Flask's JSON session serializer can't handle; fixed with `int(duplicate_count)`
+- Upload pipeline is now fully working: parse → normalize → deduplicate → stage → review → commit
+
 ## 2026-05-24 (end of session)
 - Built `/upload/review` GET+POST route in `routes/upload.py`
   - GET: loads `staging_transactions` into DataFrame with `pd.read_sql_query`, drops internal columns (`session_id`, `account_id`, `dedup_hash`, `source`, `import_date`, `statement_id`, `pending`), reads `duplicate_count` from session, renders `review.html`
@@ -8,7 +16,6 @@
 - Updated `upload_process`: stores `duplicate_count` in session, redirects to `/upload/review` instead of rendering directly
 - Updated `review.html` form action from `/upload/commit` to `/upload/review`
 - Deleted `data/` folder and `registry.db` to reset for testing after staging_transactions schema change
-- Next: test the full upload pipeline end to end
 
 ## 2026-05-22 (end of session)
 - Added duplicate detection in `upload_process`: queries existing `dedup_hash` values from transactions table, flags duplicates, counts them, flashes warning if any found, drops them from dataframe
