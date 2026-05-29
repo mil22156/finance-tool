@@ -7,6 +7,25 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 25 — 2026-05-29
+
+### Transactions Blueprint and Route
+
+- Reviewed all project MD files at session start to re-establish context
+- Recommended load-all approach (no pagination, no infinite scroll) for the transactions list — 1000-row Bootstrap table is fast enough for a personal finance tool; infinite scroll would require JS event listeners and a separate paginated endpoint, not worth it at this scale
+- Designed column set for the transactions list: account name, date, description, merchant_name, amount, category, suggested_category, api_category
+- Explained JOIN aliases (`t.`, `a.`) — shorthand for table names; mandatory when joining the same table twice (categories joined twice as `c1` and `c2`); user asked whether full table names could be used instead — confirmed yes, aliases are just a convention
+- Caught Blueprint imported but not registered in `app.py` — `app.register_blueprint(transactions_bp)` was missing
+- Caught stub `/transactions` route still in `app.py` alongside the new Blueprint — would cause `AssertionError` on startup once Blueprint defines the same path
+- Caught unused imports copied from `upload.py` (`secure_filename`, `pd`, `hashlib`, `uuid`) — user cleaned up
+- Caught single-quoted multi-line SQL string — Python single quotes cannot span lines; fix: triple quotes `'''`
+- Caught `db.execute()` result passed directly to template without `.fetchall()` — returns a cursor, not a list
+- Caught missing `db.close()` before return
+- Caught function and variable both named `transactions` — user renamed variable to `transactions_display`
+- Flagged `uploads/` directory missing from `.gitignore` — contains real bank statement files
+
+---
+
 ## Session 24 — 2026-05-25
 
 ### Upload Pipeline Testing — Bug Fixes

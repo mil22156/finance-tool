@@ -5,6 +5,7 @@ from database.db import init_registry, init_db, get_db, REGISTRY_PATH
 from flask import Flask, render_template, request, flash, redirect, session
 import uuid
 from routes.upload import upload_bp
+from routes.transactions import transactions_bp
 
 
 
@@ -13,6 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 
 app.register_blueprint(upload_bp)
+app.register_blueprint(transactions_bp)
 
 app.secret_key = os.getenv('SECRET_KEY')
 
@@ -154,11 +156,7 @@ def login():
         conn.close()
         return render_template('login.html', households=households)
 
-# Transactions route
-# For now this will just be a placeholder to demonstrate navigation after login. It will eventually display the transactions for the household and allow users to add, edit, and delete transactions.
-@app.route('/transactions')
-def transactions():
-    return render_template('transactions.html')
+# Transactions route has been moved to routes/transactions.py to keep app.py cleaner and more focused on the core application setup and routing. The transactions blueprint will handle all transaction-related routes and logic, allowing for better organization and separation of concerns in the codebase.
 
 # Add user to household route
 # For now this will just be a placeholder to demonstrate navigation after login. It will eventually allow admin users to add other users to the household and assign them rights.
