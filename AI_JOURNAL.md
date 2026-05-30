@@ -9,7 +9,7 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ## Session 26 — 2026-05-30
 
-### Transactions Search Form
+### Transactions Search Form and Route Filter Logic
 
 - Explained that Bootstrap has no built-in date picker — recommended native HTML5 `<input type="date">` as a no-JavaScript solution; browser renders its own calendar picker natively; value format is YYYY-MM-DD which matches SQLite date storage exactly
 - Caught missing `class="form-select"` on `<select>` — without it the dropdown looks unstyled alongside the Bootstrap inputs
@@ -18,6 +18,14 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 - Walked through four filter scenarios: no filters, date range only, search only, both combined
 - Provided FIELD_MAP whitelist pattern for mapping user-submitted field values to SQL column expressions safely
 - Next: user to write updated route reading `request.args` and building WHERE clause
+- Caught `else: ''` not assigning to `where_clause` — floating string does nothing; must be `where_clause = ''`
+- Caught `t.category` and `t.suggested_category` used in WHERE clause — those are JOIN alias names not table columns; corrected to `c1.name` and `c2.name`
+- Caught `where_clause` passed as second argument to `db.execute()` instead of being interpolated into the SQL string — second argument must be the params list; fix: use f-string to embed `where_clause` in SQL, pass `params` as second argument
+- Caught missing space in `'WHERE' + ...` producing `'WHEREt.date >= ?'`
+- Explained f-string interpolation of `where_clause` into SQL is safe because the string is built entirely from hardcoded condition strings — user input only goes into `params` as parameterized values
+- Explained `.join()` syntax — called on the separator string, not the list; `' AND '.join(conditions)`
+- Explained ternary expression vs if/else block — user chose classic if/else for readability
+- Diagnosed sticky form issue: form inputs reset to blank on each page reload; second search loses previous filter values; fix is to pass filter values back via `render_template` and set `value` attributes on inputs and `selected` on the dropdown
 
 ---
 

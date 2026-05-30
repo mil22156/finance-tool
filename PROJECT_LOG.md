@@ -1,13 +1,16 @@
 # Project Log — Personal Finance Tool
 
-## 2026-05-30 (end of session)
+## 2026-05-30 (end of session — continued)
 - Agreed on CS50 completion feature list — documented in CLAUDE.md under "CS50 Feature Completion Plan"
 - Decided to keep the stack JavaScript-free throughout; monthly summary will be a plain HTML table rather than a chart
 - Post-CS50 phase will continue with greater AI support and additional features
 - Added search/filter form to `transactions.html`: field dropdown (All/Description/Merchant/Category/Suggested Category/Bank Category), text search input, native HTML5 date range pickers (`<input type="date">`), Search and Clear buttons
 - Used Bootstrap `d-flex gap-2` for inline layout; `form-select` on dropdown, `form-control` on inputs
 - Decided to add date range filter after seeing native HTML5 date inputs work cleanly without JavaScript
-- Next: update `GET /transactions` route to read `request.args` and build WHERE clause dynamically — date range first, then field/search logic
+- Built dynamic WHERE clause in `GET /transactions` route: reads `search`, `field`, `date_from`, `date_to` from `request.args`; builds `conditions` list and `params` list incrementally; joins with `AND`; interpolates into SQL f-string; passes params to `.execute()`
+- Searching and date filtering tested and working
+- Known issue: form is not sticky — inputs reset to blank on each search, so a second search loses previous filter values; fix is to pass filter values back to the template via `render_template` and set `value` attributes on inputs
+- Next: fix sticky form (pass `search`, `field`, `date_from`, `date_to` to template; set `value` on inputs, `selected` on dropdown option)
 
 ## 2026-05-29 (end of session)
 - Started building the transactions page
