@@ -1,5 +1,10 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-30
+- Agreed on CS50 completion feature list — documented in CLAUDE.md under "CS50 Feature Completion Plan"
+- Decided to keep the stack JavaScript-free throughout; monthly summary will be a plain HTML table rather than a chart
+- Post-CS50 phase will continue with greater AI support and additional features
+
 ## 2026-05-29 (end of session)
 - Started building the transactions page
 - Created `routes/transactions.py` Blueprint (`transactions_bp`) following the same pattern as `routes/upload.py`

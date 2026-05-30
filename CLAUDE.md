@@ -97,6 +97,19 @@ python app.py        # start dev server at http://127.0.0.1:5000
 - When in doubt, explain the concept and let the user implement it
 - When running git commands, briefly explain what each command is doing and why
 
+## CS50 Feature Completion Plan (agreed 2026-05-30)
+Features required to call the project complete for CS50 submission, in build order:
+- [x] Upload pipeline — parse → deduplicate → stage → review → commit (done 2026-05-25)
+- [x] Transactions list page — JOIN query, Bootstrap table, amount formatting (done 2026-05-29)
+- [ ] Transactions sort and filter — server-side via GET params, no JavaScript
+- [ ] Accounts list page — simple list of household accounts
+- [ ] Categories management — CRUD UI for creating and editing categories
+- [ ] Manual category assignment — assign `category_ID` to a transaction from the transactions page
+- [ ] Auto-categorization rules — rules engine runs at import time, populates `suggested_category_id`; CRUD UI for managing rules
+- [ ] Monthly summary table — totals by category by month, pure SQL aggregation, no JavaScript
+- [ ] README.md
+- [ ] Video (3 min, unlisted YouTube)
+
 ## Before We Finish (Pre-submission To-Do)
 - [ ] Decide on a permanent data directory location — currently `data/` is relative to the project folder; revisit if deployment needs change
 - [ ] Harden household creation code — currently a plain secret stored in `.env`; consider expiring codes, rate limiting, or admin-only creation for stricter deployments
