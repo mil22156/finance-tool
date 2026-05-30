@@ -15,7 +15,7 @@ def transactions():
         flash('Please log in to view transactions.', 'danger')
         return redirect('/login')
     db = get_db(session['household_db_path'])
-    transactions_display = db.execute('''SELECT t.date, a.name, t.description, t.merchant_name, t.amount,
+    transactions_display = db.execute('''SELECT t.date, a.name AS account_name, t.description, t.merchant_name, t.amount,
                                     c1.name AS category,
                                     c2.name AS suggested_category,
                                     t.api_category

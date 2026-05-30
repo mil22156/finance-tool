@@ -5,9 +5,12 @@
 - Created `routes/transactions.py` Blueprint (`transactions_bp`) following the same pattern as `routes/upload.py`
 - Removed stub `/transactions` route from `app.py`; registered `transactions_bp` in `app.py`
 - Built `GET /transactions` route: auth guard (redirects to `/login` if not logged in), JOIN query across `transactions`, `accounts`, and `categories` (twice, aliased `c1`/`c2`), ordered by date descending, connection closed before return
-- Query returns: date, account name, description, merchant_name, amount, category name, suggested_category name, api_category
+- Query returns: date, `account_name` (aliased from `a.name AS account_name`), description, merchant_name, amount, category, suggested_category, api_category
 - Added `uploads/` to `.gitignore` — contains real bank statement files, should not be committed
-- Next: build `transactions.html` template — Bootstrap table, loop over rows, format amount to 2 decimal places, color negative amounts red, handle empty state
+- Built `transactions.html` — Bootstrap striped table, loops over `transactions_display`, amount formatted to 2 decimal places with `"%.2f"|format()`, negative amounts colored red via `text-danger` conditional class, empty state handled with `{% else %}` on the for loop
+- Transactions page tested and working — 988 rows loading correctly
+- Decided on server-side sorting and filtering via GET params (no JavaScript) — sorting via `?sort=col&dir=asc`, search via `?search=term` with WHERE clause in SQL
+- Next: add search form to `transactions.html`, then update route to read `request.args` and apply WHERE/ORDER BY
 
 ## 2026-05-25 (end of session)
 - Tested full upload pipeline end to end — 988 transactions successfully imported

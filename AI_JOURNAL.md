@@ -9,7 +9,7 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ## Session 25 — 2026-05-29
 
-### Transactions Blueprint and Route
+### Transactions Blueprint, Route, and Template
 
 - Reviewed all project MD files at session start to re-establish context
 - Recommended load-all approach (no pagination, no infinite scroll) for the transactions list — 1000-row Bootstrap table is fast enough for a personal finance tool; infinite scroll would require JS event listeners and a separate paginated endpoint, not worth it at this scale
@@ -23,6 +23,14 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 - Caught missing `db.close()` before return
 - Caught function and variable both named `transactions` — user renamed variable to `transactions_display`
 - Flagged `uploads/` directory missing from `.gitignore` — contains real bank statement files
+- Explained SQL aliases vs full table names — `t['name']` vs adding `AS account_name` to the SELECT; recommended alias approach to avoid ambiguity without touching the schema
+- Caught `a.name AS account.name` (dot in alias) — SQL aliases cannot contain dots; corrected to `a.name AS account_name`
+- Caught placeholder text left in `<thead>` and `<tbody>` rows — user had kept scaffold text instead of replacing with actual `<th>`/`<td>` elements
+- Caught `{% end for %}` (space) — must be `{% endfor %}` in Jinja2
+- Caught `{{ 'date' }}` with quoted string — renders the literal word "date"; correct form is `{{ t['date'] }}`
+- Explained `"%.2f"|format()` Jinja2 filter for 2-decimal amount formatting and conditional `text-danger` class for negative amounts
+- Recommended server-side sort/filter via GET params (no JavaScript) over DataTables after user expressed preference to avoid JS; explained column whitelist pattern to safely build dynamic ORDER BY without SQL injection
+- Provided search form HTML scaffold (not yet added by user — next session)
 
 ---
 
