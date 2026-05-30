@@ -7,6 +7,20 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 26 — 2026-05-30
+
+### Transactions Search Form
+
+- Explained that Bootstrap has no built-in date picker — recommended native HTML5 `<input type="date">` as a no-JavaScript solution; browser renders its own calendar picker natively; value format is YYYY-MM-DD which matches SQLite date storage exactly
+- Caught missing `class="form-select"` on `<select>` — without it the dropdown looks unstyled alongside the Bootstrap inputs
+- Explained that `<input type="date">` doesn't support placeholder text — browser shows its own format hint; recommended adding `<label>` elements for "From" / "To" clarity
+- Explained incrementally-built WHERE clause pattern for combining optional filters — empty conditions list and params list, append to both as filters are present, join with AND
+- Walked through four filter scenarios: no filters, date range only, search only, both combined
+- Provided FIELD_MAP whitelist pattern for mapping user-submitted field values to SQL column expressions safely
+- Next: user to write updated route reading `request.args` and building WHERE clause
+
+---
+
 ## Session 25 — 2026-05-29
 
 ### Transactions Blueprint, Route, and Template

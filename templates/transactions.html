@@ -6,6 +6,27 @@
 {% block main %}
     <div class="container mt-4">
         <h2>Transactions</h2>
+        <!-- Form to select to the data to present-->
+        <form method="GET" action="/transactions">
+            <div class="d-flex gap-2 mb-3">
+                <!-- Select Data For custom query. At this point you can just put in one search category at a time along with the date range-->
+                <label class="form-label mb-0">From</label>
+                <input type="date" name="date_from" class="form-control">
+                <label class="form-label mb-0">To</label>
+                <input type="date" name="date_to" class="form-control">
+                <select name="field" class="form-select">
+                    <option value="all">All Fields</option>
+                    <option value="description">Description</option>
+                    <option value="merchant">Merchant</option>
+                    <option value="category">Category</option>
+                    <option value="suggested_category">Suggested Category</option>
+                    <option value="api_category">Bank Category</option>
+                </select>
+                <input type="text" name="search" class="form-control" placeholder="Search transactions...">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a href="/transactions" class="btn btn-secondary">Clear</a>
+            </div>
+        </form>
         <table class="table table-striped">
             <thead>
                 <tr>

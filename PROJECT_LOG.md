@@ -1,9 +1,13 @@
 # Project Log — Personal Finance Tool
 
-## 2026-05-30
+## 2026-05-30 (end of session)
 - Agreed on CS50 completion feature list — documented in CLAUDE.md under "CS50 Feature Completion Plan"
 - Decided to keep the stack JavaScript-free throughout; monthly summary will be a plain HTML table rather than a chart
 - Post-CS50 phase will continue with greater AI support and additional features
+- Added search/filter form to `transactions.html`: field dropdown (All/Description/Merchant/Category/Suggested Category/Bank Category), text search input, native HTML5 date range pickers (`<input type="date">`), Search and Clear buttons
+- Used Bootstrap `d-flex gap-2` for inline layout; `form-select` on dropdown, `form-control` on inputs
+- Decided to add date range filter after seeing native HTML5 date inputs work cleanly without JavaScript
+- Next: update `GET /transactions` route to read `request.args` and build WHERE clause dynamically — date range first, then field/search logic
 
 ## 2026-05-29 (end of session)
 - Started building the transactions page
