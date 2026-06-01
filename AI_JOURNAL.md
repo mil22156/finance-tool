@@ -7,6 +7,24 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 27 — 2026-05-31
+
+### Transactions Route Rewrite and Template (in progress)
+
+- Explained `if/elif/else` vs chain of `if` statements — `elif` stops checking once a match is found; plain `if` chain checks every condition; `else` only pairs with the immediately preceding `if`
+- Explained `try/except ValueError` for safe float conversion of URL params — `float('abc')` throws `ValueError`; `except` catches it; `pass` skips silently
+- Explained `checked` as a boolean HTML attribute — just its presence makes a radio selected; use `{{ 'checked' if sort == 'date' }}` in Jinja2
+- Caught `sort == amount` (bare name) — must be string literal `sort == 'amount'`
+- Caught `conditions = []` and `params = []` defined after the amount try/except blocks that append to them — moved initialization above the blocks
+- Caught `amount_min` and `amount_max` missing from `render_template` — added
+- Caught `</form>` closing before `<table>` — table must be inside form for filter inputs to submit
+- Caught `<div class="d-flex">` unclosed in template
+- Caught leftover Bootstrap example radio code pasted below `{% endblock %}` — needs to be deleted
+- User added `filter_account` / `sort == 'account'` independently — correctly wired to `a.name`
+- Template in progress: sort radios complete, Order section and buttons not yet added, filter thead row not yet added, sticky `checked` attrs not yet added
+
+---
+
 ## Session 26 — 2026-05-30
 
 ### Transactions Search Form and Route Filter Logic

@@ -1,5 +1,21 @@
 # Project Log — Personal Finance Tool
 
+## 2026-05-31 (end of session)
+- Rewrote `GET /transactions` route with per-field filters: `filter_account`, `filter_description`, `filter_merchant`, `filter_category`, `filter_suggested_category`, `filter_api_category`, `amount_min`, `amount_max`, `date_from`, `date_to`
+- Added sort via `sort` and `direction` params — `elif` chain maps sort value to SQL column expression; `direction` whitelisted to `ASC`/`DESC` to prevent injection
+- Amount min/max use `try/except float()` to safely convert string params to numbers
+- All filter and sort values passed back to `render_template` for sticky form
+- Added `filter_account` and `sort == 'account'` — both wired to `a.name` in the JOIN
+- Started rewriting `transactions.html` — old single search form removed; new form wraps table; all 8 sort radio buttons added (Date, Account, Description, Merchant, Amount, Category, Suggested Category, Bank Category)
+- Template mid-session state — still needed when resuming:
+  - `</form>` is in wrong place (line 50) — must move to after `</table>`
+  - `<div class="d-flex">` unclosed — needs `</div>` before `</form>`
+  - Order (ASC/DESC) radio buttons not yet added after `Order:` label
+  - Search and Clear buttons not yet added
+  - `checked` attributes missing on all sort radios (stickiness)
+  - Filter input row (`<tr>` in `<thead>`) not yet added
+- Next: finish sort row (Order radios + buttons + checked attrs), then add filter input row in thead
+
 ## 2026-05-30 (end of session — continued)
 - Agreed on CS50 completion feature list — documented in CLAUDE.md under "CS50 Feature Completion Plan"
 - Decided to keep the stack JavaScript-free throughout; monthly summary will be a plain HTML table rather than a chart

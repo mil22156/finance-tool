@@ -7,25 +7,46 @@
     <div class="container mt-4">
         <h2>Transactions</h2>
         <!-- Form to select to the data to present-->
+        <!-- This form is to allow the user to filter and sort the data as desired -->
         <form method="GET" action="/transactions">
-            <div class="d-flex gap-2 mb-3">
-                <!-- Select Data For custom query. At this point you can just put in one search category at a time along with the date range-->
-                <label class="form-label mb-0">From</label>
-                <input type="date" name="date_from" class="form-control">
-                <label class="form-label mb-0">To</label>
-                <input type="date" name="date_to" class="form-control">
-                <select name="field" class="form-select">
-                    <option value="all">All Fields</option>
-                    <option value="description">Description</option>
-                    <option value="merchant">Merchant</option>
-                    <option value="category">Category</option>
-                    <option value="suggested_category">Suggested Category</option>
-                    <option value="api_category">Bank Category</option>
-                </select>
-                <input type="text" name="search" class="form-control" placeholder="Search transactions...">
-                <button type="submit" class="btn btn-primary">Search</button>
-                <a href="/transactions" class="btn btn-secondary">Clear</a>
-            </div>
+            <!-- row 1 sort controls and buttons-->
+            <div class="d-flex gap-3 mb-2 align-items-center">
+                Sort by: 
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sort" id="date" value="date">
+                    <label class="form-check-label" for="date">Date</label>
+                </div>
+                 <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sort" id="account" value="account">
+                    <label class="form-check-label" for="account">Account</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sort" id="description" value="description">
+                    <label class="form-check-label" for="description">Description</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sort" id="merchant" value="merchant">
+                    <label class="form-check-label" for="merchant">Merchant</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sort" id="amount" value="amount">
+                    <label class="form-check-label" for="amount">Amount</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sort" id="category" value="category">
+                    <label class="form-check-label" for="category">Category</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sort" id="suggested_category" value="suggested_category">
+                    <label class="form-check-label" for="suggested_category">Suggested Category</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sort" id="api_category" value="api_category">
+                    <label class="form-check-label" for="api_category">API Category</label>
+                </div>
+
+                Order: 
+                
         </form>
         <table class="table table-striped">
             <thead>
