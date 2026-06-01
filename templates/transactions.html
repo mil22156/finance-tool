@@ -10,75 +10,134 @@
         <!-- This form is to allow the user to filter and sort the data as desired -->
         <form method="GET" action="/transactions">
             <!-- row 1 sort controls and buttons-->
-            <div class="d-flex gap-3 mb-2 align-items-center">
+            <div class="d-flex gap-3 mb-2 align-items-center flex-wrap">
                 Sort by: 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sort" id="date" value="date">
+                    <input class="form-check-input" type="radio" name="sort" id="date" value="date"
+                    {{ 'checked' if sort == 'date' or not sort}}>
                     <label class="form-check-label" for="date">Date</label>
                 </div>
                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sort" id="account" value="account">
+                    <input class="form-check-input" type="radio" name="sort" id="account" value="account"
+                    {{ 'checked' if sort == 'account' }}>
                     <label class="form-check-label" for="account">Account</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sort" id="description" value="description">
+                    <input class="form-check-input" type="radio" name="sort" id="description" value="description"
+                    {{ 'checked' if sort == 'description' }}>
                     <label class="form-check-label" for="description">Description</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sort" id="merchant" value="merchant">
+                    <input class="form-check-input" type="radio" name="sort" id="merchant" value="merchant"
+                    {{ 'checked' if sort == 'merchant' }}>
                     <label class="form-check-label" for="merchant">Merchant</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sort" id="amount" value="amount">
+                    <input class="form-check-input" type="radio" name="sort" id="amount" value="amount"
+                    {{ 'checked' if sort == 'amount' }}>
                     <label class="form-check-label" for="amount">Amount</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sort" id="category" value="category">
+                    <input class="form-check-input" type="radio" name="sort" id="category" value="category"
+                    {{ 'checked' if sort == 'category'}}>                    
                     <label class="form-check-label" for="category">Category</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sort" id="suggested_category" value="suggested_category">
+                    <input class="form-check-input" type="radio" name="sort" id="suggested_category" value="suggested_category"
+                    {{ 'checked' if sort == 'suggested_category' }}>
                     <label class="form-check-label" for="suggested_category">Suggested Category</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sort" id="api_category" value="api_category">
-                    <label class="form-check-label" for="api_category">API Category</label>
+                    <input class="form-check-input" type="radio" name="sort" id="api_category" value="api_category"
+                    {{ 'checked' if sort == 'api_category' }}>
+                    <label class="form-check-label" for="api_category">Bank Category</label>
                 </div>
-
+            </div>
+            <!-- Select Ascending or Descending order -->
+            <div class="d-flex gap-3 mb-2 align-items-center">
                 Order: 
-                
-        </form>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Account</th>
-                    <th>Description</th>
-                    <th>Merchant</th>
-                    <th>Amount</th>
-                    <th>Category</th>
-                    <th>Suggested Category</th>
-                    <th>Bank Category</th>
-                </tr> 
-            </thead>
-            <tbody>
-                {% for t in transactions_display %}
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="direction" id="ASC" value="ASC"
+                    {{ 'checked' if direction == 'ASC' }}>
+                    <label class="form-check-label" for="ASC">Ascending</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="direction" id="DESC" value="DESC"
+                    {{ 'checked' if direction == 'DESC' or not direction }}>
+                    <label class="form-check-label" for="DESC">Descending</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Search</button>
+                <a href="/transactions" class="btn btn-secondary btn-sm">Clear</a>
+            </div>
+            
+            <!-- show number of records in dataset and total USD in the data set -->
+            <<div class="mb-2">
+                <strong>{{ record_count }}</strong> transactions &nbsp;|&nbsp; 
+                Total: <strong class="{{ 'text-danger' if total_amount < 0 else '' }}">{{ "%.2f"|format(total_amount) }}</strong>
+            </div>
+            
+            <!-- column headers for transactions data -->
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td>{{ t['date'] }}</td>
-                        <td>{{ t['account_name'] }}</td>
-                        <td>{{ t['description'] }}</td>
-                        <td>{{ t['merchant_name'] }}</td>
-                        <td class="{{ 'text-danger' if t['amount'] < 0 else '' }}">
-                            {{ "%.2f"|format(t['amount']) }}
-                        </td>
-                        <td>{{ t['category'] }}</td>
-                        <td>{{ t['suggested_category'] }}</td>
-                        <td>{{ t['api_category'] }}</td>
+                        <th>Date</th>
+                        <th>Account</th>
+                        <th>Description</th>
+                        <th>Merchant</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Suggested Category</th>
+                        <th>Bank Category</th>
                     </tr>
-                {% else %}
-                    <tr><td colspan="8">No Transactions found.</td></tr>
-                {% endfor %}                
-            </tbody>
-        </table>
+                    <!--filter input boxes for each column-->
+                    <tr>
+                        <th>
+                            <input type="date" name="date_from" class="form-control form-control-sm" value="{{ date_from }}">
+                            <input type="date" name="date_to" class="form-control form-control-sm" value="{{ date_to }}">
+                        </th>
+                        <th>
+                            <input type="text" name="filter_account" class="form-control form-control-sm" value="{{ filter_account }}">                            
+                        </th>
+                        <th>
+                            <input type="text" name="filter_description" class="form-control form-control-sm" value="{{ filter_description }}">                            
+                        </th>
+                        <th>
+                            <input type="text" name="filter_merchant" class="form-control form-control-sm" value="{{ filter_merchant }}">                            
+                        </th>
+                        <th>
+                            <input type="text" name="filter_amount" class="form-control form-control-sm" value="{{ filter_amount }}">                            
+                        </th>
+                        <th>
+                            <input type="text" name="filter_category" class="form-control form-control-sm" value="{{ filter_category }}">                            
+                        </th>
+                        <th>
+                            <input type="text" name="filter_suggested_category" class="form-control form-control-sm" value="{{ filter_suggested_category }}">                            
+                        </th>
+                        <th>
+                            <input type="text" name="filter_api_category" class="form-control form-control-sm" value="{{ filter_api_category }}">                            
+                        </th>
+                    </tr> 
+                </thead>
+                <!-- transaction data -->
+                <tbody>
+                    {% for t in transactions_display %}
+                        <tr>
+                            <td>{{ t['date'] }}</td>
+                            <td>{{ t['account_name'] }}</td>
+                            <td>{{ t['description'] }}</td>
+                            <td>{{ t['merchant_name'] }}</td>
+                            <td class="{{ 'text-danger' if t['amount'] < 0 else '' }}">
+                                {{ "%.2f"|format(t['amount']) }}
+                            </td>
+                            <td>{{ t['category'] }}</td>
+                            <td>{{ t['suggested_category'] }}</td>
+                            <td>{{ t['api_category'] }}</td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="8">No Transactions found.</td></tr>
+                    {% endfor %}                
+                </tbody>
+            </table>
+        </form>
     </div>
 {% endblock %}  

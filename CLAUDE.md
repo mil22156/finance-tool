@@ -101,7 +101,7 @@ python app.py        # start dev server at http://127.0.0.1:5000
 Features required to call the project complete for CS50 submission, in build order:
 - [x] Upload pipeline — parse → deduplicate → stage → review → commit (done 2026-05-25)
 - [x] Transactions list page — JOIN query, Bootstrap table, amount formatting (done 2026-05-29)
-- [ ] Transactions sort and filter — server-side via GET params, no JavaScript
+- [x] Transactions sort and filter — per-column filters, sort radios, date range, amount min/max; done 2026-06-01
 - [ ] Accounts list page — simple list of household accounts
 - [ ] Categories management — CRUD UI for creating and editing categories
 - [ ] Manual category assignment — assign `category_ID` to a transaction from the transactions page

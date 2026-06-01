@@ -121,6 +121,8 @@ def transactions():
                 {where_clause}
                 ORDER BY {sort_clause}'''
     transactions_display = db.execute(sql, params).fetchall()
+    record_count = len(transactions_display)
+    total_amount = sum(t['amount'] for t in transactions_display)
     db.close()
 
     # render transaction page sending the data and the current filter and sort criteria
@@ -128,4 +130,4 @@ def transactions():
                            filter_account = filter_account, filter_description = filter_description, filter_merchant = filter_merchant, 
                            filter_category = filter_category, filter_suggested_category = filter_suggested_category, 
                            filter_api_category = filter_api_category, sort = sort, direction = direction, amount_min = amount_min, 
-                           amount_max = amount_max)
+                           amount_max = amount_max, record_count = record_count, total_amount = total_amount)

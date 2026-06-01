@@ -1,5 +1,15 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-01 (end of session)
+- Completed `transactions.html` rewrite — per-column filter inputs in second `<thead>` row, all aligned with column headers automatically via table layout
+- Sort radio buttons (8 columns) and Order radio buttons (ASC/DESC) with sticky `checked` attributes
+- Filter inputs sticky via `value="{{ variable }}"` on all inputs
+- Amount column: stacked Min/Max number inputs; Date column: stacked date_from/date_to date pickers
+- Added record count and total amount summary display
+- `transactions.html` and sort/filter now fully working
+- Discussed HTTPS/dev server security — confirmed localhost dev server is safe for personal use; HTTPS via nginx + Let's Encrypt is a deployment concern for post-CS50
+- Next: categorization — categories management CRUD, manual category assignment on transactions page
+
 ## 2026-05-31 (end of session)
 - Rewrote `GET /transactions` route with per-field filters: `filter_account`, `filter_description`, `filter_merchant`, `filter_category`, `filter_suggested_category`, `filter_api_category`, `amount_min`, `amount_max`, `date_from`, `date_to`
 - Added sort via `sort` and `direction` params — `elif` chain maps sort value to SQL column expression; `direction` whitelisted to `ASC`/`DESC` to prevent injection

@@ -7,6 +7,22 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 28 — 2026-06-01
+
+### Transactions Template Completion
+
+- Explained `<div>` as block-level element — creates new line; `d-flex` overrides to horizontal layout; `align-items-center` controls vertical alignment within flex row; `justify-content` controls horizontal
+- Explained Bootstrap spacing utilities: `gap-3` (space between flex children), `mb-2`/`mb-3` (margin bottom), number scale 0–5
+- Caught stray `'` in `class="'d-flex..."` on Order row — broke flex layout
+- Explained second `<tr>` in `<thead>` auto-aligns with column headers via table layout — no extra CSS needed
+- Caught `<input>` directly inside `<tr>` without `<th>` wrapper — invalid HTML; must be wrapped in `<th>`
+- Caught single curly braces `{ variable }` instead of `{{ variable }}` in value attributes
+- Explained sticky radio buttons — `{{ 'checked' if sort == 'date' or not sort }}` pattern; `or not sort` sets default selection
+- Recommended `len(transactions_display)` and `sum(t['amount'] for t in transactions_display)` in route for record count and total amount
+- Discussed HTTPS security — Flask dev server is HTTP only; debug mode exposes interactive console; both are fine for localhost; HTTPS via nginx + Let's Encrypt needed for internet-accessible deployment
+
+---
+
 ## Session 27 — 2026-05-31
 
 ### Transactions Route Rewrite and Template (in progress)
