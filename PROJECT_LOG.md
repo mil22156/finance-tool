@@ -1,5 +1,14 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-01 (end of session — continued)
+- Built accounts list page — `GET /accounts` queries household DB, passes accounts to template, Bootstrap table with Edit buttons
+- Built combined new/edit form (`account_form.html`) replacing `add_account.html` — single template handles both create and edit; conditionally shows "Edit Account" vs "Add Account" heading, pre-populates fields, shows Delete button only in edit mode
+- Built `GET/POST /accounts/edit/<id>` route — fetches account by id, pre-populates form, UPDATE on POST
+- Built `POST /accounts/delete/<id>` route — verifies account exists, DELETE, redirect to `/accounts`
+- Delete button is an inline form POSTing directly to delete route (no confirmation yet — to revisit with modal decision)
+- Known issue: Edit and Delete buttons styling needs improvement — to fix next session
+- Next: button styling cleanup, then move to categories management
+
 ## 2026-06-01 (end of session)
 - Completed `transactions.html` rewrite — per-column filter inputs in second `<thead>` row, all aligned with column headers automatically via table layout
 - Sort radio buttons (8 columns) and Order radio buttons (ASC/DESC) with sticky `checked` attributes

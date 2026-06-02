@@ -7,6 +7,24 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 29 — 2026-06-01 (continued)
+
+### Accounts Page — List, Edit, Delete
+
+- Explained REST URL pattern — `<id>` embedded in URL path identifies the resource; Flask captures it with `<int:account_id>` in route definition
+- Explained combining new/edit into one template — pass `account=None` for new, `account=data` for edit; template adapts with `{% if account %}` conditionals
+- Caught nested `<form>` inside main `<form>` — HTML doesn't allow it; moved delete form outside main form
+- Caught `name="name"` not matching `request.form.get('account_name')` in route
+- Caught `credit_card` not matching schema CHECK constraint `'credit'`
+- Caught double slash in edit link `/accounts//{{ account['id'] }}/edit`
+- Caught URL order mismatch — link generated `/accounts/<id>/edit` but route was `/accounts/edit/<id>`
+- Caught `onclick="window.location.href=..."` JS on Add Account button — replaced with plain `<a>` link
+- Caught dot notation (`account.name`) inconsistent with rest of project — changed to bracket notation
+- Explained VS Code red highlighting on Jinja2 in HTML attributes is a false positive — HTML linter doesn't understand Jinja2 syntax
+- Recommended "Better Jinja" VS Code extension to resolve false positives
+
+---
+
 ## Session 28 — 2026-06-01
 
 ### Transactions Template Completion

@@ -102,7 +102,7 @@ Features required to call the project complete for CS50 submission, in build ord
 - [x] Upload pipeline — parse → deduplicate → stage → review → commit (done 2026-05-25)
 - [x] Transactions list page — JOIN query, Bootstrap table, amount formatting (done 2026-05-29)
 - [x] Transactions sort and filter — per-column filters, sort radios, date range, amount min/max; done 2026-06-01
-- [ ] Accounts list page — simple list of household accounts
+- [x] Accounts list page — simple list of household accounts, with edit/delete; done 2026-06-01
 - [ ] Categories management — CRUD UI for creating and editing categories
 - [ ] Manual category assignment — assign `category_ID` to a transaction from the transactions page
 - [ ] Auto-categorization rules — rules engine runs at import time, populates `suggested_category_id`; CRUD UI for managing rules

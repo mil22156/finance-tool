@@ -165,10 +165,16 @@ def add_user():
     return render_template('add_user.html')
 
 # Account management route
-# For now this will just be a placeholder to demonstrate navigation after login. It will eventually allow users to manage their accounts, including changing their password and email.  
+# This route will display all of the accounts for the household and offer the option to add edit and delete accounts. 
 @app.route('/accounts')
 def accounts():
-    return render_template('accounts.html')
+    if 'household_db_path' not in session:
+        flash('Please log in.', 'danger')
+        return redirect('/login')
+    household_conn = get_db(session['household_db_path'])
+    accounts = household_conn.execute('SELECT id, name, institution, account_type, currency FROM accounts').fetchall()
+    household_conn.close()
+    return render_template('accounts.html', accounts=accounts)
 
 # Add Account route
 @app.route('/accounts/new', methods=['GET', 'POST'])
@@ -191,8 +197,54 @@ def add_account():
         household_conn.close()
         flash('Account added successfully.', 'success')
         return redirect('/accounts')
-    return render_template('add_account.html')    
-        
+    return render_template('account_form.html')
+    
+# Edit account route. There is one account edit form which when it has and ID passed to it will edit or delete the account with that ID
+# If there is no ID passed it will be blank and allow the user to add the account.
+@app.route('/accounts/edit/<int:account_id>', methods=['GET', 'POST'])
+def edit_account(account_id):
+    household_conn = get_db(session['household_db_path'])
+    account = household_conn.execute('SELECT id, name, institution, account_type, currency FROM accounts WHERE id = ?', (account_id,)).fetchone()
+    if not account:
+        flash('Account not found.', 'danger')
+        household_conn.close()
+        return redirect('/accounts')
+    if request.method == 'POST':
+        # get form fields: account name, institution, account type, currency
+        account_name = request.form.get('account_name')
+        institution = request.form.get('institution')
+        account_type = request.form.get('account_type')
+        currency = request.form.get('currency')
+        # validate fields
+        if not account_name or not institution or not account_type or not currency:
+            flash('All fields are required.', 'danger')
+            return redirect(f'/accounts/edit/{account_id}') 
+        #  update account in the household database
+        household_conn.execute(
+            'UPDATE accounts SET name = ?, institution = ?, account_type = ?, currency = ? WHERE id = ?', (account_name, institution, account_type, currency, account_id))
+        household_conn.commit()
+        household_conn.close()
+        flash('Account updated successfully.', 'success')
+        return redirect('/accounts')
+    household_conn.close()
+    return render_template('account_form.html', account=account)
+
+# Delete account route. this will be triggered by a button on the account_form.html template
+
+@app.route('/accounts/delete/<int:account_id>', methods=['POST'])
+def delete_account(account_id):
+    household_conn = get_db(session['household_db_path'])
+    account = household_conn.execute('SELECT id FROM accounts WHERE id = ?', (account_id,)).fetchone()
+    if not account:
+        flash('Account not found.', 'danger')
+        household_conn.close()
+        return redirect('/accounts')
+    household_conn.execute('DELETE FROM accounts WHERE id = ?', (account_id,))
+    household_conn.commit()
+    household_conn.close()
+    flash('Account deleted successfully.', 'success')
+    return redirect('/accounts')
+      
 # Logout route
 @app.route('/logout')
 def logout():

@@ -5,6 +5,31 @@
 {% block main %}
 <div class="container mt-4">
     <h2>Accounts</h2>
-    <p>Coming soon!</p>
+    <a href="/accounts/new" class="btn btn-primary mb-3">Add Account</a>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Institution</th>
+                <th>Type</th>
+                <th>Currency</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for account in accounts %}
+            <!-- each account will have an edit button which will open the account edit page -->
+             <!-- AI note copied this edit button code from AI suggestion-->
+            <tr>
+                <td>{{ account['name'] }}</td>
+                <td>{{ account['institution'] }}</td>
+                <td>{{ account['account_type'] }}</td>
+                <td>{{ account['currency'] }}</td>
+                <td><a href="/accounts/edit/{{ account['id'] }}" class="btn btn-sm btn-outline-primary">Edit</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}  

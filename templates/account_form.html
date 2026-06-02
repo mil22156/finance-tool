@@ -1,0 +1,42 @@
+{%- extends "layout.html" -%}
+<!-- This is the account page. If there is an account ID in the URL it will open in edit mode with the edit and delete options -->
+<!-- if no account id is in the URL is will show as a create account form-->
+{%- block main -%}
+<div class="container mt-4">
+    <h2>{{ 'Edit Account' if account else 'Add Account' }}</h2>
+    <form method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">Account Name</label>
+            <input type="text" class="form-control" id="name" name="account_name" value="{{ account['name'] if account else '' }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="institution" class="form-label">Institution</label>
+            <input type="text" class="form-control" id="institution" name="institution" value="{{ account['institution'] if account else '' }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="account_type" class="form-label">Account Type</label>
+            <select class="form-control" id="account_type" name="account_type" required>
+                <option value="">-- Select Account Type --</option>
+                <option value="checking" {% if account and account['account_type'] == 'checking' %}selected{% endif %}>Checking</option>
+                <option value="savings" {% if account and account['account_type'] == 'savings' %}selected{% endif %}>Savings</option>
+                <option value="credit" {% if account and account['account_type'] == 'credit' %}selected{% endif %}>Credit Card</option>
+                <option value="investment" {% if account and account['account_type'] == 'investment' %}selected{% endif %}>Investment</option>
+                <option value="other" {% if account and account['account_type'] == 'other' %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="currency" class="form-label">Currency</label>
+            <input type="text" class="form-control" id="currency" name="currency" value="{{ account['currency'] if account else '' }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'Update Account' if account else 'Create Account' }}</button>
+    </form>
+    {% if account %}
+    <form method="POST" action="/accounts/delete/{{ account['id'] }}" style="display:inline">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    {% endif %}
+
+</div>
+
+{%- endblock -%}
+    
