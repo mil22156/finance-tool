@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+<!--Categories page to view add edit categories -->
+{% block main %}
+<div class="container mt-4">
+    <h2>Categories</h2>
+    <!-- Form to add new category -->
+    <form method="POST" action="/categories/new" class="d-flex gap-2 align-items-center">
+            <button type="submit" class="btn btn-primary">Add Category</button>
+            <input type="text" class="form-control" id="categoryName" placeholder="New Category Name" name="category_name" required>
+            <select class="form-control" id="parentCategory" name="parent_id">
+                <option value="">-- None --</option>
+                {% for category in categories_list %}
+                <option value="{{ category['id'] }}">{{ category['name'] }}</option>
+                {% endfor %}
+            </select>
+    </form>
+    <!-- Table with all categories-->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Parent</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories_list %}
+            <tr>
+                <td>{{ category['name'] }}</td>
+                <td>{{ category['parent_name'] if category['parent_name'] else 'None' }}</td>
+                <td>
+                    <!-- Edit and Delete buttons will go here -->
+                    <a href="/categories/{{ category['id'] }}/edit" class="btn btn-sm btn-secondary">Edit</a>
+                    <form action="/categories/{{ category['id'] }}/delete" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

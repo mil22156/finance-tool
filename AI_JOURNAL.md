@@ -7,6 +7,24 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 30 — 2026-06-02
+
+### Categories Page — Blueprint, Route, Template
+
+- Explained why `style="display:inline"` was overriding Bootstrap `mt-3` — inline style beats class; fix is to remove the inline style
+- Explained `<a href="...">` styled as a button for Cancel — navigates without submitting a form
+- Caught variable name collision in `categories()` function — local variable `categories` shadowing the function name; renamed to `categories_list`
+- Caught unused imports (`os`, `REGISTRY_PATH`) in `categories.py`
+- Caught missing `methods=['POST']` on `/categories/new` route decorator
+- Explained SQL self-join concept — joining a table to itself using two aliases (`cat` and `parent`) to look up parent category name from the same table
+- Explained `LEFT JOIN` vs plain `JOIN` — plain JOIN drops rows with no match; LEFT JOIN keeps all rows from the left side, returning NULL for missing parent
+- Explained `AS parent_name` column aliasing — avoids two columns both named `name` in the result set
+- Explained Bootstrap `d-flex gap-2 align-items-center` for inline form layout — makes children sit in a row with spacing
+- Explained `placeholder` attribute for ghost text vs `<label>` elements
+- Provided final merged list of 27 default categories from user's prior household data
+
+---
+
 ## Session 29 — 2026-06-01 (continued)
 
 ### Accounts Page — List, Edit, Delete

@@ -1,5 +1,14 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-02 (end of session)
+- Fixed `account_form.html` button layout — removed `style="display:inline"` from delete form, added `class="mt-3"` to separate Delete from Update/Create; added Cancel `<a>` tag with `class="btn btn-secondary ms-2"` inside main form
+- Created `routes/categories.py` Blueprint (`categories_bp`) registered in `app.py`
+- Built `populate_default_categories(household_db_path)` — checks if categories table is empty, seeds 27 default categories on first run; called from `/household/new` in `app.py` immediately after `init_db()`
+- Built `GET /categories` route — self-join query on categories table to fetch each category's parent name; uses table aliases `cat` and `parent` with `LEFT JOIN` so categories without parents still appear
+- Built `POST /categories/new` route — inserts category name and optional parent_id; converts empty string to `None` for nullable FK
+- Built `categories.html` — inline add form using `d-flex gap-2` with text input (placeholder "New Category Name"), parent dropdown, and Add Category button; table below showing Name, Parent, Edit/Delete per row
+- Next: inline edit on categories table, delete route, then manual category assignment on transactions page
+
 ## 2026-06-01 (end of session — continued)
 - Built accounts list page — `GET /accounts` queries household DB, passes accounts to template, Bootstrap table with Edit buttons
 - Built combined new/edit form (`account_form.html`) replacing `add_account.html` — single template handles both create and edit; conditionally shows "Edit Account" vs "Add Account" heading, pre-populates fields, shows Delete button only in edit mode

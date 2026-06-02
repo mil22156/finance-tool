@@ -6,6 +6,8 @@ from flask import Flask, render_template, request, flash, redirect, session
 import uuid
 from routes.upload import upload_bp
 from routes.transactions import transactions_bp
+from routes.categories import categories_bp
+from routes.categories import populate_default_categories
 
 
 
@@ -15,6 +17,7 @@ app = Flask(__name__)
 
 app.register_blueprint(upload_bp)
 app.register_blueprint(transactions_bp)
+app.register_blueprint(categories_bp)
 
 app.secret_key = os.getenv('SECRET_KEY')
 
@@ -103,6 +106,8 @@ def household_new():
         conn.commit()
         conn.close()
                 
+        # populate the default categories in the categories table
+        populate_default_categories(db_path)
 
         flash('Household created successfully. Please log in.', 'success')
         return redirect('/login')
