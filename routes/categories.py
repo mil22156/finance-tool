@@ -66,14 +66,25 @@ def new_category():
     if 'household_db_path' not in session:
         flash('Please log in.', 'danger')
         return redirect('/login')
-    if request.method == 'POST':
-        category_name = request.form.get('category_name')
-        parent_category_id = request.form.get('parent_category_id') or None  # Convert empty string to None
-        conn = get_db(session['household_db_path'])
-        conn.execute('INSERT INTO categories (name, parent_id) VALUES (?, ?)', (category_name, parent_category_id))
-        conn.commit()
-        conn.close()
-        flash('Category added successfully.', 'success')
-        return redirect('/categories')
+    category_name = request.form.get('category_name')
+    parent_category_id = request.form.get('parent_category_id') or None  # Convert empty string to None
+    conn = get_db(session['household_db_path'])
+    conn.execute('INSERT INTO categories (name, parent_id) VALUES (?, ?)', (category_name, parent_category_id))
+    conn.commit()
+    conn.close()
+    flash('Category added successfully.', 'success')
+    return redirect('/categories')
 
 # Delete Categories 
+@categories_bp.route('/categories/<int:category_id>/delete', methods=['POST'])
+def delete_category(category_id):
+    if 'household_db_path' not in session:
+        flash('Please log in.', 'danger')
+        return redirect('/login')
+    conn = get_db(session['household_db_path'])
+    conn.execute('DELETE FROM categories WHERE id == ?', (category_id,))
+    conn.commit()
+    conn.close()
+    flash('Category has been deleted')
+    return redirect('/categories')
+

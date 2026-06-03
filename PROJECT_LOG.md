@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-02 (end of session — continued)
+- Built `POST /categories/<id>/delete` route — auth guard, fetches household DB from session, DELETE by id, commit, flash, redirect to `/categories`
+- Fixed several bugs in delete route: missing `category_id` parameter on function def, `session.form.get` → `session['household_db_path']`, `FROM categories DELETE` → `DELETE FROM categories WHERE id = ?`, single-value tuple missing trailing comma
+- Delete working end to end
+- Known issue: no confirmation before delete — to add next session (modal or confirm page)
+- Next: delete confirmation, then inline edit on categories table
+
 ## 2026-06-02 (end of session)
 - Fixed `account_form.html` button layout — removed `style="display:inline"` from delete form, added `class="mt-3"` to separate Delete from Update/Create; added Cancel `<a>` tag with `class="btn btn-secondary ms-2"` inside main form
 - Created `routes/categories.py` Blueprint (`categories_bp`) registered in `app.py`

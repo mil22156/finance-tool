@@ -7,6 +7,15 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 30 — 2026-06-02 (continued)
+
+### Categories Delete Route
+
+- Caught four bugs in delete route: missing function parameter, `session.form.get` instead of `session['household_db_path']`, reversed SQL syntax (`FROM categories DELETE`), single-item tuple missing trailing comma
+- Explained what a tuple is and why SQLite requires one — `(value)` is just parentheses, `(value,)` is a tuple; needed because `?` placeholder expects a sequence
+
+---
+
 ## Session 30 — 2026-06-02
 
 ### Categories Page — Blueprint, Route, Template
