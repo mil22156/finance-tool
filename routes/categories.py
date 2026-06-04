@@ -58,7 +58,10 @@ def categories():
                                              FROM categories
                                              LEFT JOIN categories parent ON categories.parent_id = parent.id''').fetchall()
     household_conn.close()
-    return render_template('categories.html', categories_list=categories_list)
+    # Confirm ID is used to identify when a user is trying to delete something confirm ID allows for a 
+    # confirmation of delete by the user before the record is actually deleted
+    confirm_id = request.args.get('confirm_id', type = int)
+    return render_template('categories.html', categories_list=categories_list, confirm_id=confirm_id)
 
 # New Categories route adds the route from the categories page to the database. category_name and parent_category_id are passed
 @categories_bp.route('/categories/new', methods=['POST'])

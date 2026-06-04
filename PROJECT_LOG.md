@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-03 (end of session)
+- Reworked categories delete flow — abandoned inline confirm approach (button shifting layout issue on variable screen sizes); moved to account_form pattern instead
+- Built `category_form.html` — single template handles add and edit; Category Name text input, Parent dropdown populated from `categories_list` with `selected` pre-fill in edit mode, Update/Create submit button, Cancel link, Delete form below (edit mode only)
+- Simplified `categories.html` — removed all confirm delete logic, clean loop with Edit button per row; Delete button removed from list (delete now handled from edit form)
+- Known issue: edit and delete routes in `categories.py` not yet built — next session
+- Next: `GET/POST /categories/<id>/edit` and update delete route URL to `/categories/delete/<id>`
+
 ## 2026-06-02 (end of session — continued)
 - Built `POST /categories/<id>/delete` route — auth guard, fetches household DB from session, DELETE by id, commit, flash, redirect to `/categories`
 - Fixed several bugs in delete route: missing `category_id` parameter on function def, `session.form.get` → `session['household_db_path']`, `FROM categories DELETE` → `DELETE FROM categories WHERE id = ?`, single-value tuple missing trailing comma

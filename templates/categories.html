@@ -23,18 +23,20 @@
             </tr>
         </thead>
         <tbody>
+
+            <!-- TODO this works but the buttons move to another spot on the screen when a delete button is pressed-->
+            <!-- This whole UI is wonky I wouldn't mind starting from the beginning. We are going a long way to-->
+            <!-- confirm delete.-->
+            <!-- in order to allow for a confirm delete where the columns don't change positions-->
+            <!-- we are building different tables based on whether we are in confirm mode or not-->
             {% for category in categories_list %}
-            <tr>
-                <td>{{ category['name'] }}</td>
-                <td>{{ category['parent_name'] if category['parent_name'] else 'None' }}</td>
-                <td>
-                    <!-- Edit and Delete buttons will go here -->
-                    <a href="/categories/{{ category['id'] }}/edit" class="btn btn-sm btn-secondary">Edit</a>
-                    <form action="/categories/{{ category['id'] }}/delete" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
+                <tr>
+                    <td>{{ category['name'] }}</td>
+                    <td>{{ category['parent_name'] if category['parent_name'] else 'None' }}</td>
+                    <td>
+                        <a href="/categories/{{ category['id'] }}/edit" class="btn btn-sm btn-secondary">Edit</a>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

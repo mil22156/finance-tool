@@ -7,6 +7,18 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 31 — 2026-06-03
+
+### Categories Form and Delete Flow Redesign
+
+- User decided to move delete to a separate form page (consistent with accounts pattern) — abandoned inline confirm approach due to layout shifting on variable screen sizes
+- Caught variable name shadowing in dropdown loop (`category` shadowing outer `category`) — guided rename to `parent`
+- Caught wrong field references in dropdown (`category['id']` and `parent['parent']`) — corrected to `parent['id']` and `parent['name']`
+- Explained `selected` attribute for pre-filling dropdowns in edit mode — user noted this line was copied from AI suggestion
+- Advised moving delete route URL to `/categories/delete/<id>` to match accounts pattern
+
+---
+
 ## Session 30 — 2026-06-02 (continued)
 
 ### Categories Delete Route
