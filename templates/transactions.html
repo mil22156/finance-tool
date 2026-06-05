@@ -71,7 +71,7 @@
             </div>
             
             <!-- show number of records in dataset and total USD in the data set -->
-            <<div class="mb-2">
+            <div class="mb-2">
                 <strong>{{ record_count }}</strong> transactions &nbsp;|&nbsp; 
                 Total: <strong class="{{ 'text-danger' if total_amount < 0 else '' }}">{{ "%.2f"|format(total_amount) }}</strong>
             </div>
@@ -105,10 +105,18 @@
                             <input type="text" name="filter_merchant" class="form-control form-control-sm" value="{{ filter_merchant }}">                            
                         </th>
                         <th>
-                            <input type="text" name="filter_amount" class="form-control form-control-sm" value="{{ filter_amount }}">                            
+                            <input type="text" name="amount_min" class="form-control form-control-sm" placeholder="Min" value="{{ amount_min }}">
+                            <input type="text" name="amount_max" class="form-control form-control-sm" placeholder="Max" value="{{ amount_max }}">
                         </th>
                         <th>
-                            <input type="text" name="filter_category" class="form-control form-control-sm" value="{{ filter_category }}">                            
+                            <!--<input type="text" name="filter_category" class="form-control form-control-sm" value="{{ filter_category }}">    -->                        
+                            <select class="form-control" id="filter_category" name="filter_category">
+                                <option value="">-- None --</option>
+                                {% for cat in categories_list %}
+                                <!-- this next line I copied from AI. I was not getting it right-->
+                                 <option value="{{ cat['name'] }}" {% if cat['name']|string == filter_category %}selected{% endif %}>{{ cat['name'] }}</option>
+                                {% endfor %}   
+                            </select>                         
                         </th>
                         <th>
                             <input type="text" name="filter_suggested_category" class="form-control form-control-sm" value="{{ filter_suggested_category }}">                            

@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-04 (end of session — continued)
+- Added category dropdown filter to transactions page — replaces text input; submits category name so existing `c1.name LIKE ?` route filter works unchanged
+- Fixed amount filter inputs — replaced broken `filter_amount` reference with proper `amount_min`/`amount_max` stacked inputs using `placeholder` attribute for ghost text
+- Fixed `<<div` typo in transactions template
+- Discussed manual category assignment approach — agreed on: (1) transaction edit form for one-offs, (2) bulk assign to filtered set for large batches
+- Next: build transaction edit form (category field only for now)
+
 ## 2026-06-04 (end of session)
 - Built `GET/POST /categories/new` route — GET renders `category_form.html` in add mode; POST inserts new category, closes connection, redirects to `/categories`
 - Built `GET/POST /categories/edit/<id>` route — GET fetches category and categories list, renders form in edit mode with pre-filled fields; POST validates name, UPDATE, close, redirect

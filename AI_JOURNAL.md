@@ -7,6 +7,17 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 33 — 2026-06-04 (continued)
+
+### Transactions Page — Category Filter Dropdown and Amount Fix
+
+- Explained `placeholder` attribute vs `value` for ghost text in inputs
+- Caught loop variable mismatch — `{% for cat %}` loop still referenced `parent['id']` and `parent['name']`
+- Explained submitting category name vs id in dropdown — name simpler since route already uses `LIKE` on name
+- Caught `filter_amount` reference that doesn't exist — corrected to `amount_min`/`amount_max`
+
+---
+
 ## Session 32 — 2026-06-04
 
 ### Categories Routes — Add, Edit, Delete

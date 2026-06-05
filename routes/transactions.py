@@ -16,6 +16,9 @@ def transactions():
         flash('Please log in to view transactions.', 'danger')
         return redirect('/login')
     db = get_db(session['household_db_path'])
+    categories_list = db.execute('''SELECT categories.id, categories.name, parent.name as parent_name 
+                                             FROM categories
+                                             LEFT JOIN categories parent ON categories.parent_id = parent.id''').fetchall()
 
     # Build the where condition from the user input on the transactions search form
     # Now the search is limited to the date then one search criteria. In the future I'd like to expand this capability 
@@ -130,4 +133,4 @@ def transactions():
                            filter_account = filter_account, filter_description = filter_description, filter_merchant = filter_merchant, 
                            filter_category = filter_category, filter_suggested_category = filter_suggested_category, 
                            filter_api_category = filter_api_category, sort = sort, direction = direction, amount_min = amount_min, 
-                           amount_max = amount_max, record_count = record_count, total_amount = total_amount)
+                           amount_max = amount_max, record_count = record_count, total_amount = total_amount, categories_list=categories_list)
