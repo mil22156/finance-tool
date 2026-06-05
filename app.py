@@ -184,6 +184,9 @@ def accounts():
 # Add Account route
 @app.route('/accounts/new', methods=['GET', 'POST'])
 def add_account():
+    if 'household_db_path' not in session:
+        flash('Please log in.', 'danger')
+        return redirect('/login')
     if request.method == 'POST':
         # get form fields: account name, institution, account type, currency
         account_name = request.form.get('account_name')
@@ -208,6 +211,9 @@ def add_account():
 # If there is no ID passed it will be blank and allow the user to add the account.
 @app.route('/accounts/edit/<int:account_id>', methods=['GET', 'POST'])
 def edit_account(account_id):
+    if 'household_db_path' not in session:
+        flash('Please log in.', 'danger')
+        return redirect('/login')
     household_conn = get_db(session['household_db_path'])
     account = household_conn.execute('SELECT id, name, institution, account_type, currency FROM accounts WHERE id = ?', (account_id,)).fetchone()
     if not account:
@@ -238,6 +244,9 @@ def edit_account(account_id):
 
 @app.route('/accounts/delete/<int:account_id>', methods=['POST'])
 def delete_account(account_id):
+    if 'household_db_path' not in session:
+        flash('Please log in.', 'danger')
+        return redirect('/login')
     household_conn = get_db(session['household_db_path'])
     account = household_conn.execute('SELECT id FROM accounts WHERE id = ?', (account_id,)).fetchone()
     if not account:
