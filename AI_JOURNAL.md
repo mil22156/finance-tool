@@ -7,6 +7,22 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 32 — 2026-06-04
+
+### Categories Routes — Add, Edit, Delete
+
+- Explained auth guard should be on all routes touching household DB; identified it missing from some accounts routes
+- Caught `session[household_db_path]` missing quotes — NameError at runtime
+- Caught wrong form field name (`category_name` vs `name`) causing IntegrityError on insert
+- Caught SQL syntax error — stray comma before WHERE in UPDATE statement
+- Caught typo in redirect URL (`/catetories/`)
+- Caught duplicate `class` attribute on delete form tag
+- Caught missing `household_conn.close()` before successful POST redirects
+- Explained "database is locked" error — SQLite single-writer limit; caused by unclosed connections from prior requests
+- Explained `<div>` nesting inside `<form>` is valid HTML — only `<td>` inside `<td>` is invalid
+
+---
+
 ## Session 31 — 2026-06-03
 
 ### Categories Form and Delete Flow Redesign

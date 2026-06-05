@@ -223,12 +223,12 @@ def edit_account(account_id):
         # validate fields
         if not account_name or not institution or not account_type or not currency:
             flash('All fields are required.', 'danger')
-            return redirect(f'/accounts/edit/{account_id}') 
+            household_conn.close()
+            return redirect(f'/accounts/edit/{account_id}')
         #  update account in the household database
         household_conn.execute(
             'UPDATE accounts SET name = ?, institution = ?, account_type = ?, currency = ? WHERE id = ?', (account_name, institution, account_type, currency, account_id))
         household_conn.commit()
-        household_conn.close()
         flash('Account updated successfully.', 'success')
         return redirect('/accounts')
     household_conn.close()

@@ -4,16 +4,7 @@
 <div class="container mt-4">
     <h2>Categories</h2>
     <!-- Form to add new category -->
-    <form method="POST" action="/categories/new" class="d-flex gap-2 align-items-center">
-            <button type="submit" class="btn btn-primary">Add Category</button>
-            <input type="text" class="form-control" id="categoryName" placeholder="New Category Name" name="category_name" required>
-            <select class="form-control" id="parentCategory" name="parent_id">
-                <option value="">-- None --</option>
-                {% for category in categories_list %}
-                <option value="{{ category['id'] }}">{{ category['name'] }}</option>
-                {% endfor %}
-            </select>
-    </form>
+    <a href="/categories/new" class="btn btn-primary mb-3">Add Category</a>
     <!-- Table with all categories-->
     <table class="table table-striped">
         <thead>
@@ -34,7 +25,7 @@
                     <td>{{ category['name'] }}</td>
                     <td>{{ category['parent_name'] if category['parent_name'] else 'None' }}</td>
                     <td>
-                        <a href="/categories/{{ category['id'] }}/edit" class="btn btn-sm btn-secondary">Edit</a>
+                        <a href="/categories/edit/{{ category['id'] }}" class="btn btn-sm btn-secondary">Edit</a>
                     </td>
                 </tr>
             {% endfor %}

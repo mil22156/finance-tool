@@ -1,5 +1,16 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-04 (end of session)
+- Built `GET/POST /categories/new` route — GET renders `category_form.html` in add mode; POST inserts new category, closes connection, redirects to `/categories`
+- Built `GET/POST /categories/edit/<id>` route — GET fetches category and categories list, renders form in edit mode with pre-filled fields; POST validates name, UPDATE, close, redirect
+- Built `POST /categories/delete/<id>` route — verifies category exists, DELETE, redirect
+- Replaced inline add form on `categories.html` with plain `<a>` link to `/categories/new`
+- Fixed several bugs: missing `household_conn.close()` on successful POST paths, `session[household_db_path]` missing quotes, wrong form field names, SQL comma before WHERE, typo in redirect URL, duplicate `class` attribute on delete form
+- Fixed `category_form.html` button spacing — wrapped submit/cancel in `<div class="mt-3">`, delete form uses `class="mt-3"`
+- Known issue: `confirm_id` still read in `GET /categories` route but confirm delete logic removed — dead code to clean up
+- Known issue: `import os` and `REGISTRY_PATH` unused in `categories.py`
+- Next: manual category assignment on transactions page
+
 ## 2026-06-03 (end of session)
 - Reworked categories delete flow — abandoned inline confirm approach (button shifting layout issue on variable screen sizes); moved to account_form pattern instead
 - Built `category_form.html` — single template handles add and edit; Category Name text input, Parent dropdown populated from `categories_list` with `selected` pre-fill in edit mode, Update/Create submit button, Cancel link, Delete form below (edit mode only)
