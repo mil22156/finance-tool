@@ -53,6 +53,7 @@
                     <label class="form-check-label" for="api_category">Bank Category</label>
                 </div>
             </div>
+
             <!-- Select Ascending or Descending order -->
             <div class="d-flex gap-3 mb-2 align-items-center">
                 Order: 
@@ -68,8 +69,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-sm">Search</button>
                 <a href="/transactions" class="btn btn-secondary btn-sm">Clear</a>
-            </div>
-            
+            </div>            
             <!-- show number of records in dataset and total USD in the data set -->
             <div class="mb-2">
                 <strong>{{ record_count }}</strong> transactions &nbsp;|&nbsp; 
@@ -86,6 +86,7 @@
                         <th>Merchant</th>
                         <th>Amount</th>
                         <th>Category</th>
+                        <th></th>
                         <th>Suggested Category</th>
                         <th>Bank Category</th>
                     </tr>
@@ -118,6 +119,7 @@
                                 {% endfor %}   
                             </select>                         
                         </th>
+                        <th></th>
                         <th>
                             <input type="text" name="filter_suggested_category" class="form-control form-control-sm" value="{{ filter_suggested_category }}">                            
                         </th>
@@ -138,6 +140,7 @@
                                 {{ "%.2f"|format(t['amount']) }}
                             </td>
                             <td>{{ t['category'] }}</td>
+                            <td><a href="/transactions/edit/{{ t['id'] }}" class="btn btn-sm btn-outline-primary">Edit</a></td>
                             <td>{{ t['suggested_category'] }}</td>
                             <td>{{ t['api_category'] }}</td>
                         </tr>

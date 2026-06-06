@@ -116,7 +116,8 @@ def transactions():
     sql = f'''SELECT t.date, a.name AS account_name, t.description, t.merchant_name, t.amount,
                     c1.name AS category,
                     c2.name AS suggested_category,
-                    t.api_category
+                    t.api_category,
+                    t.id
                 FROM transactions t
                 JOIN accounts a ON t.account_id = a.id
                 LEFT JOIN categories c1 ON t.category_ID = c1.id
@@ -134,3 +135,45 @@ def transactions():
                            filter_category = filter_category, filter_suggested_category = filter_suggested_category, 
                            filter_api_category = filter_api_category, sort = sort, direction = direction, amount_min = amount_min, 
                            amount_max = amount_max, record_count = record_count, total_amount = total_amount, categories_list=categories_list)
+
+# Edit Transactions opens the transactions_form.html which allows for the edit of the category only
+# Future versions may include further editing and transaction creation bot not now
+
+@transactions_bp.route('/transactions/edit/<int:transaction_id>', methods=['GET', 'POST'])
+def edit_transaction(transaction_id):
+    if 'household_db_path' not in session:
+        flash('Please log in to edit transactions.', 'danger')
+        return redirect('/login')
+    db = get_db(session['household_db_path'])
+    if request.method == 'POST':
+        new_category = request.form.get('category')
+        new_category_id = db.execute('SELECT id FROM categories WHERE name = ?', (new_category,)).fetchone()[0]
+        if not new_category_id:
+            db.close()
+            flash('Category not found.', 'danger')
+            return redirect(f'/transactions/edit/{transaction_id}')
+        db.execute('''UPDATE transactions SET category_id = ? 
+                    WHERE id = ?''', (new_category_id, transaction_id))
+        db.commit()
+        db.close()
+        flash('Transaction updated successfully.', 'success')
+        return redirect('/transactions')
+    else:
+        transaction = db.execute('''SELECT t.id, t.date, a.name AS account_name, t.description, t.merchant_name, t.amount,
+                                            c1.name AS category,
+                                            c2.name AS suggested_category,
+                                            t.api_category
+                                        FROM transactions t
+                                        JOIN accounts a ON t.account_id = a.id
+                                        LEFT JOIN categories c1 ON t.category_ID = c1.id
+                                        LEFT JOIN categories c2 ON t.suggested_category_id = c2.id
+                                        WHERE t.id = ?''', (transaction_id,)).fetchone()
+        categories_list = db.execute('''SELECT categories.id, categories.name, parent.name as parent_name 
+                                                 FROM categories
+                                                 LEFT JOIN categories parent ON categories.parent_id = parent.id''').fetchall()
+        db.close()
+        if transaction is None:
+            flash('Transaction not found.', 'danger')
+            return redirect('/transactions')
+        return render_template('transactions_form.html', transaction=transaction, categories_list=categories_list)
+

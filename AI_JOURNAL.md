@@ -7,6 +7,22 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 34 — 2026-06-06
+
+### Transaction Edit Form and Route
+
+- Explained `for` attribute on labels — links label to input by matching `id`; helps accessibility
+- Explained `readonly` attribute on inputs — displays value without allowing edits; `form-control-plaintext` as visual alternative
+- Caught multiple Jinja syntax errors in option tag — `{%` used instead of `{{`, wrong variable names, unbalanced brackets
+- Explained `fetchone()` vs `fetchall()` — fetchone returns one Row or None; fetchall returns list; neither needed for INSERT/UPDATE/DELETE
+- Caught overcomplicated category id lookup query — simplified to `SELECT id FROM categories WHERE name = ?`
+- Caught `WHERE transaction_id = ?` — column is `id` not `transaction_id`
+- Caught missing tuple comma on fetchone params
+- Explained `if not result` as Pythonic equivalent of `if result is None` for falsy None check
+- Caught missing `db.close()` on category-not-found branch
+
+---
+
 ## Session 33 — 2026-06-04 (continued)
 
 ### Transactions Page — Category Filter Dropdown and Amount Fix

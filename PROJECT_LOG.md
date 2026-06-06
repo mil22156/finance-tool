@@ -1,5 +1,15 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-06 (end of session)
+- Built `GET/POST /transactions/edit/<id>` route in `routes/transactions.py`
+  - GET: fetches transaction by id with full JOIN query, fetches categories list, renders `transactions_form.html`
+  - POST: looks up category id by name, guards against missing category, UPDATE category_id, commit, close, redirect
+- Built `transactions_form.html` — read-only fields for id, account, date, amount, description, merchant; category dropdown with pre-selected current category and conditional parent display; blank "Select Category" option for unassigned transactions
+- Added Edit button to transactions list — links to `/transactions/edit/{{ t['id'] }}`; added `t.id` to SELECT in transactions route
+- Fixed category name mismatch between template variable and route (`categories` vs `categories_list`)
+- Known issue: duplicate category name check not yet implemented — SQLite UNIQUE constraint will throw unhandled IntegrityError
+- Next: add suggested category and bank category display to transaction edit form, then bulk category assignment
+
 ## 2026-06-04 (end of session — continued)
 - Added category dropdown filter to transactions page — replaces text input; submits category name so existing `c1.name LIKE ?` route filter works unchanged
 - Fixed amount filter inputs — replaced broken `filter_amount` reference with proper `amount_min`/`amount_max` stacked inputs using `placeholder` attribute for ghost text

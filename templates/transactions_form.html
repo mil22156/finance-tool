@@ -1,0 +1,47 @@
+{%- extends "layout.html" -%}
+<!-- This is the transactions edit page. In the future it may allow for creation of a new transaction-->
+ <!-- and full editing of a transaction but for now it will just allow for the editing of the category-->
+{%- block main -%}
+<div class="container mt-4">
+    <h2>{{ 'Edit Transaction' if transaction else 'Add Transaction' }}</h2>
+    <form method="post">
+        <div class="mb-3">
+            <label for="id" class="form-label">Transaction ID</label>
+            <input type="text" class="form-control" id="id" name="id" value="{{ transaction['id'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="account" class="form-label">Account</label>
+            <input type="text" class="form-control" id="account" name="account" value="{{ transaction['account'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">Transaction Date</label>
+            <input type="text" class="form-control" id="date" name="date" value="{{ transaction['date'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="text" class="form-control" id="amount" name="amount" value="{{ transaction['amount'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" name="description" value="{{ transaction['description'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="merchant" class="form-label">Merchant</label>
+            <input type="text" class="form-control" id="merchant" name="merchant" value="{{ transaction['merchant_name'] }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-control" id="category" name="category">
+                <option value="">-- Select Category --</option>
+                {% for cat in categories_list %}
+                <!-- AI Note: I copied this line from Claude-->
+                    <option value="{{ cat['name'] }}" {% if cat['name'] == transaction['category'] %}selected{% endif %}>{{ cat['name'] }}{% if cat['parent_name'] %} | Parent: {{ cat['parent_name'] }}{% endif %}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Transaction</button>
+        <a href="/transactions" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+
+{%- endblock -%}
