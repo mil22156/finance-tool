@@ -1,11 +1,14 @@
 # Project Log — Personal Finance Tool
 
 ## 2026-06-07 (end of session)
+- Built bulk category assignment — assign a category to all currently-filtered transactions in one action
+  - Added category select + "Categorize Filtered" button to `transactions.html` filter area
+  - Confirm step shown inline using `{% if categorize_category %}` — displays "Assign X to N transactions?" with Confirm/Cancel
+  - Confirm button uses HTML5 `formmethod="POST"` and `formaction="/transactions/bulk_categorize?{{ request.query_string.decode() }}"` to POST while preserving all filter params in the query string
+  - Added `POST /transactions/bulk_categorize` route — reads filter params from `request.args`, rebuilds WHERE clause using subqueries (avoids JOIN limitation in UPDATE), updates `category_id` for all matching transactions
 - Added bank category and suggested category read-only fields to `transactions_form.html`
 - Fixed `transaction['account']` → `transaction['account_name']` in transactions_form.html
-- Discussed bulk category assignment approach — agreed on query param pattern (`?categorize_category=X`) same as category delete confirm; transactions route reads param and passes to template; template shows confirm button when param is set
-- TODO in transactions.html marks where bulk assign form will go
-- Next: build bulk category assignment — query param confirm pattern, Update button → confirm button → POST to update route
+- Next: auto-categorization rules engine
 
 ## 2026-06-06 (end of session)
 - Built `GET/POST /transactions/edit/<id>` route in `routes/transactions.py`

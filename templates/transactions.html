@@ -77,7 +77,24 @@
                 Total: <strong class="{{ 'text-danger' if total_amount < 0 else '' }}">{{ "%.2f"|format(total_amount) }}</strong>
             </div>
 
-            <!-- TO DO Form to assign category to filtered transactions-->
+            <!-- Form to assign category to filtered transactions-->
+            <div class="d-flex gap-3 mb-2 align-items-center flex-wrap">
+            <label for="categorize_category" class="form-label">Assign Category To Filtered Transactions</label>
+            <select class="form-control" id="categorize_category" name="categorize_category">
+                    <option value="">-- None --</option>
+                    {% for cat in categories_list %}
+                        <option value="{{ cat['name'] }}" {% if cat['name']|string == categorize_category %}selected{% endif %}>{{ cat['name'] }}</option>
+                    {% endfor %}
+            </select>
+            
+            <button type="submit" class="btn btn-warning btn-sm">Categorize Filtered</button>
+            {% if categorize_category %}
+                <span>Assign <strong>{{ categorize_category }}</strong> to <strong>{{ record_count }}</strong> transactions?</span>
+                <button type="submit" formmethod="POST" formaction="/transactions/bulk_categorize?{{ request.query_string.decode() }}" class="btn btn-danger btn-sm">Confirm</button>
+                <a href="/transactions" class="btn btn-secondary btn-sm">Cancel</a>
+            {% endif %}
+            </div>
+
             
             <!-- column headers for transactions data -->
             <table class="table table-striped">

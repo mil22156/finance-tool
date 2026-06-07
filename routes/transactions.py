@@ -36,7 +36,7 @@ def transactions():
     direction = request.args.get('direction', 'DESC')
     amount_min = request.args.get('amount_min', '')
     amount_max = request.args.get('amount_max', '')
-    categorize_filtered_category = request.args.get('categorized_filter_category')
+    categorize_category = request.args.get('categorize_category')
 
     conditions = []
     params = []
@@ -135,7 +135,7 @@ def transactions():
                            filter_account = filter_account, filter_description = filter_description, filter_merchant = filter_merchant, 
                            filter_category = filter_category, filter_suggested_category = filter_suggested_category, 
                            filter_api_category = filter_api_category, sort = sort, direction = direction, amount_min = amount_min, 
-                           amount_max = amount_max, categorize_filtered_category=categorize_filtered_category, record_count = record_count, total_amount = total_amount, categories_list=categories_list)
+                           amount_max = amount_max, categorize_category=categorize_category, record_count = record_count, total_amount = total_amount, categories_list=categories_list)
 
 # Edit Transactions opens the transactions_form.html which allows for the edit of the category only
 # Future versions may include further editing and transaction creation bot not now
@@ -178,3 +178,83 @@ def edit_transaction(transaction_id):
             return redirect('/transactions')
         return render_template('transactions_form.html', transaction=transaction, categories_list=categories_list)
 
+# Function to categorize all of the transactions filtered on the transactions form
+@transactions_bp.route('/transactions/bulk_categorize', methods=['POST'])
+def bulk_categorize():
+    if 'household_db_path' not in session:
+        flash('Please log in to categorize transactions.', 'danger')
+        return redirect('/login')
+    
+    
+    date_to = request.args.get('date_to', '')
+    date_from = request.args.get('date_from', '')
+    filter_account = request.args.get('filter_account', '')
+    filter_description = request.args.get('filter_description', '')
+    filter_merchant = request.args.get('filter_merchant', '')
+    filter_category = request.args.get('filter_category', '')
+    filter_suggested_category = request.args.get('filter_suggested_category', '')
+    filter_api_category = request.args.get('filter_api_category', '')
+    sort = request.args.get('sort', '')
+    direction = request.args.get('direction', 'DESC')
+    amount_min = request.args.get('amount_min', '')
+    amount_max = request.args.get('amount_max', '')
+    categorize_category = request.args.get('categorize_category')
+
+    if not categorize_category:
+        flash('No category selected for bulk categorization.', 'danger')
+        return redirect('/transactions')
+
+    db = get_db(session['household_db_path'])
+
+    # Update query to update the category id of all the transactions currently filtered on the 
+    # transactions page to that matching categorize category
+    conditions = []
+    params = []
+    if date_from:
+        conditions.append('date >= ?')
+        params.append(date_from)
+    if date_to:
+        conditions.append('date <= ?')
+        params.append(date_to)
+    if filter_account:
+        conditions.append('account_id IN (SELECT id FROM accounts WHERE name LIKE ?)')
+        params.append(f'%{filter_account}%')
+    if filter_description:
+        conditions.append('description LIKE ?')
+        params.append(f'%{filter_description}%')
+    if filter_merchant:
+        conditions.append('merchant_name LIKE ?')
+        params.append(f'%{filter_merchant}%')
+    if filter_category:
+        conditions.append('category_id IN (SELECT id FROM categories WHERE name LIKE ?)')
+        params.append(f'%{filter_category}%')
+    if filter_suggested_category:
+        conditions.append('suggested_category_id IN (SELECT id FROM categories WHERE name LIKE ?)')
+        params.append(f'%{filter_suggested_category}%')
+    if filter_api_category:
+        conditions.append('api_category LIKE ?')
+        params.append(f'%{filter_api_category}%')
+    if amount_min:
+        try:
+            conditions.append('amount >= ?')
+            params.append(float(amount_min))
+        except ValueError:
+            pass
+    if amount_max:
+        try:
+            conditions.append('amount <= ?')
+            params.append(float(amount_max))
+        except ValueError:
+            pass
+    if conditions:
+        where_clause = 'WHERE ' + ' AND '.join(conditions)
+    else:        where_clause = ''
+    sql = f'''UPDATE transactions 
+                SET category_id = (SELECT id FROM categories WHERE name = ?)
+                {where_clause}'''
+    db.execute(sql, (categorize_category, *params))
+    db.commit()
+    db.close()
+    flash('Transactions categorized successfully.', 'success')
+    return redirect('/transactions')
+    

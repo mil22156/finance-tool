@@ -9,13 +9,17 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ## Session 35 — 2026-06-07
 
-### Bulk Category Assignment — Design
+### Bulk Category Assignment — Design and Implementation
 
 - Explained why passing SQL through form fields is a security risk — user could modify it in browser
 - Explained two options for passing filter state to bulk assign route: hidden fields vs forwarding GET params in form action URL
 - Explained `<a>` tags cannot do POST or carry form `name` attributes — confirm step needs a proper `<form>`
 - Explained `{{` vs `{%` — `{{` outputs values, `{%` is for control statements
-- Agreed on query param confirm pattern for bulk assign — same approach as category delete confirm
+- Explained HTML5 `formmethod`/`formaction` button attributes — allows a submit button inside a GET form to POST to a different endpoint
+- Explained why `request.args` vs `request.form` depends on whether the query string is in the `formaction` URL
+- Identified and explained bug: variable used before assignment (`categorize_category` checked before being read from `request.args`)
+- Reviewed user-written route and template at each stage; pointed out typo (`dflex` → `d-flex`), misplaced div, and wrong request object
+- User wrote all code; Claude provided design guidance, bug identification, and code review
 
 ---
 
