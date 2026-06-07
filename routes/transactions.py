@@ -36,6 +36,7 @@ def transactions():
     direction = request.args.get('direction', 'DESC')
     amount_min = request.args.get('amount_min', '')
     amount_max = request.args.get('amount_max', '')
+    categorize_filtered_category = request.args.get('categorized_filter_category')
 
     conditions = []
     params = []
@@ -134,7 +135,7 @@ def transactions():
                            filter_account = filter_account, filter_description = filter_description, filter_merchant = filter_merchant, 
                            filter_category = filter_category, filter_suggested_category = filter_suggested_category, 
                            filter_api_category = filter_api_category, sort = sort, direction = direction, amount_min = amount_min, 
-                           amount_max = amount_max, record_count = record_count, total_amount = total_amount, categories_list=categories_list)
+                           amount_max = amount_max, categorize_filtered_category=categorize_filtered_category, record_count = record_count, total_amount = total_amount, categories_list=categories_list)
 
 # Edit Transactions opens the transactions_form.html which allows for the edit of the category only
 # Future versions may include further editing and transaction creation bot not now

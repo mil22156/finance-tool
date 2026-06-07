@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-07 (end of session)
+- Added bank category and suggested category read-only fields to `transactions_form.html`
+- Fixed `transaction['account']` → `transaction['account_name']` in transactions_form.html
+- Discussed bulk category assignment approach — agreed on query param pattern (`?categorize_category=X`) same as category delete confirm; transactions route reads param and passes to template; template shows confirm button when param is set
+- TODO in transactions.html marks where bulk assign form will go
+- Next: build bulk category assignment — query param confirm pattern, Update button → confirm button → POST to update route
+
 ## 2026-06-06 (end of session)
 - Built `GET/POST /transactions/edit/<id>` route in `routes/transactions.py`
   - GET: fetches transaction by id with full JOIN query, fetches categories list, renders `transactions_form.html`

@@ -7,6 +7,18 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 35 — 2026-06-07
+
+### Bulk Category Assignment — Design
+
+- Explained why passing SQL through form fields is a security risk — user could modify it in browser
+- Explained two options for passing filter state to bulk assign route: hidden fields vs forwarding GET params in form action URL
+- Explained `<a>` tags cannot do POST or carry form `name` attributes — confirm step needs a proper `<form>`
+- Explained `{{` vs `{%` — `{{` outputs values, `{%` is for control statements
+- Agreed on query param confirm pattern for bulk assign — same approach as category delete confirm
+
+---
+
 ## Session 34 — 2026-06-06
 
 ### Transaction Edit Form and Route
