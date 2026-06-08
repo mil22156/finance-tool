@@ -133,6 +133,7 @@
                             <!--<input type="text" name="filter_category" class="form-control form-control-sm" value="{{ filter_category }}">    -->                        
                             <select class="form-control" id="filter_category" name="filter_category">
                                 <option value="">-- None --</option>
+                                <option value="__uncategorized__">-- Uncategorized --</option>
                                 {% for cat in categories_list %}
                                 <!-- this next line I copied from AI. I was not getting it right-->
                                  <option value="{{ cat['name'] }}" {% if cat['name']|string == filter_category %}selected{% endif %}>{{ cat['name'] }}</option>

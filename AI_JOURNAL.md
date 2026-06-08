@@ -7,6 +7,17 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 36 — 2026-06-08
+
+### Transactions filter and categories polish
+
+- Explained sentinel value pattern for "Uncategorized" filter — why empty string can't serve double duty as both "no filter" and "filter for null"
+- Explained why `__uncategorized__` should not be appended to params — `IS NULL` has no `?` placeholder
+- Explained `.upper()` approach for enforcing category name casing at the route level vs CSS/template workarounds
+- User wrote all code; Claude provided guidance and bug identification
+
+---
+
 ## Session 35 — 2026-06-07
 
 ### Bulk Category Assignment — Design and Implementation

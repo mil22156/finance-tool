@@ -79,8 +79,11 @@ def transactions():
         conditions.append('t.merchant_name LIKE ?')
         params.append(f'%{filter_merchant}%')
     if filter_category:
-        conditions.append('c1.name LIKE ?')
-        params.append(f'%{filter_category}%')
+        if filter_category == '__uncategorized__':
+            conditions.append('c1.name IS NULL')
+        else:
+            conditions.append('c1.name LIKE ?')
+            params.append(f'%{filter_category}%')
     if filter_suggested_category:
         conditions.append('c2.name LIKE ?')
         params.append(f'%{filter_suggested_category}%')

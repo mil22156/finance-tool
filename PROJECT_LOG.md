@@ -1,5 +1,11 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-08 (end of session)
+- Added "Uncategorized" filter option to category column on transactions page — uses sentinel value `__uncategorized__` which maps to `t.category_id IS NULL` in the WHERE clause
+- Added Categories nav link to layout.html
+- Enforced uppercase on category names at save time — `.upper()` applied in both `/categories/new` and `/categories/edit/<id>` POST handlers
+- Next: auto-categorization rules engine
+
 ## 2026-06-07 (end of session)
 - Built bulk category assignment — assign a category to all currently-filtered transactions in one action
   - Added category select + "Categorize Filtered" button to `transactions.html` filter area
