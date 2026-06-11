@@ -7,6 +7,18 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 37 — 2026-06-10
+
+### Auto-categorization rules engine — design
+
+- Discussed description matching strategy — explained tradeoffs between exact match, LIKE/partial, and merchant_name; user decided on exact full description match
+- Explained why merchant_name is unreliable for CSV/OFX imports (not provided by banks, only by API providers like Plaid)
+- User designed `check_rules` function — a single function handling lookup, rule creation, conflict detection, and overwrite; Claude validated the design and played back the logic to confirm alignment
+- Explained why conflict resolution (flash/redirect) belongs in the route, not the function — function has no access to the HTTP layer
+- User made all design decisions; Claude provided tradeoff analysis and design validation
+
+---
+
 ## Session 36 — 2026-06-08
 
 ### Transactions filter and categories polish

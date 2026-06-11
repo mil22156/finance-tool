@@ -1,5 +1,14 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-10 (end of session)
+- Designed auto-categorization rules engine — decisions:
+  - Match on full description exact match (not LIKE/partial) — simpler, no false positives; merchant_name not reliable for CSV/OFX imports
+  - `check_rules(db, description, category_id=None, overwrite=False)` function in `core/categorizer.py`
+  - Behavior: no category_id → lookup only, return matching rule's category_id or None; category_id provided → create rule if none exists; if rule exists with same category do nothing; if rule exists with different category and overwrite=False return existing category_id (conflict signal); overwrite=True → update rule
+  - Conflict resolution stays in the route (flash/redirect), not in the function — function handles data logic only
+  - Function will be called from: single-transaction edit route (with conflict prompt), import pipeline (lookup only), bulk assign (optional, later)
+- Next: implement `check_rules` in `core/categorizer.py`, then wire into edit transaction route
+
 ## 2026-06-08 (end of session)
 - Added "Uncategorized" filter option to category column on transactions page — uses sentinel value `__uncategorized__` which maps to `t.category_id IS NULL` in the WHERE clause
 - Added Categories nav link to layout.html
