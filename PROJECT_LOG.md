@@ -1,5 +1,17 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-12 (end of session)
+- Fixed bugs in `/categories/new` POST handler: missing parentheses on `.upper()`, missing empty-name validation (added flash + redirect back to `/categories/new`; fixed redirect target along the way — initially pointed at a nonexistent variable, then a template name, then a relative URL)
+- Removed dangling `/categories/rule_check` route decorator from `routes/categories.py` — rules engine belongs in `core/categorizer.py` per 06-10 design (plain function, no HTTP layer; avoids route modules importing each other)
+- Created `core/categorizer.py` with commented pseudocode skeleton for `category_rule_check(db, description, category=None, overwrite=False)` (renamed from `check_rules`)
+- Design decisions amending the 06-10 rules engine design:
+  - Function receives an open db connection from the caller; it never opens/closes one and never commits — caller commits, so rule write and transaction update share one transaction (also avoids SQLite write-lock contention between two connections in one request)
+  - Invalid input raises `ValueError` (message names the bad argument) instead of returning sentinel codes like 0/1 — return value is always a real `category_id`, never collides with data
+  - **Lookup mode (`category=None`) dropped (YAGNI)** — import pipeline will instead load all rules into a dict once per import (`description_pattern → category_id`) and match in memory; one query total instead of one per transaction. `category_rule_check` now serves only the assignment paths (transaction edit, bulk assign), so `category` becomes a required parameter
+  - Conflict signal unchanged: on a rule mismatch with `overwrite=False`, return the existing rule's category_id; the route compares it against what it sent
+- Known issue: `delete_category` route still missing session auth guard
+- Next: rewrite skeleton to the four-exit branch structure (no rule → insert; same category → no-op; different + overwrite False → return existing; different + overwrite True → update), then implement and wire into transaction edit route
+
 ## 2026-06-10 (end of session)
 - Designed auto-categorization rules engine — decisions:
   - Match on full description exact match (not LIKE/partial) — simpler, no false positives; merchant_name not reliable for CSV/OFX imports

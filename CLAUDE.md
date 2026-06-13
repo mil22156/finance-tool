@@ -30,6 +30,7 @@ static/             — CSS and JS
 - All data stays local — no external services
 - Deduplication uses a hash of (account + date + amount + normalized description)
 - Categorization is rules-based with user override capability
+- Rules engine (designed 2026-06-10, amended 2026-06-12): `category_rule_check(db, description, category, overwrite=False)` in `core/categorizer.py` — exact-match on full description; caller passes open connection and commits; invalid input raises `ValueError`; always returns a `category_id` (a differing return = rule conflict, caller decides about overwrite); import pipeline does NOT call it per-row — it loads all rules into a dict once per import and matches in memory
 - Statement upload goes through: parse → normalize → deduplicate → categorize → review → commit
 - Upload pipeline uses a strict 3-step validation gate before any data is written (decided 2026-05-10):
   - **Step 1 — File validation:** check extension/MIME type, file size limit, non-empty; for OFX/QFX also validate header structure; hard reject with clear error message
@@ -103,8 +104,8 @@ Features required to call the project complete for CS50 submission, in build ord
 - [x] Transactions list page — JOIN query, Bootstrap table, amount formatting (done 2026-05-29)
 - [x] Transactions sort and filter — per-column filters, sort radios, date range, amount min/max; done 2026-06-01
 - [x] Accounts list page — simple list of household accounts, with edit/delete; done 2026-06-01
-- [ ] Categories management — CRUD UI for creating and editing categories
-- [ ] Manual category assignment — assign `category_ID` to a transaction from the transactions page
+- [x] Categories management — CRUD UI for creating and editing categories; done 2026-06-04, validation bugs fixed 2026-06-12
+- [x] Manual category assignment — edit form (done 2026-06-06) and bulk assign to filtered set (done 2026-06-07)
 - [ ] Auto-categorization rules — rules engine runs at import time, populates `suggested_category_id`; CRUD UI for managing rules
 - [ ] Monthly summary table — totals by category by month, pure SQL aggregation, no JavaScript
 - [ ] README.md

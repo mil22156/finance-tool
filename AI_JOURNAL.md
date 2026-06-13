@@ -7,6 +7,22 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 38 — 2026-06-12 (model: claude-fable-5)
+
+### Categories bug fixes and rules engine skeleton
+
+- Identified three bugs in `routes/categories.py`: missing parentheses on `.upper()`, a dangling route decorator that prevented the app from starting, and missing empty-name validation in `/categories/new`; user fixed all of them
+- Explained `redirect()` vs `render_template()` — redirect sends the browser to a URL, render builds HTML now; guided user through fixing the validation redirect (undefined variable → template name → relative URL → correct absolute URL)
+- Explained relative vs absolute redirect URLs and why `redirect('categories')` resolves to a 404
+- Explained why `category_rule_check` belongs in `core/categorizer.py` rather than `routes/categories.py`: one-directional imports prevent circular import errors, HTTP/data layering, file purpose for the README
+- Explained SQLite multi-connection behavior (single writer lock, "database is locked" errors, separate transactions can commit partially) to support the pass-the-connection design
+- Explained `raise ValueError` and exceptions vs sentinel return codes — exception messages carry which input was invalid; `try`/`except` with `str(e)`; why returning 0/1 collides with real category IDs
+- Explained the load-rules-into-a-dict approach for import-time batch lookup (one query instead of one per transaction) when user asked about batching; validated user's resulting decision to drop lookup mode from the function (YAGNI)
+- User wrote all code, including the pseudocode skeleton in `core/categorizer.py`; Claude reviewed each revision and explained concepts
+- Claude wrote this journal entry and the PROJECT_LOG.md entry at user's request
+
+---
+
 ## Session 37 — 2026-06-10
 
 ### Auto-categorization rules engine — design

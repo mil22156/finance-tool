@@ -74,8 +74,12 @@ def add_category():
                                              FROM categories
                                              LEFT JOIN categories parent ON categories.parent_id = parent.id''').fetchall()
     if request.method == 'POST':
-        category_name = request.form.get('name').upper
+        category_name = request.form.get('name').upper()
         parent_category_id = request.form.get('parent_id') or None  # Convert empty string to None
+        if not category_name:
+            flash('Category Name Required','danger')
+            household_conn.close()
+            return redirect('/categories/new')
         household_conn.execute('INSERT INTO categories (name, parent_id) VALUES (?, ?)', (category_name, parent_category_id))
         household_conn.commit()
         household_conn.close()
@@ -127,3 +131,4 @@ def delete_category(category_id):
     household_conn.close()
     flash('Category deleted successfully.', 'success')
     return redirect('/categories')
+
