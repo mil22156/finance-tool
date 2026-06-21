@@ -7,6 +7,21 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 39 — 2026-06-21 (model: claude-opus-4-8)
+
+### Implementing the rules engine — `category_rule_check`
+
+- Reviewed each of the user's revisions of `core/categorizer.py` and pointed out issues; user wrote all code
+- Flagged that the user's `try/except` caught the `ValueError` it was raising and returned `None` — explained this reintroduced the sentinel-return design they had deliberately dropped on 06-12; user removed it
+- Pointed out leftover `category_id is not None` branches were dead code once the param became required
+- Caught name/typo bugs in successive passes: undefined `category` vs `category_id`, a mangled line (`category_ID not isinstance...`), wrong table name (`category_rules` → `categorization_rules`), wrong column (`description` → `description_pattern`)
+- Walked the user through the four-exit branch logic (same id / different+no-overwrite / different+overwrite / no rule) as a decision table; user implemented it
+- Caught that the overwrite UPDATE wrote the old value (`row[0]`) instead of the new `category_id`
+- Examined `routes/transactions.py` to confirm what the edit route has at the call site, which settled the `category_id`-vs-name signature decision
+- Claude wrote the PROJECT_LOG.md, AI_JOURNAL.md, and CLAUDE.md updates at the user's request
+
+---
+
 ## Session 38 — 2026-06-12 (model: claude-fable-5)
 
 ### Categories bug fixes and rules engine skeleton

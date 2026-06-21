@@ -1,5 +1,15 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-21 (end of session)
+- Implemented `category_rule_check(db, description, category_id, overwrite=False)` in `core/categorizer.py` — function logic complete, parses clean
+- Settled signature: takes `category_id` (an int), not a category name — edit route already resolves name→id, schema stores `category_id`, keeps the function pure data-logic. Updated CLAUDE.md to match (it previously said `category`)
+- Validation now raises `ValueError` directly (removed an earlier `try/except` that caught its own raise and returned `None` — that had reintroduced the sentinel-return design dropped on 06-12)
+- Dropped the leftover `category_id is not None` branches — `category_id` is required now, never None
+- Built the four-exit branch structure: no rule → INSERT, return passed id; rule with same id → return it; rule with different id + overwrite False → return existing id (conflict signal); different + overwrite True → UPDATE rule, return passed id
+- Fixed table/column names against schema: `categorization_rules` table, `description_pattern` column
+- Known issues for next session: (1) wire the function into `GET/POST /transactions/edit/<id>` — POST branch must first fetch the transaction's `description`; (2) latent bug at `transactions.py:154` — `fetchone()[0]` throws if category name not found, before the `if not new_category_id` guard can run; (3) top comment block in categorizer.py is now a one-liner stub, function name typo (`check_category_selection`)
+- Next: wire into edit route, then CRUD UI for managing rules, then import-time batch lookup
+
 ## 2026-06-12 (end of session)
 - Fixed bugs in `/categories/new` POST handler: missing parentheses on `.upper()`, missing empty-name validation (added flash + redirect back to `/categories/new`; fixed redirect target along the way — initially pointed at a nonexistent variable, then a template name, then a relative URL)
 - Removed dangling `/categories/rule_check` route decorator from `routes/categories.py` — rules engine belongs in `core/categorizer.py` per 06-10 design (plain function, no HTTP layer; avoids route modules importing each other)

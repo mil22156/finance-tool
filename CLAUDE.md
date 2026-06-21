@@ -30,7 +30,7 @@ static/             — CSS and JS
 - All data stays local — no external services
 - Deduplication uses a hash of (account + date + amount + normalized description)
 - Categorization is rules-based with user override capability
-- Rules engine (designed 2026-06-10, amended 2026-06-12): `category_rule_check(db, description, category, overwrite=False)` in `core/categorizer.py` — exact-match on full description; caller passes open connection and commits; invalid input raises `ValueError`; always returns a `category_id` (a differing return = rule conflict, caller decides about overwrite); import pipeline does NOT call it per-row — it loads all rules into a dict once per import and matches in memory
+- Rules engine (designed 2026-06-10, amended 2026-06-12, implemented 2026-06-21): `category_rule_check(db, description, category_id, overwrite=False)` in `core/categorizer.py` — exact-match on full description (`description_pattern` column); caller passes open connection and commits; invalid input raises `ValueError`; always returns a `category_id` (a differing return = rule conflict, caller decides about overwrite); import pipeline does NOT call it per-row — it loads all rules into a dict once per import and matches in memory
 - Statement upload goes through: parse → normalize → deduplicate → categorize → review → commit
 - Upload pipeline uses a strict 3-step validation gate before any data is written (decided 2026-05-10):
   - **Step 1 — File validation:** check extension/MIME type, file size limit, non-empty; for OFX/QFX also validate header structure; hard reject with clear error message
