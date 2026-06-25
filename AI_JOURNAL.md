@@ -7,6 +7,19 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 40 — 2026-06-24 (model: claude-opus-4-8)
+
+### Wiring `category_rule_check` into the edit route
+
+- Caught that the user's first instinct — adding the call to the upload route — contradicted the 06-12 design (import pipeline uses an in-memory dict, not this function); redirected them to the edit route instead
+- Explained how `raise`/exceptions propagate up the call stack vs `return` values, and that an uncaught `ValueError` becomes a Flask 500; user chose to wrap the call in `try/except`
+- Clarified the conflict-return semantics (returned id != submitted id means a rule already maps the description elsewhere) and suggested reusing their existing bulk-assign inline-confirm pattern rather than a new page; user deferred the conflict UI as a TODO
+- Reviewed successive revisions and pointed out bugs the user then fixed: SQL placeholder typo (`/` for `?`), missing `.fetchone()[0]` (was passing a cursor/row into the function), `try`/`except` syntax slips (`try` colon, `sa`→`as`), and the earlier unreachable guard caused by `fetchone()[0]` on a `None`
+- User wrote all code; Claude reviewed and ran a syntax check
+- Claude wrote the PROJECT_LOG.md and AI_JOURNAL.md updates at the user's request
+
+---
+
 ## Session 39 — 2026-06-21 (model: claude-opus-4-8)
 
 ### Implementing the rules engine — `category_rule_check`

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, session
 import os
 from database.db import get_db, REGISTRY_PATH
+from core.categorizer import category_rule_check
 
 # Transactions blueprint to handle all transaction-related routes and logic, allowing for better organization and separation of concerns in the codebase.
 # Routes will include viewing, categorizing, and managing transactions for the household.
@@ -151,11 +152,24 @@ def edit_transaction(transaction_id):
     db = get_db(session['household_db_path'])
     if request.method == 'POST':
         new_category = request.form.get('category')
-        new_category_id = db.execute('SELECT id FROM categories WHERE name = ?', (new_category,)).fetchone()[0]
-        if not new_category_id:
+        row = db.execute('SELECT id FROM categories WHERE name = ?', (new_category,)).fetchone()
+        if row is None:
             db.close()
             flash('Category not found.', 'danger')
             return redirect(f'/transactions/edit/{transaction_id}')
+        new_category_id = row[0]
+        # Check whether this description already has a category
+        description = db.execute('SELECT description FROM transactions WHERE id = ?',(transaction_id,)).fetchone()[0]
+        try:
+            category = category_rule_check(db, description, new_category_id, overwrite=False)
+        except ValueError as e:
+            db.close()
+            flash(str(e), 'danger')
+            return redirect(f'/transactions/edit/{transaction_id}')
+        if category != new_category_id:
+            pass # To Do - write the code and update the page to give the user the choice of overwriting the 
+                 # existing rule or keeping the old one
+
         db.execute('''UPDATE transactions SET category_id = ? 
                     WHERE id = ?''', (new_category_id, transaction_id))
         db.commit()

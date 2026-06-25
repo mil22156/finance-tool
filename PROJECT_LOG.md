@@ -1,5 +1,14 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-24 (end of session)
+- Wired `category_rule_check` into the `POST /transactions/edit/<id>` route — editing a transaction's category now also creates/matches a categorization rule, sharing the route's connection so the transaction UPDATE and the rule write commit together
+- Confirmed (per the 06-12 design) the rules function does NOT belong in the upload/import pipeline — that path will use the in-memory dict batch lookup; the function only serves assignment paths (edit, bulk assign). Briefly started toward the upload route before catching this
+- Fixed the latent `fetchone()[0]` bug at the category lookup: split into fetch row → `if row is None` guard → `row[0]`, so a missing category no longer raises `TypeError` before the guard runs
+- Wrapped the `category_rule_check` call in `try/except ValueError` (closes the connection and flashes on failure), though the inputs are validated upstream so it shouldn't fire in practice
+- Conflict case (rule already maps the description to a different category) left as an explicit TODO — function returns the existing id as the signal; plan is to reuse the bulk-assign inline-confirm pattern to offer keep/overwrite, deferred to its own task
+- Not yet verified by running the app
+- Next: run the app and confirm a rule lands in `categorization_rules`; then conflict-overwrite UI; then rules CRUD page; then import-time batch lookup
+
 ## 2026-06-21 (end of session)
 - Implemented `category_rule_check(db, description, category_id, overwrite=False)` in `core/categorizer.py` — function logic complete, parses clean
 - Settled signature: takes `category_id` (an int), not a category name — edit route already resolves name→id, schema stores `category_id`, keeps the function pure data-logic. Updated CLAUDE.md to match (it previously said `category`)
