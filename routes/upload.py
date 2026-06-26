@@ -222,7 +222,18 @@ def upload_process():
 
     df = df[~df['is_duplicate']]
 
-    # For now we will assume that the categorization will be done after import.
+    # apply categories from the category rules table.
+    # get the categorization_rules and look up each transaction description and write any 
+    # matching categorization rule to the the suggested_category_id column
+    # I got AI help for this. particularly the for loop. I would not have had something so dense
+    db = get_db(session['household_db_path'])
+    rules = dict(db.execute('''SELECT description_pattern, category_ID
+                            FROM categorization_rules''').fetchall())
+    db.close()
+    for index, row in df.iterrows():
+        df.at[index, 'suggested_category_id'] = rules.get(row['description'])
+
+
 
     # Drop the is_duplicate column before displaying the review page, since it's not needed for the user to see and may cause confusion.
     df = df.drop(columns=['is_duplicate'])
@@ -237,10 +248,10 @@ def upload_process():
     db.execute('DELETE FROM staging_transactions')  # Clear any existing staging transactions for this session
     for _, row in df.iterrows():
         db.execute('''INSERT INTO staging_transactions 
-            (session_id, account_id, date, amount, description, api_category, dedup_hash, source)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
+            (session_id, account_id, date, amount, description, api_category, suggested_category_id, dedup_hash, source)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
             (session_id, account_id, row['date'], row['amount'], row['description'], 
-             row.get('api_category'), row['dedup_hash'], 'csv'))
+             row.get('api_category'), row.get('suggested_category_id'), row['dedup_hash'], 'csv'))
     db.commit()
     db.close()
 
@@ -260,8 +271,8 @@ def upload_review():
             return redirect('/upload')
         db = get_db(session['household_db_path'])
         # Move transactions from staging to transaction
-        result = db.execute('''INSERT INTO  transactions (account_id, date, amount, description, api_category, dedup_hash, source)
-                            SELECT account_id, date, amount, description, api_category, dedup_hash, source
+        result = db.execute('''INSERT INTO  transactions (account_id, date, amount, description, api_category, suggested_category_id, dedup_hash, source)
+                            SELECT account_id, date, amount, description, api_category, suggested_category_id, dedup_hash, source
                             FROM staging_transactions
                             WHERE session_id = ?''', (session_id,))        
         db.execute('DELETE FROM staging_transactions WHERE session_id = ?', (session_id,))  # Clear the staging transactions for this session after committing to the main transactions table
@@ -272,14 +283,17 @@ def upload_review():
 
     else:
         # User is just viewing the review page, so we will load the transactions from the staging_transactions table for this session and display them for review.
+        # I had some AI assistance on the SQL
         session_id = session.get('upload_session_id')
         if not session_id:
             flash('Session expired, please upload the file again.', 'danger')
             return redirect('/upload')
         db = get_db(session['household_db_path'])
-        df = pd.read_sql_query('SELECT * FROM staging_transactions WHERE session_id = ?', db, 
-            params=(session_id,))        
+        df = pd.read_sql_query('''SELECT s.*, c.name AS suggested_category 
+                               FROM staging_transactions s
+                               LEFT JOIN categories c ON s.suggested_category_id = c.id
+                               WHERE s.session_id = ?''', db, params=(session_id,))        
         db.close()
-        df=df.drop(columns=['session_id', 'account_id', 'dedup_hash', 'source', 'import_date', 'statement_id', 'pending'])  # Drop columns that are not needed for the review display
+        df=df.drop(columns=['session_id', 'suggested_category_id', 'account_id', 'dedup_hash', 'source', 'import_date', 'statement_id', 'pending'])  # Drop columns that are not needed for the review display
         duplicate_count = session.get('duplicate_count', 0)
         return render_template('review.html', df=df, duplicate_count=duplicate_count)   

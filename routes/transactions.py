@@ -158,7 +158,7 @@ def edit_transaction(transaction_id):
             flash('Category not found.', 'danger')
             return redirect(f'/transactions/edit/{transaction_id}')
         new_category_id = row[0]
-        # Check whether this description already has a category
+        # Check whether this description already has a category using category_rule_check in the core directory
         description = db.execute('SELECT description FROM transactions WHERE id = ?',(transaction_id,)).fetchone()[0]
         try:
             category = category_rule_check(db, description, new_category_id, overwrite=False)

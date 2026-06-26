@@ -79,6 +79,7 @@ CREATE TABLE staging_transactions (
     amount REAL NOT NULL,
     description TEXT NOT NULL,
     merchant_name TEXT,
+    suggested_category_id INTEGER,
     api_category TEXT,
     pending BOOLEAN NOT NULL DEFAULT 0,
     dedup_hash TEXT NOT NULL,

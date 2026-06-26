@@ -1,5 +1,15 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-26 (end of session)
+- Implemented import-time auto-categorization in `routes/upload.py` — the headline of the CS50 auto-categorization feature
+- Threaded `suggested_category_id` through all four points of the upload pipeline: (1) compute at categorize step — load all `categorization_rules` into a dict once, then `rules.get(description)` per row (in-memory, one query, no per-row DB hit per the 06-12 design); (2) added `suggested_category_id` column to `staging_transactions` (schema.sql + `ALTER TABLE` on the live DB, since schema.sql doesn't touch existing files); (3) staging INSERT; (4) final commit INSERT (staging → transactions, both column list and SELECT)
+- Used `dict.get()` rather than pandas `.map()` so misses return `None` (→ SQL NULL) instead of `NaN` (→ float)
+- Review page now LEFT JOINs `categories` to display the category name instead of the raw `suggested_category_id`; review.html builds its table generically from the df so no template change needed (name-display fix unverified until next import)
+- Populated `categorization_rules` from existing categorizations via a one-off SQL INSERT…SELECT (not app code): one rule per distinct categorized description, majority category wins per description (resolved the lone conflict, `EBLEN SHORT STOP #7`, to GROCERIES 33× over CARS/GAS 8×), skipped descriptions that already had a rule. 160 rules total, no duplicates. Backed up the DB first (`*.db.bak-<timestamp>`)
+- Verified end-to-end on a real import: suggestions populated on the review page and persisted to `transactions`
+- Git hygiene note: the `.db.bak-*` backup is NOT matched by the `*.db` gitignore rule, so `data/` shows as untracked — must never `git add data/`/`git add .`; also a stray empty `schema.sql` at repo root (and earlier an empty `data/<household>.db`) are accidental artifacts to delete
+- Next: rules CRUD UI (manage `categorization_rules`); conflict-overwrite UI in the edit route (still a TODO); then the CS50 auto-categorization checkbox is fully done
+
 ## 2026-06-24 (end of session)
 - Wired `category_rule_check` into the `POST /transactions/edit/<id>` route — editing a transaction's category now also creates/matches a categorization rule, sharing the route's connection so the transaction UPDATE and the rule write commit together
 - Confirmed (per the 06-12 design) the rules function does NOT belong in the upload/import pipeline — that path will use the in-memory dict batch lookup; the function only serves assignment paths (edit, bulk assign). Briefly started toward the upload route before catching this

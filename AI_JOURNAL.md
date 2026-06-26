@@ -7,6 +7,22 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 41 — 2026-06-26 (model: claude-opus-4-8)
+
+### Import-time auto-categorization + populating the rules table
+
+- Confirmed the user's placement of the categorize step in the upload pipeline (between dedup and staging) was correct
+- Steered the user off a per-row DB query inside the import loop (988 connections/queries) toward loading all rules into a dict once, then `rules.get()` in memory — consistent with the 06-12 design
+- Explained the difference between pandas `.map()` (missing → `NaN`, a float) and `dict.get()` (missing → `None`, a proper SQL NULL), which is why the dict approach avoids the NaN-coercion problem
+- Tutored several pandas concepts on request: `df.iterrows()` (yields index + row Series, row is a copy), why `for row in df` iterates column names not rows, `df.at[index, col]` as the single-cell write-back accessor
+- Reviewed revisions and caught bugs the user fixed: wrong table/column names again (`category_rules`/`category`/`description`), a column-count vs placeholder mismatch and a tangled `.get()`/paren error in the staging INSERT, and the final commit INSERT having the column in the SELECT but not the INSERT list
+- Identified that `suggested_category_id` had to be added to `staging_transactions`; ran the `ALTER TABLE` on the live DB at the user's request (schema.sql edit was the user's)
+- At the user's request, populated `categorization_rules` from existing categorizations using a one-off SQL `INSERT…SELECT` with a `ROW_NUMBER()` window function for majority-wins conflict resolution; backed up the DB first and verified counts, the conflict resolution, and absence of duplicates. This was a data operation run in the terminal, not application code
+- Flagged a git-hygiene risk: the backup file isn't covered by the `*.db` gitignore rule, so the financial-data `data/` dir showed as untracked — committed explicit source files only
+- Claude wrote the PROJECT_LOG.md and AI_JOURNAL.md updates
+
+---
+
 ## Session 40 — 2026-06-24 (model: claude-opus-4-8)
 
 ### Wiring `category_rule_check` into the edit route
