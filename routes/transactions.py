@@ -152,6 +152,19 @@ def edit_transaction(transaction_id):
     db = get_db(session['household_db_path'])
     if request.method == 'POST':
         new_category = request.form.get('category')
+        action = request.form.get('rule_action')
+        # If the user has selected to update the categorization rule. This block updates it
+        if action:
+            new_category_id = int(request.form.get('new_category_id'))
+            db.execute('UPDATE transactions SET category_id = ? WHERE id = ?', (new_category_id, transaction_id))
+            if action == 'overwrite':
+                description = db.execute('SELECT description FROM transactions WHERE id = ?', (transaction_id,)).fetchone()[0]
+                category_rule_check(db, description, new_category_id, overwrite=True)
+            db.commit()
+            db.close()
+            flash('Transaction updated successfully.', 'success')
+            return redirect('/transactions')
+        
         row = db.execute('SELECT id FROM categories WHERE name = ?', (new_category,)).fetchone()
         if row is None:
             db.close()
@@ -166,9 +179,29 @@ def edit_transaction(transaction_id):
             db.close()
             flash(str(e), 'danger')
             return redirect(f'/transactions/edit/{transaction_id}')
+        # If the returned category doesn't match the requested category redirect the page to give the user
+        # a choice of overwriting or staying with the existing rule.
         if category != new_category_id:
-            pass # To Do - write the code and update the page to give the user the choice of overwriting the 
-                 # existing rule or keeping the old one
+            conflict = True
+
+            existing_category = db.execute('SELECT name FROM categories WHERE id = ?', (category,)).fetchone()[0]
+            transaction = db.execute('''SELECT t.id, t.date, a.name AS account_name, t.description, t.merchant_name, t.amount,
+                                            c1.name AS category,
+                                            c2.name AS suggested_category,
+                                            t.api_category
+                                        FROM transactions t
+                                        JOIN accounts a ON t.account_id = a.id
+                                        LEFT JOIN categories c1 ON t.category_ID = c1.id
+                                        LEFT JOIN categories c2 ON t.suggested_category_id = c2.id
+                                        WHERE t.id = ?''', (transaction_id,)).fetchone()
+            categories_list = db.execute('''SELECT categories.id, categories.name, parent.name as parent_name 
+                                                 FROM categories
+                                                 LEFT JOIN categories parent ON categories.parent_id = parent.id''').fetchall()
+            db.close()
+            if transaction is None:
+                flash('Transaction not found.', 'danger')
+                return redirect('/transactions')
+            return render_template('transactions_form.html', existing_category=existing_category, conflict=True, transaction=transaction, categories_list=categories_list, new_category=new_category, new_category_id=new_category_id)
 
         db.execute('''UPDATE transactions SET category_id = ? 
                     WHERE id = ?''', (new_category_id, transaction_id))

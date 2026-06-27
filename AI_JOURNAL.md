@@ -7,6 +7,21 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 42 — 2026-06-27 (model: claude-opus-4-8)
+
+### Conflict-overwrite UI for the transaction edit route
+
+- Reviewed the user's two-phase design for the edit route and refined it: the conflict buttons govern the *rule*, while the transaction's category is the user's explicit choice
+- The user pushed back on an early suggestion to update the transaction regardless of conflict, pointing out Cancel should be able to back out entirely — agreed and revised the design to defer all commits until the user resolves the conflict
+- Explained that a form's `method` controls what the browser sends, not what the route returns — a POST handler can `render_template` directly, so no GET needed to re-render with the buttons
+- Explained how to distinguish multiple submit buttons via their own `name`/`value` (only the clicked button is submitted) rather than a hidden field, and how to carry `new_category_id` forward in a hidden field
+- Tutored Jinja conditionals to swap the `<select>` for a read-only box during conflict, and how `{{ }}` substitution fills the warning message
+- Reviewed many revisions and caught bugs the user fixed: `if action = 'overwrite'` (single `=`), `render_template` passing `conflict` positionally, passing the wrong variable for display (`category` id vs `new_category` name), `db.commit()` trapped inside the overwrite branch so Leave never persisted, the transaction UPDATE missing from phase 2, an `existing_category` lookup placed in the wrong branch, and a duplicate hidden input
+- Ran syntax/Jinja parse checks; user verified the flow in the browser
+- User wrote all code; Claude reviewed, explained, and wrote the log/journal entries
+
+---
+
 ## Session 41 — 2026-06-26 (model: claude-opus-4-8)
 
 ### Import-time auto-categorization + populating the rules table

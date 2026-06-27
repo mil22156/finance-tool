@@ -37,17 +37,34 @@
             <label for="suggested_category" class="form-label">Suggested Category</label>
             <input type="text" class="form-control" id="suggested_category" name="suggested_category" value="{{ transaction['suggested_category'] }}" readonly>
         </div>
-        <div class="mb-3">
+        <!-- I copied this next div from Claude--><div class="mb-3">
             <label for="category" class="form-label">Category</label>
-            <select class="form-control" id="category" name="category">
-                <option value="">-- Select Category --</option>
-                {% for cat in categories_list %}
-                <!-- AI Note: I copied this line from Claude-->
-                    <option value="{{ cat['name'] }}" {% if cat['name'] == transaction['category'] %}selected{% endif %}>{{ cat['name'] }}{% if cat['parent_name'] %} | Parent: {{ cat['parent_name'] }}{% endif %}</option>
-                {% endfor %}
-            </select>
+            {% if conflict %}
+                <input type="text" class="form-control" value="{{ new_category }}" readonly>
+                <input type="hidden" name="new_category_id" value="{{ new_category_id }}">
+            {% else %}
+                <select class="form-control" id="category" name="category">
+                    <option value="">-- Select Category --</option>
+                    {% for cat in categories_list %}
+                        <option value="{{ cat['name'] }}" {% if cat['name'] == transaction['category'] %}selected{% endif %}>{{ cat['name'] }}{% if cat['parent_name'] %} | Parent: {{ cat['parent_name'] }}{% endif %}</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">Update Transaction</button>
+
+        {% if conflict %}
+            <div class="alert alert-warning">
+                Transactions with this description are currently categorized as
+                <strong>{{ existing_category }}</strong>.
+                Categorize future transactions as <strong>{{ new_category }}</strong>,
+                or leave the rule as-is?
+            </div>
+            <button type="submit" name="rule_action" value="overwrite" class="btn btn-primary">Overwrite Rule</button>
+            <button type="submit" name="rule_action" value="leave" class="btn btn-secondary">Leave Category</button>
+        {% else %}
+            <button type="submit" class="btn btn-primary">Update Transaction</button>
+        {% endif %}
+
         <a href="/transactions" class="btn btn-secondary ms-2">Cancel</a>
     </form>
 </div>

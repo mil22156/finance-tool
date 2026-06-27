@@ -1,5 +1,15 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-27 (end of session)
+- Built the conflict-overwrite UI for the transaction edit route — the last interactive piece of auto-categorization besides the rules CRUD page
+- Edit route POST now has two phases distinguished by the `rule_action` form field: (1) initial save — resolve category, update transaction + commit (no conflict) or, on conflict, re-render the form with `conflict=True` committing nothing; (2) conflict resolution — both Overwrite and Leave update the transaction, Overwrite also calls `category_rule_check(..., overwrite=True)`
+- Design decision (user's call): on conflict, commit nothing until the user chooses, so the Cancel link genuinely cancels — the transaction is updated in phase 2 by either button, not pre-committed in phase 1
+- Buttons distinguished by their own `name="rule_action"`/`value` (overwrite/leave) rather than a hidden field — only the clicked submit button's name/value is sent
+- transactions_form.html: category `<select>` swapped for a read-only box during conflict, plus an informative warning naming the existing vs proposed category ("currently categorized as X… categorize future as Y, or leave as-is?"); route passes `existing_category` (looked up from the rule's category_id) and `new_category` names
+- Removed a stray duplicate hidden `new_category_id` input
+- Verified working in the browser
+- Next: rules CRUD UI (the only remaining piece to fully check the CS50 auto-categorization box), then monthly summary, README, video
+
 ## 2026-06-26 (end of session)
 - Implemented import-time auto-categorization in `routes/upload.py` — the headline of the CS50 auto-categorization feature
 - Threaded `suggested_category_id` through all four points of the upload pipeline: (1) compute at categorize step — load all `categorization_rules` into a dict once, then `rules.get(description)` per row (in-memory, one query, no per-row DB hit per the 06-12 design); (2) added `suggested_category_id` column to `staging_transactions` (schema.sql + `ALTER TABLE` on the live DB, since schema.sql doesn't touch existing files); (3) staging INSERT; (4) final commit INSERT (staging → transactions, both column list and SELECT)
