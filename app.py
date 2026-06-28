@@ -8,6 +8,7 @@ from routes.upload import upload_bp
 from routes.transactions import transactions_bp
 from routes.categories import categories_bp
 from routes.categories import populate_default_categories
+from routes.summary import summary_bp
 
 
 
@@ -18,6 +19,7 @@ app = Flask(__name__)
 app.register_blueprint(upload_bp)
 app.register_blueprint(transactions_bp)
 app.register_blueprint(categories_bp)
+app.register_blueprint(summary_bp)
 
 app.secret_key = os.getenv('SECRET_KEY')
 
@@ -236,6 +238,7 @@ def edit_account(account_id):
             'UPDATE accounts SET name = ?, institution = ?, account_type = ?, currency = ? WHERE id = ?', (account_name, institution, account_type, currency, account_id))
         household_conn.commit()
         flash('Account updated successfully.', 'success')
+        household_conn.close()
         return redirect('/accounts')
     household_conn.close()
     return render_template('account_form.html', account=account)

@@ -1,5 +1,15 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-28 (end of session)
+- **Descoped the rules CRUD UI** (out of project time budget) — auto-categorization is considered done; rules are created/changed via transaction edits only. Marked the CS50 plan item complete with this note
+- Built the **monthly summary** as a category-totals report that reuses the transactions page's filter/sort UX (user's preferred design over a fixed month pivot) — the "monthly" view comes from setting the date filter to a month
+- New `routes/summary.py` (`summary_bp`, registered in app.py); `GET /summary` reuses the transactions filter-building pattern (date range, account, category) and runs an aggregate query: `SELECT c1.name, SUM(t.amount) AS total, COUNT(*) AS cnt ... GROUP BY c1.name ORDER BY total`
+- New `templates/summary.html` — filter form + grouped totals table (modeled on transactions.html)
+- Bugs fixed during the build: blueprint name collision (`'categories'` → `'summary'`), `household_db_path` typo, `flash` missing comma, non-aggregate SELECT/invalid `ORDER BY ... SUM`, `render_template` positional args, the `sql=` assignment accidentally nested inside the `else` block (parsed fine but would NameError whenever a filter was applied), account filter operator, and a missing `{% endfor %}` in the template
+- Verified rendering in the browser
+- Known gaps (minor): no `/summary` nav link in layout.html yet; summary table still has empty Date/Account columns to tidy; no Apply button (Enter submits)
+- Remaining for CS50: README.md, then the video
+
 ## 2026-06-27 (end of session)
 - Built the conflict-overwrite UI for the transaction edit route — the last interactive piece of auto-categorization besides the rules CRUD page
 - Edit route POST now has two phases distinguished by the `rule_action` form field: (1) initial save — resolve category, update transaction + commit (no conflict) or, on conflict, re-render the form with `conflict=True` committing nothing; (2) conflict resolution — both Overwrite and Leave update the transaction, Overwrite also calls `category_rule_check(..., overwrite=True)`

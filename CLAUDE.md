@@ -106,7 +106,7 @@ Features required to call the project complete for CS50 submission, in build ord
 - [x] Accounts list page — simple list of household accounts, with edit/delete; done 2026-06-01
 - [x] Categories management — CRUD UI for creating and editing categories; done 2026-06-04, validation bugs fixed 2026-06-12
 - [x] Manual category assignment — edit form (done 2026-06-06) and bulk assign to filtered set (done 2026-06-07)
-- [ ] Auto-categorization rules — rules engine runs at import time, populates `suggested_category_id`; CRUD UI for managing rules
+- [x] Auto-categorization rules — engine (`category_rule_check`), import-time `suggested_category_id` population, edit-route wiring + conflict-overwrite prompt; done 2026-06-27. **Rules CRUD UI descoped 2026-06-27** (out of project time budget) — rules are created/changed via transaction edits only; CRUD page is a possible future enhancement
 - [ ] Monthly summary table — totals by category by month, pure SQL aggregation, no JavaScript
 - [ ] README.md
 - [ ] Video (3 min, unlisted YouTube)

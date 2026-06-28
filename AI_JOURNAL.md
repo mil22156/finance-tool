@@ -7,6 +7,20 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 43 — 2026-06-28 (model: claude-opus-4-8)
+
+### Monthly summary page (category-totals report)
+
+- Helped shape the design after the user opted for a transactions-style filter/sort report grouped by category, rather than a fixed month-pivot; recorded the rules-CRUD descope
+- Explained aggregate SQL: select only the GROUP BY column plus aggregate functions (`SUM`, `COUNT`), why raw per-row columns can't be mixed in, and the corrected `GROUP BY ... ORDER BY total` query
+- Answered a question on clause evaluation order (FROM→WHERE→GROUP BY→HAVING→SELECT→ORDER BY) explaining why `GROUP BY` can't use a SELECT alias in standard SQL but `ORDER BY` can — and that SQLite allows the alias as a non-portable extension
+- Advised exact match (`a.name = ?`) over `LIKE %…%` for the account dropdown filter
+- Reviewed revisions and caught bugs the user fixed: blueprint name collision with the categories blueprint, `household_db_path` typo, a `flash` missing its comma, a non-aggregate query with invalid `ORDER BY ... SUM`, positional `render_template` args, and — notably — the `sql=` assignment indented into the `else` block, which parses cleanly but NameErrors whenever a filter is applied (flagged that a syntax check can't catch this)
+- Diagnosed the template not rendering as a missing `{% endfor %}` via a Jinja parse check; explained what the `cnt` column is
+- User wrote all code; Claude reviewed, explained, ran parse checks, and wrote the log/journal entries
+
+---
+
 ## Session 42 — 2026-06-27 (model: claude-opus-4-8)
 
 ### Conflict-overwrite UI for the transaction edit route
