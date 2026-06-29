@@ -1,5 +1,12 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-29 (end of session)
+- Added the `/summary` nav link to layout.html
+- Recorded the project video (OBS); to be uploaded to YouTube as unlisted
+- Created a ~750-word draft `README.md` covering all CS50 requirements (title, video URL placeholder, description, features, file-by-file explanation, design rationale, run instructions, AI-assistance citation) — Claude drafted it at the user's request after the user distinguished prose-drafting from the no-code-authoring rule; user will heavily edit it
+- Accuracy note for the README edit: `parsers/` is empty and there is no `core/deduplicator.py` despite CLAUDE.md describing them — CSV parsing and dedup-hash logic actually live inline in `routes/upload.py`; the draft was written to match the real repo. OFX/QFX is only a dependency, not wired — draft describes CSV upload only
+- Remaining for CS50: finish editing README (in user's own voice, especially Design Decisions), add YouTube URL, upload video, submit via submit50, verify at cs50.me
+
 ## 2026-06-28 (end of session)
 - **Descoped the rules CRUD UI** (out of project time budget) — auto-categorization is considered done; rules are created/changed via transaction edits only. Marked the CS50 plan item complete with this note
 - Built the **monthly summary** as a category-totals report that reuses the transactions page's filter/sort UX (user's preferred design over a fixed month pivot) — the "monthly" view comes from setting the date filter to a month

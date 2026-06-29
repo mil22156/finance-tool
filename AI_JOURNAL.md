@@ -7,6 +7,19 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 44 — 2026-06-29 (model: claude-opus-4-8)
+
+### Summary nav link and a README draft
+
+- Provided the nav-link markup for `/summary`; user added it to layout.html
+- Looked up the user's GitHub username (`mil22156`, from the git remote) and reminded them of the video tools (OBS Studio / Shotcut) from CLAUDE.md
+- On the README: first flagged that drafting a graded submission component could cross the CS50 academic-honesty line per the project's own guidelines, and offered a fill-in-the-blank scaffold instead. The user clarified they consider prose-drafting (which they will heavily edit) distinct from the no-code-authoring rule; at their direction, Claude wrote a ~750-word draft `README.md`
+- Wrote the draft to match the actual repo (noting `parsers/` is empty and dedup/parsing live inline in `upload.py`) and pointed out which claims the user must verify/own when editing
+- **Disclosure for academic honesty:** the initial README draft prose was AI-generated and is to be revised by the user into their own voice; this is recorded here per CS50 citation requirements
+- Claude wrote the log/journal entries
+
+---
+
 ## Session 43 — 2026-06-28 (model: claude-opus-4-8)
 
 ### Monthly summary page (category-totals report)
