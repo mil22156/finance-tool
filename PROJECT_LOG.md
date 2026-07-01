@@ -1,5 +1,13 @@
 # Project Log — Personal Finance Tool
 
+## 2026-06-30 (PROJECT COMPLETE — CS50x submitted)
+- **Submitted the CS50x final project and received the course certificate.** 🎓
+- Uploaded the demo video to YouTube (unlisted): https://youtu.be/1YAl1KN5CW8; added the URL to the README
+- Submission logistics (for future reference): local `submit50` kept failing GitHub auth because its interactive credential prompt wasn't reaching the terminal; the working path was (1) `git push` with a personal access token via `credential.helper store`, which both updated GitHub and stored the token, then (2) submitting from **cs50.dev** — because `git` is disabled there, pulled the repo as a tarball (`wget .../main.tar.gz`) and ran `submit50` in the extracted folder
+- Also learned mid-way that all prior commits were local only — GitHub `origin` was far behind until this session's push (commits ≠ pushes)
+- Tagged this commit `cs50-submission` and added an "as submitted" note to the README so the submission snapshot stays identifiable as the repo evolves
+- Final feature set as submitted: multi-user households, upload pipeline, transactions list w/ filter+sort, categories CRUD, manual + bulk categorization, auto-categorization (engine + import-time suggestions + edit-route conflict/overwrite), monthly summary. Rules CRUD UI was descoped.
+
 ## 2026-06-29 (end of session)
 - Added the `/summary` nav link to layout.html
 - Recorded the project video (OBS); to be uploaded to YouTube as unlisted

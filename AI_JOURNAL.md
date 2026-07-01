@@ -7,6 +7,20 @@ As required by CS50x academic honesty policy, all AI assistance is cited here.
 
 ---
 
+## Session 45 — 2026-06-30 (model: claude-opus-4-8)
+
+### Submission, GitHub sync, and project wrap-up
+
+- Walked through YouTube upload (unlisted vs private) and where/how `submit50` runs
+- Diagnosed a chain of submission blockers: `submit50` not installed locally (installed it in a separate tooling venv), the project dir tripping submit50's >10k-file guard because of `venv/` (moved venv aside temporarily), GitHub auth failing because password auth is disabled and no token/prompt was reaching the terminal
+- Resolved auth by setting `credential.helper store` and having the user `git push` with a personal access token (which also surfaced that all prior commits were local-only and GitHub was far behind)
+- When local submit still wouldn't prompt, pivoted to cs50.dev; since `git` is disabled there, had the user pull the repo as a tarball and submit from the extracted folder — this succeeded
+- Restored the moved `venv` afterward; flagged (correctly, via `git show` vs working tree) that the submitted README still had the placeholder video URL while the working copy had the real one — the URL edit was uncommitted
+- Final housekeeping at user's request: added an "as submitted" note to the README and this session's log; committed and tagged `cs50-submission`
+- **Disclosure:** the README draft was AI-generated and then edited by the user; the user documented this and their AI usage in the README's AI Assistance section. Project is complete; certificate received.
+
+---
+
 ## Session 44 — 2026-06-29 (model: claude-opus-4-8)
 
 ### Summary nav link and a README draft

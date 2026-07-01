@@ -1,25 +1,37 @@
 # Household Finance Tool
 
-#### Video Demo: <ADD YOUR UNLISTED YOUTUBE URL HERE>
+> **Note:** This is the version of the app as submitted for Harvard CS50x (final project) in June 2026, tagged `cs50-submission`. Any later commits are post-submission changes.
+
+#### Video Demo: (https://youtu.be/1YAl1KN5CW8)
 
 #### Description
 
-Household Finance Tool is a free, self-hosted personal finance application — a lightweight replacement for services like Mint, built for people who would rather keep their financial data on their own machine than hand it to a third party. Users upload bank and credit-card statements, and the application parses, deduplicates, and categorizes each transaction so that spending can be reviewed and summarized. All data stays local: there are no external services, no API calls, and nothing leaves the computer it runs on.
+Household Finance Tool is a free, self-hosted lightweight replacement for services like Mint, built for people who would rather keep their financial data on their own machine than hand it to a third party or want direct control over the function of the softwary. Users upload bank and credit-card statements, and the application parses, deduplicates, and categorizes each transaction so that spending can be reviewed and summarized. All data stays local and nothing leaves the computer it runs on.
 
-The tool is designed for a small number of households (for example, a couple of families sharing a personal server) rather than as a large commercial service. Each household gets its own isolated SQLite database file, and members of a household can either share accounts or keep them separate. Within a household, users log in with a hashed password, upload statements, assign categories, and view a monthly summary of where their money went.
+The tool is designed for a small number of households rather than as a web based commercial site. Each household gets its own isolated SQLite database file, and members of a household can either share accounts or keep them separate. Within a household, users log in with a hashed password, upload statements, assign categories, and view a monthly summary of where their money went.
 
-A typical workflow is: upload a statement → the file is validated → columns are mapped and confirmed → every row is validated → duplicates are removed → categories are suggested → the user reviews the staged transactions → the data is committed to the database. From there the user can filter and sort transactions, assign categories manually or in bulk, and let the rules engine suggest categories automatically on future imports.
+A typical workflow is: 
+1. upload statement
+2. validate file 
+3. map statement columns 
+4. duplicates of existing transactions from the database are removed 
+5. categories are suggested based on the previous choices in the existing database
+6. user reviews the data befor upload
+7. data is committed to the transactions table.
+8. transactions can be edited manually from the transactions page
 
-## Features
 
-- **Upload pipeline** with a strict three-step validation gate (file check, column mapping, row validation) before any data is written.
-- **Deduplication** using a SHA-256 hash of account, date, amount, and normalized description, so re-uploading an overlapping statement does not create duplicate records.
-- **Transactions page** with per-column filters, sorting, date ranges, and amount ranges.
-- **Categories management** (create, edit, delete) and both single and bulk category assignment.
-- **Auto-categorization rules** that learn from how transactions are categorized and suggest categories on import.
-- **Monthly summary** that totals spending by category for any filtered date range.
+Features
+The work to get just these features working was a lot more than anticipated at the beginning of the project so this is somewhere close to the minimum feature set to get it working. Since this is an open source project, others can add features they would desire.
 
-## File Structure
+-Upload - with a strict three-step validation gate (file check, column mapping, row validation) before any data is written.
+-Deduplication - using a SHA-256 hash of account, date, amount, and normalized description, so re-uploading an overlapping statement does not create duplicate records.
+-Transactions Page - with per-column filters, sorting, date ranges, and amount ranges.
+-Category management - (create, edit, delete) and both single and bulk category assignment.
+-Auto-categorization rules - that learn from how transactions are categorized and suggest categories on import.
+-Monthly summary - that totals spending by category for any filtered date range.
+
+File Structure
 
 - `app.py` — the Flask entry point. Sets up the application, registers the route blueprints, and handles login, logout, household creation, and user management.
 - `database/schema.sql` — the schema for a household database (users, accounts, transactions, categories, rules, and a staging table for in-progress uploads).
@@ -44,7 +56,7 @@ For **categorization**, rules match on the full description with an exact match 
 
 The **upload validation gate** is deliberately strict: a single unparseable value rejects the whole upload with a specific error, which keeps bad data out of the database.
 
-## How to Run
+How to Run
 
 ```
 python -m venv venv
@@ -55,6 +67,12 @@ python app.py
 
 Then open http://127.0.0.1:5000. Creating a household requires a `CREATION_CODE` set in a `.env` file.
 
-## AI Assistance
+AI Assistance
 
 Claude Code was used as a tutor, explainer, and code reviewer during development; the assistance provided in each session is documented in `AI_JOURNAL.md`.
+
+Some auto-complete from vs-code was used in the beginning of the project but this proved somewhat unreliable and it was unclear how this fit in with the guidance for the project so this was turned off.
+
+Some code snippets were taken from Claude code where I was just not getting it but generally all the code was entered by me manually though granted with a lot of consultation with AI. This project would have gone a lot faster if Claude were actually writing the code but I didn't gather that that was in the spirit of the project so I did not do this.
+
+I had AI do the draft of this readme file and I edited it. During the project I also had Claude draft the MD files with my approval. I also had Claude do the github commits.
